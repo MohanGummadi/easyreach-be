@@ -1,7 +1,10 @@
-package com.easyreach.auth.controller;
+package com.easyreach.backend.auth.controller;
 
-import com.easyreach.auth.dto.*;
-import com.easyreach.auth.service.AuthService;
+import com.easyreach.backend.auth.service.AuthService;
+import com.easyreach.backend.auth.dto.AuthResponse;
+import com.easyreach.backend.auth.dto.LoginRequest;
+import com.easyreach.backend.auth.dto.RefreshRequest;
+import com.easyreach.backend.auth.dto.RegisterRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

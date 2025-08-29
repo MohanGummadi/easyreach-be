@@ -1,6 +1,6 @@
-package com.easyreach.vehicleentries.repository;
+package com.easyreach.backend.repositories;
 
-import com.easyreach.vehicleentries.entity.VehicleEntry;
+import com.easyreach.backend.entities.VehicleEntry;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

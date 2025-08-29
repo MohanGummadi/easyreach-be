@@ -1,27 +1,35 @@
 spring:
+  datasource:
+    url: jdbc:postgresql://dpg-d2ioktje5dus73b8gv9g-a.singapore-postgres.render.com:5432/easyreach_db?sslmode=require
+    username: easyreach_db_user
+    password: WHqcz59yKp5km8BN0t6K1fsjSCKhxKnu
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+  flyway:
+    enabled: true
   jackson:
     time-zone: Asia/Kolkata
-  web:
-    cors:
-      allowed-origins:
-        - http://localhost:8081
 
-spring:
-  config:
-    activate:
-      on-profile: dev
-  datasource:
-    url: jdbc:postgresql://dpg-d2ioktje5dus73b8gv9g-a.singapore-postgres.render.com:5432/easyreach_db
-    username: easyreach_db_user
-    password: WHqcz59yKp5km8BN0t6K1fsjSCKhxKnu
-    driver-class-name: org.postgresql.Driver
----
-spring:
-  config:
-    activate:
-      on-profile: prod
-  datasource:
-    url: jdbc:postgresql://dpg-d2ioktje5dus73b8gv9g-a:5432/easyreach_db
-    username: easyreach_db_user
-    password: WHqcz59yKp5km8BN0t6K1fsjSCKhxKnu
-    driver-class-name: org.postgresql.Driver
+server:
+  port: 8080
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+jwt:
+  secret: change-me
+  access-token:
+    ttl-minutes: 15
+  refresh-token:
+    ttl-days: 7
+
+logging:
+  level:
+    org.springframework: info

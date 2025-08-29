@@ -1,6 +1,6 @@
-package com.easyreach.auth.repository;
+package com.easyreach.backend.auth.repository;
 
-import com.easyreach.auth.entity.RefreshToken;
+import com.easyreach.backend.auth.entity.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

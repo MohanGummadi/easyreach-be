@@ -1,4 +1,4 @@
-package com.easyreach.auth.entity;
+package com.easyreach.backend.auth.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

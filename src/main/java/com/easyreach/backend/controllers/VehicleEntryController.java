@@ -1,8 +1,8 @@
-package com.easyreach.vehicleentries.controller;
+package com.easyreach.backend.controllers;
 
-import com.easyreach.vehicleentries.dto.ApiResponse;
-import com.easyreach.vehicleentries.dto.VehicleEntryDto;
-import com.easyreach.vehicleentries.service.VehicleEntryService;
+import com.easyreach.backend.dto.ApiResponse;
+import com.easyreach.backend.dto.VehicleEntryDto;
+import com.easyreach.backend.services.VehicleEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -1,8 +1,8 @@
 package com.easyreach.vehicleentries;
 
-import com.easyreach.vehicleentries.dto.VehicleEntryDto;
-import com.easyreach.vehicleentries.repository.VehicleEntryRepository;
-import com.easyreach.vehicleentries.service.VehicleEntryService;
+import com.easyreach.backend.dto.VehicleEntryDto;
+import com.easyreach.backend.repositories.VehicleEntryRepository;
+import com.easyreach.backend.services.VehicleEntryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

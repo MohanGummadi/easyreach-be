@@ -1,4 +1,4 @@
-package com.easyreach.vehicleentries.entity;
+package com.easyreach.backend.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

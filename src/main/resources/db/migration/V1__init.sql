@@ -1,185 +1,183 @@
--- Initial database schema
-
 CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,
   uuid TEXT UNIQUE,
-  employeeId TEXT NOT NULL,
-  email TEXT UNIQUE,
-  mobileNo TEXT,
-  password TEXT,
-  role TEXT,
-  name TEXT,
+  employeeId VARCHAR(50) NOT NULL,
+  email VARCHAR(100) UNIQUE,
+  mobileNo VARCHAR(20),
+  password VARCHAR(255),
+  role VARCHAR(30),
+  name VARCHAR(100),
   companyId INTEGER,
-  companyName TEXT,
-  createdBy TEXT,
-  location TEXT,
-  dateOfBirth TEXT,
-  joiningDate TEXT,
+  companyName VARCHAR(100),
+  createdBy VARCHAR(50),
+  location VARCHAR(100),
+  dateOfBirth DATE,
+  joiningDate DATE,
   isActive INTEGER DEFAULT 1,
   UNIQUE (companyId, employeeId)
 );
 
 CREATE TABLE IF NOT EXISTS companies (
   uuid TEXT PRIMARY KEY,
-  companyId TEXT UNIQUE,
-  companyName TEXT(30) NOT NULL,
-  companyContactNo TEXT NOT NULL,
-  companyCoordinates TEXT,
-  companyLocation TEXT(50) NOT NULL,
-  companyRegistrationDate TEXT NOT NULL,
-  ownerName TEXT(20) NOT NULL,
-  ownerMobileNo TEXT NOT NULL,
-  ownerEmailAddress TEXT(50) NOT NULL,
-  ownerDOB TEXT NOT NULL,
+  companyId VARCHAR(50) UNIQUE,
+  companyName VARCHAR(30) NOT NULL,
+  companyContactNo VARCHAR(20) NOT NULL,
+  companyCoordinates VARCHAR(100),
+  companyLocation VARCHAR(50) NOT NULL,
+  companyRegistrationDate DATE NOT NULL,
+  ownerName VARCHAR(20) NOT NULL,
+  ownerMobileNo VARCHAR(20) NOT NULL,
+  ownerEmailAddress VARCHAR(50) NOT NULL,
+  ownerDOB DATE NOT NULL,
   isActive INTEGER DEFAULT 1,
   isSynced INTEGER DEFAULT 0,
-  createdBy TEXT,
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedBy TEXT,
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+  createdBy VARCHAR(50),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedBy VARCHAR(50),
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS internal_vehicles (
-  vehicleId TEXT(20) PRIMARY KEY,
-  vehicleName TEXT(30) NOT NULL,
-  vehicleType TEXT(15) NOT NULL,
+  vehicleId VARCHAR(20) PRIMARY KEY,
+  vehicleName VARCHAR(30) NOT NULL,
+  vehicleType VARCHAR(15) NOT NULL,
   isActive INTEGER DEFAULT 1,
-  companyId TEXT,
+  companyId VARCHAR(50),
   isSynced INTEGER DEFAULT 0,
-  createdBy TEXT,
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedBy TEXT,
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+  createdBy VARCHAR(50),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedBy VARCHAR(50),
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS vehicle_entries (
-  entryId TEXT(20) PRIMARY KEY,
-  companyId TEXT NOT NULL,
-  payerId TEXT(20) NOT NULL,
-  vehicleNumber TEXT(15) NOT NULL,
-  vehicleType TEXT(15) NOT NULL,
-  fromAddress TEXT(50) NOT NULL,
-  toAddress TEXT(50) NOT NULL,
-  driverName TEXT(20) NOT NULL,
-  driverContactNo TEXT NOT NULL,
-  commission REAL NOT NULL,
-  beta REAL NOT NULL,
-  refferedBy TEXT(20),
-  amount REAL NOT NULL,
-  paytype TEXT(10) NOT NULL,
+  entryId VARCHAR(20) PRIMARY KEY,
+  companyId VARCHAR(50) NOT NULL,
+  payerId VARCHAR(20) NOT NULL,
+  vehicleNumber VARCHAR(15) NOT NULL,
+  vehicleType VARCHAR(15) NOT NULL,
+  fromAddress VARCHAR(50) NOT NULL,
+  toAddress VARCHAR(50) NOT NULL,
+  driverName VARCHAR(20) NOT NULL,
+  driverContactNo VARCHAR(20) NOT NULL,
+  commission NUMERIC(10,2) NOT NULL,
+  beta NUMERIC(10,2) NOT NULL,
+  refferedBy VARCHAR(20),
+  amount NUMERIC(10,2) NOT NULL,
+  paytype VARCHAR(10) NOT NULL,
   entryDate DATE NOT NULL,
-  entryTime DATETIME NOT NULL,
-  exitTime DATETIME,
+  entryTime TIMESTAMP NOT NULL,
+  exitTime TIMESTAMP,
   notes TEXT,
-  paymentReceivedBy TEXT,
-  paidAmount REAL NOT NULL,
-  pendingAmt REAL NOT NULL,
+  paymentReceivedBy VARCHAR(50),
+  paidAmount NUMERIC(10,2) NOT NULL,
+  pendingAmt NUMERIC(10,2) NOT NULL,
   isSettled INTEGER DEFAULT 0,
-  settlementType TEXT(15),
-  settlementDate DATETIME,
+  settlementType VARCHAR(15),
+  settlementDate TIMESTAMP,
   isSynced INTEGER DEFAULT 0,
-  createdBy TEXT,
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedBy TEXT,
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+  createdBy VARCHAR(50),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedBy VARCHAR(50),
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS payer_settlements (
-  settlementId TEXT(20) PRIMARY KEY,
-  payerId TEXT(20) NOT NULL,
-  amount REAL NOT NULL,
-  date DATETIME NOT NULL,
-  companyId TEXT NOT NULL,
+  settlementId VARCHAR(20) PRIMARY KEY,
+  payerId VARCHAR(20) NOT NULL,
+  amount NUMERIC(10,2) NOT NULL,
+  date TIMESTAMP NOT NULL,
+  companyId VARCHAR(50) NOT NULL,
   isSynced INTEGER DEFAULT 0,
-  createdBy TEXT,
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedBy TEXT,
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+  createdBy VARCHAR(50),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedBy VARCHAR(50),
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS payers (
-  payerId TEXT(20) PRIMARY KEY,
-  payerName TEXT(30) NOT NULL,
-  mobileNo TEXT NOT NULL,
-  payerAddress TEXT(100),
+  payerId VARCHAR(20) PRIMARY KEY,
+  payerName VARCHAR(30) NOT NULL,
+  mobileNo VARCHAR(20) NOT NULL,
+  payerAddress VARCHAR(100),
   registrationDate DATE,
-  creditLimit INTEGER(10) DEFAULT 0,
-  companyId TEXT NOT NULL,
+  creditLimit INTEGER DEFAULT 0,
+  companyId VARCHAR(50) NOT NULL,
   isSynced INTEGER DEFAULT 0,
-  createdBy TEXT,
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedBy TEXT,
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+  createdBy VARCHAR(50),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedBy VARCHAR(50),
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS expense_master (
-  id TEXT(20) PRIMARY KEY,
-  expenseName TEXT(20) NOT NULL,
-  companyId TEXT NOT NULL,
+  id VARCHAR(20) PRIMARY KEY,
+  expenseName VARCHAR(20) NOT NULL,
+  companyId VARCHAR(50) NOT NULL,
   isSynced INTEGER DEFAULT 0,
-  createdBy TEXT,
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedBy TEXT,
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+  createdBy VARCHAR(50),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedBy VARCHAR(50),
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS daily_expenses (
-  expenseId TEXT(20) PRIMARY KEY,
-  expenseType TEXT(30) NOT NULL,
-  expenseAmount REAL NOT NULL,
-  expenseDate DATETIME NOT NULL,
+  expenseId VARCHAR(20) PRIMARY KEY,
+  expenseType VARCHAR(30) NOT NULL,
+  expenseAmount NUMERIC(10,2) NOT NULL,
+  expenseDate TIMESTAMP NOT NULL,
   expenseNote TEXT,
-  companyId TEXT NOT NULL,
+  companyId VARCHAR(50) NOT NULL,
   isSynced INTEGER DEFAULT 0,
-  createdBy TEXT,
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedBy TEXT,
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+  createdBy VARCHAR(50),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedBy VARCHAR(50),
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS diesel_usage (
-  dieselUsageId TEXT(20) PRIMARY KEY,
-  vehicleName TEXT(30) NOT NULL,
-  date DATETIME NOT NULL,
-  liters REAL NOT NULL,
-  companyId TEXT NOT NULL,
+  dieselUsageId VARCHAR(20) PRIMARY KEY,
+  vehicleName VARCHAR(30) NOT NULL,
+  date TIMESTAMP NOT NULL,
+  liters NUMERIC(10,2) NOT NULL,
+  companyId VARCHAR(50) NOT NULL,
   isSynced INTEGER DEFAULT 0,
-  createdBy TEXT,
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedBy TEXT,
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+  createdBy VARCHAR(50),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedBy VARCHAR(50),
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS equipment_usage (
-  equipmentUsageId TEXT(20) PRIMARY KEY,
-  equipmentName TEXT(30) NOT NULL,
-  equipmentType TEXT(15) NOT NULL,
-  startKM REAL NOT NULL,
-  endKM REAL NOT NULL,
-  startTime DATETIME NOT NULL,
-  endTime DATETIME NOT NULL,
-  date DATETIME NOT NULL,
-  companyId TEXT NOT NULL,
+  equipmentUsageId VARCHAR(20) PRIMARY KEY,
+  equipmentName VARCHAR(30) NOT NULL,
+  equipmentType VARCHAR(15) NOT NULL,
+  startKM NUMERIC(10,2) NOT NULL,
+  endKM NUMERIC(10,2) NOT NULL,
+  startTime TIMESTAMP NOT NULL,
+  endTime TIMESTAMP NOT NULL,
+  date TIMESTAMP NOT NULL,
+  companyId VARCHAR(50) NOT NULL,
   isSynced INTEGER DEFAULT 0,
-  createdBy TEXT,
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedBy TEXT,
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+  createdBy VARCHAR(50),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedBy VARCHAR(50),
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS vehicle_types (
-  id TEXT(20) PRIMARY KEY,
-  vehicleType TEXT(30) NOT NULL,
-  type TEXT(10) NOT NULL,
-  companyId TEXT NOT NULL,
+  id VARCHAR(20) PRIMARY KEY,
+  vehicleType VARCHAR(30) NOT NULL,
+  type VARCHAR(10) NOT NULL,
+  companyId VARCHAR(50) NOT NULL,
   isSynced INTEGER DEFAULT 0,
-  createdBy TEXT,
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedBy TEXT,
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+  createdBy VARCHAR(50),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedBy VARCHAR(50),
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Indexes for frequent filters
+-- Indexes
 CREATE INDEX idx_users_companyId ON users(companyId);
 CREATE INDEX idx_internal_vehicles_companyId ON internal_vehicles(companyId);
 CREATE INDEX idx_vehicle_entries_companyId ON vehicle_entries(companyId);

@@ -1,4 +1,4 @@
-package com.easyreach.security;
+package com.easyreach.backend.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -1,4 +1,4 @@
-package com.easyreach.security;
+package com.easyreach.backend.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

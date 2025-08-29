@@ -1,4 +1,4 @@
-package com.easyreach.vehicleentries.dto;
+package com.easyreach.backend.dto;
 
 import lombok.Data;
 

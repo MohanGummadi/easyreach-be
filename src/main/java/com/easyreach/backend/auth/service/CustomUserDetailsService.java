@@ -1,6 +1,6 @@
-package com.easyreach.auth.service;
+package com.easyreach.backend.auth.service;
 
-import com.easyreach.auth.repository.UserRepository;
+import com.easyreach.backend.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

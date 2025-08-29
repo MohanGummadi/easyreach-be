@@ -1,9 +1,9 @@
-package com.easyreach.vehicleentries.service;
+package com.easyreach.backend.services;
 
-import com.easyreach.vehicleentries.dto.VehicleEntryDto;
-import com.easyreach.vehicleentries.entity.VehicleEntry;
-import com.easyreach.vehicleentries.mapper.VehicleEntryMapper;
-import com.easyreach.vehicleentries.repository.VehicleEntryRepository;
+import com.easyreach.backend.dto.VehicleEntryDto;
+import com.easyreach.backend.entities.VehicleEntry;
+import com.easyreach.backend.mappers.VehicleEntryMapper;
+import com.easyreach.backend.repositories.VehicleEntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

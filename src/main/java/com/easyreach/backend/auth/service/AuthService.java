@@ -1,12 +1,15 @@
-package com.easyreach.auth.service;
+package com.easyreach.backend.auth.service;
 
-import com.easyreach.auth.dto.*;
-import com.easyreach.auth.entity.RefreshToken;
-import com.easyreach.auth.entity.Role;
-import com.easyreach.auth.entity.User;
-import com.easyreach.auth.repository.RefreshTokenRepository;
-import com.easyreach.auth.repository.UserRepository;
-import com.easyreach.security.JwtService;
+import com.easyreach.backend.auth.entity.RefreshToken;
+import com.easyreach.backend.auth.entity.Role;
+import com.easyreach.backend.auth.entity.User;
+import com.easyreach.backend.auth.repository.RefreshTokenRepository;
+import com.easyreach.backend.auth.repository.UserRepository;
+import com.easyreach.backend.auth.dto.AuthResponse;
+import com.easyreach.backend.auth.dto.LoginRequest;
+import com.easyreach.backend.auth.dto.RefreshRequest;
+import com.easyreach.backend.auth.dto.RegisterRequest;
+import com.easyreach.backend.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

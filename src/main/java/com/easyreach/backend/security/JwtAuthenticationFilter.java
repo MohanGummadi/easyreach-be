@@ -1,4 +1,4 @@
-package com.easyreach.security;
+package com.easyreach.backend.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,4 +1,4 @@
-package com.easyreach.auth.dto;
+package com.easyreach.backend.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

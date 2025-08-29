@@ -1,7 +1,7 @@
-package com.easyreach.vehicleentries.mapper;
+package com.easyreach.backend.mappers;
 
-import com.easyreach.vehicleentries.dto.VehicleEntryDto;
-import com.easyreach.vehicleentries.entity.VehicleEntry;
+import com.easyreach.backend.dto.VehicleEntryDto;
+import com.easyreach.backend.entities.VehicleEntry;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
