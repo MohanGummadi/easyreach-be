@@ -1,0 +1,51 @@
+spring:
+  jackson:
+    time-zone: Asia/Kolkata
+  web:
+    cors:
+      allowed-origins:
+        - http://localhost:8081
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/easyreach_dev
+    username: dev
+    password: dev
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+jwt:
+  secret: dev-secret
+server:
+  port: 8080
+logging:
+  level:
+    root: DEBUG
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://prod-db:5432/easyreach
+    username: prod
+    password: prod
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+jwt:
+  secret: ${JWT_SECRET}
+server:
+  port: 8081
+logging:
+  level:
+    root: INFO
