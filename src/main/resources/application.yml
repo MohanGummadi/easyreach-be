@@ -1,11 +1,19 @@
 spring:
+  jackson:
+    time-zone: Asia/Kolkata
+  web:
+    cors:
+      allowed-origins:
+        - http://localhost:8081
+
+spring:
   config:
     activate:
       on-profile: dev
   datasource:
     url: jdbc:postgresql://dpg-d2ioktje5dus73b8gv9g-a.singapore-postgres.render.com:5432/easyreach_db
     username: easyreach_db_user
-    password: ${DEV_DB_PASSWORD}
+    password: WHqcz59yKp5km8BN0t6K1fsjSCKhxKnu
     driver-class-name: org.postgresql.Driver
 ---
 spring:
@@ -15,5 +23,5 @@ spring:
   datasource:
     url: jdbc:postgresql://dpg-d2ioktje5dus73b8gv9g-a:5432/easyreach_db
     username: easyreach_db_user
-    password: ${PROD_DB_PASSWORD}
+    password: WHqcz59yKp5km8BN0t6K1fsjSCKhxKnu
     driver-class-name: org.postgresql.Driver
