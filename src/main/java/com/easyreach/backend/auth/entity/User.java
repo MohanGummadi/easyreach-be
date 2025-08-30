@@ -40,7 +40,7 @@ public class User implements UserDetails {
 
     private String name;
 
-    private Integer companyId;
+    private String companyId;
 
     private String companyName;
 
