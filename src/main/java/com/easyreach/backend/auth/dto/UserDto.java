@@ -20,5 +20,5 @@ public class UserDto {
     private String location;
     private LocalDate dateOfBirth;
     private LocalDate joiningDate;
-    private Boolean isActive;
+    private Integer isActive;
 }
