@@ -40,7 +40,7 @@ public class AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
-                .isActive(true)
+                .isActive(1)
                 .build();
         userRepository.save(user);
         return createTokens(user, null);

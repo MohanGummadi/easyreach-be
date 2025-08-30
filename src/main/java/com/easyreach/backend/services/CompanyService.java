@@ -66,7 +66,7 @@ public class CompanyService {
 
     public void delete(String id) {
         repository.findById(id).ifPresent(entity -> {
-            entity.setIsActive(false);
+            entity.setIsActive(0);
             entity.setUpdatedAt(LocalDateTime.now());
             repository.save(entity);
         });
