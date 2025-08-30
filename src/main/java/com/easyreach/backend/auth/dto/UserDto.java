@@ -14,7 +14,7 @@ public class UserDto {
     private String mobileNo;
     private Role role;
     private String name;
-    private Integer companyId;
+    private String companyId;
     private String companyName;
     private String createdBy;
     private String location;

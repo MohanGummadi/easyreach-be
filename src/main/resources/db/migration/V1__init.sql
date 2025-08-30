@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
   password VARCHAR(255),
   role VARCHAR(30),
   name VARCHAR(100),
-  companyId INTEGER,
+  companyId VARCHAR(50),
   companyName VARCHAR(100),
   createdBy VARCHAR(50),
   location VARCHAR(100),
