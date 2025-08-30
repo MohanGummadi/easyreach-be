@@ -34,9 +34,13 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
         User user = User.builder()
+                .id(UUID.randomUUID().toString())
+                .uuid(UUID.randomUUID().toString())
+                .employeeId(UUID.randomUUID().toString())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
+                .isActive(true)
                 .build();
         userRepository.save(user);
         return createTokens(user, null);
