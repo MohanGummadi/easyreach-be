@@ -59,7 +59,7 @@ public class UserService {
         existing.setLocation(dto.getLocation());
         existing.setDateOfBirth(dto.getDateOfBirth());
         existing.setJoiningDate(dto.getJoiningDate());
-        existing.setIsActive(dto.getIsActive() == null ? 1 : dto.getIsActive());
+        existing.setIsActive(dto.getIsActive() == null ? null : (dto.getIsActive() == 1 ? 1 : 0));
         return mapper.toDto(repository.save(existing));
     }
 
