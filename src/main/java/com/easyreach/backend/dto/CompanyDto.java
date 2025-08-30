@@ -18,8 +18,8 @@ public class CompanyDto {
     private String ownerMobileNo;
     private String ownerEmailAddress;
     private LocalDate ownerDOB;
-    private Boolean isActive;
-    private Boolean isSynced;
+    private Integer isActive = 1;
+    private Integer isSynced = 0;
     private String createdBy;
     private LocalDateTime createdAt;
     private String updatedBy;
