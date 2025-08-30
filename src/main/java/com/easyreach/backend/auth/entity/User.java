@@ -52,7 +52,7 @@ public class User implements UserDetails {
 
     private LocalDate joiningDate;
 
-    private Boolean isActive;
+    private Integer isActive;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
