@@ -43,9 +43,11 @@ public class Company {
     @Column(nullable = false)
     private LocalDate ownerDOB;
 
-    private Boolean isActive;
+    @Column(columnDefinition = "INTEGER DEFAULT 1")
+    private Integer isActive;
 
-    private Boolean isSynced;
+    @Column(columnDefinition = "INTEGER DEFAULT 0")
+    private Integer isSynced;
 
     private String createdBy;
 

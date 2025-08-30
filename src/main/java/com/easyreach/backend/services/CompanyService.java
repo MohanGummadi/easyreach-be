@@ -30,6 +30,12 @@ public class CompanyService {
         LocalDateTime now = LocalDateTime.now();
         entity.setCreatedAt(now);
         entity.setUpdatedAt(now);
+        if (entity.getIsActive() == null) {
+            entity.setIsActive(1);
+        }
+        if (entity.getIsSynced() == null) {
+            entity.setIsSynced(0);
+        }
         return mapper.toDto(repository.save(entity));
     }
 
@@ -66,7 +72,7 @@ public class CompanyService {
 
     public void delete(String id) {
         repository.findById(id).ifPresent(entity -> {
-            entity.setIsActive(false);
+            entity.setIsActive(0);
             entity.setUpdatedAt(LocalDateTime.now());
             repository.save(entity);
         });
