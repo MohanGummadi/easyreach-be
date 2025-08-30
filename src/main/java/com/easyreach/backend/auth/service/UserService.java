@@ -27,6 +27,9 @@ public class UserService {
         if (dto.getId() == null) {
             throw new IllegalArgumentException("id is required");
         }
+        if (dto.getIsActive() == null) {
+            dto.setIsActive(1);
+        }
         User entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
     }
@@ -56,7 +59,7 @@ public class UserService {
         existing.setLocation(dto.getLocation());
         existing.setDateOfBirth(dto.getDateOfBirth());
         existing.setJoiningDate(dto.getJoiningDate());
-        existing.setIsActive(dto.getIsActive() == null ? null : dto.getIsActive() == 1);
+        existing.setIsActive(dto.getIsActive() == null ? 1 : dto.getIsActive());
         return mapper.toDto(repository.save(existing));
     }
 
