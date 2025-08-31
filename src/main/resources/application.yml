@@ -1,23 +1,37 @@
+server:
+  port: 8080
+
 spring:
   datasource:
-    url: jdbc:postgresql://dpg-d2ioktje5dus73b8gv9g-a.singapore-postgres.render.com:5432/easyreach_db?sslmode=require
+    url: jdbc:postgresql://dpg-d2ioktje5dus73b8gv9g-a.singapore-postgres.render.com:5432/easyreach_db?sslmode=require&application_name=easyreach
     username: easyreach_db_user
     password: WHqcz59yKp5km8BN0t6K1fsjSCKhxKnu
     driver-class-name: org.postgresql.Driver
+
+    # --- HikariCP tuning (all in milliseconds) ---
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000         # wait up to 30s for a conn
+      validation-timeout: 5000
+      max-lifetime: 1800000             # 30 min; keep lower than provider's hard kill (e.g. 55m)
+      idle-timeout: 600000              # 10 min; trim idle conns
+      keepalive-time: 300000            # ping every 5 min so proxies don’t kill idle conns
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    open-in-view: false
     hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    show-sql: false
+      ddl-auto: none
+    properties:
+      hibernate.jdbc.time_zone: Asia/Kolkata
+
   flyway:
     enabled: false
+
   jackson:
     time-zone: Asia/Kolkata
-
-server:
-  port: 8080
 
 springdoc:
   api-docs:

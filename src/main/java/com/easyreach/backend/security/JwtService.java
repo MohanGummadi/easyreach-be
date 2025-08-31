@@ -1,5 +1,6 @@
 package com.easyreach.backend.security;
 
+import com.easyreach.backend.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -25,18 +26,18 @@ public class JwtService {
     private static final long ACCESS_EXPIRATION = 15 * 60 * 1000; // 15 minutes
     private static final long REFRESH_EXPIRATION = 7L * 24 * 60 * 60 * 1000; // 7 days
 
-    public String generateAccessToken(UserDetails userDetails) {
+    public String generateAccessToken(User user) {
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
+                .setSubject(user.getEmail()) // or username field
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_EXPIRATION))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String generateRefreshToken(UserDetails userDetails, String jti) {
+    public String generateRefreshToken(User user, String jti) {
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
+                .setSubject(user.getEmail())
                 .setId(jti)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION))

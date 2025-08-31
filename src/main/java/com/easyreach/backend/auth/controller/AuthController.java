@@ -5,6 +5,7 @@ import com.easyreach.backend.auth.dto.AuthResponse;
 import com.easyreach.backend.auth.dto.LoginRequest;
 import com.easyreach.backend.auth.dto.RefreshRequest;
 import com.easyreach.backend.auth.dto.RegisterRequest;
+import com.easyreach.backend.dto.UserDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody UserDto request) {
         return ResponseEntity.ok(authService.register(request));
     }
 

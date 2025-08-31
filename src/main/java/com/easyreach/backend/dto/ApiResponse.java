@@ -22,4 +22,10 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> failure(List<String> errors) {
         return new ApiResponse<>(false, null, errors);
     }
+
+    public static <T> ApiResponse<T> failure(String error) {
+        List<String> errs = new ArrayList<>();
+        errs.add(error);
+        return new ApiResponse<>(false, null, errs);
+    }
 }

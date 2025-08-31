@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS users (
   role VARCHAR(30),
   name VARCHAR(100),
   companyId VARCHAR(50),
-  companyName VARCHAR(100),
   createdBy VARCHAR(50),
   location VARCHAR(100),
   dateOfBirth DATE,
