@@ -53,7 +53,7 @@ class PayerSettlementServiceImplTest {
         existing.setCreatedAt(old);
         existing.setUpdatedAt(old);
 
-        when(repository.findAllById(any())).thenReturn(List.of(existing));
+        when(repository.findBySettlementIdInAndCompanyUuid(any(), anyString())).thenReturn(List.of(existing));
 
         PayerSettlement newEntity = new PayerSettlement();
         newEntity.setSettlementId("s2");

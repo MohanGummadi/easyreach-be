@@ -53,7 +53,7 @@ class EquipmentUsageServiceImplTest {
         existing.setCreatedAt(old);
         existing.setUpdatedAt(old);
 
-        when(repository.findAllById(any())).thenReturn(List.of(existing));
+        when(repository.findByEquipmentUsageIdInAndCompanyUuid(any(), anyString())).thenReturn(List.of(existing));
 
         EquipmentUsage newEntity = new EquipmentUsage();
         newEntity.setEquipmentUsageId("eq2");

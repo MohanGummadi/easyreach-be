@@ -53,7 +53,7 @@ class DieselUsageServiceImplTest {
         existing.setCreatedAt(old);
         existing.setUpdatedAt(old);
 
-        when(repository.findAllById(any())).thenReturn(List.of(existing));
+        when(repository.findByDieselUsageIdInAndCompanyUuid(any(), anyString())).thenReturn(List.of(existing));
 
         DieselUsage newEntity = new DieselUsage();
         newEntity.setDieselUsageId("d2");

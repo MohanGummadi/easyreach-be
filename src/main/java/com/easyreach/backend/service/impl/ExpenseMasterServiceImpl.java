@@ -108,7 +108,7 @@ public class ExpenseMasterServiceImpl extends CompanyScopedService implements Ex
             return 0;
         }
 
-        Map<String, ExpenseMaster> existing = repository.findAllById(dtoMap.keySet()).stream()
+        Map<String, ExpenseMaster> existing = repository.findByIdInAndCompanyUuid(dtoMap.keySet(), currentCompany()).stream()
                 .collect(Collectors.toMap(ExpenseMaster::getId, Function.identity()));
 
         OffsetDateTime now = OffsetDateTime.now();
