@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -52,5 +54,16 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
     @Transactional(readOnly = true)
     public ApiResponse<Page<VehicleTypeResponseDto>> list(Pageable pageable) {
         return ApiResponse.success(repository.findAll(pageable).map(mapper::toDto));
+    }
+
+    @Override
+    public int bulkSync(List<VehicleTypeRequestDto> dtos) {
+        if (dtos == null || dtos.isEmpty()) return 0;
+        List<VehicleType> entities = dtos.stream()
+                .map(mapper::toEntity)
+                .peek(e -> e.setIsSynced(true))
+                .toList();
+        repository.saveAll(entities);
+        return entities.size();
     }
 }
