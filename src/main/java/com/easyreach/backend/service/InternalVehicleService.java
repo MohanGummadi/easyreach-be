@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
+import java.time.OffsetDateTime;
 
 public interface InternalVehicleService {
     ApiResponse<InternalVehicleResponseDto> create(InternalVehicleRequestDto dto);
@@ -15,4 +17,5 @@ public interface InternalVehicleService {
     ApiResponse<InternalVehicleResponseDto> get(String id);
     ApiResponse<Page<InternalVehicleResponseDto>> list(Pageable pageable);
     int bulkSync(List<InternalVehicleRequestDto> dtos);
+    Map<String, Object> fetchChangesSince(String companyUuid, OffsetDateTime cursor, int limit);
 }

@@ -10,6 +10,7 @@ import com.easyreach.backend.service.InternalVehicleService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,6 +78,7 @@ public class InternalVehicleServiceImpl implements InternalVehicleService {
             if (entity != null) {
                 mapper.merge(dto, entity);
                 entity.setUpdatedAt(now);
+                entity.setChangeId(entity.getChangeId() == null ? 0L : entity.getChangeId() + 1);
                 entity.setIsSynced(true);
                 entities.add(entity);
             } else {
@@ -89,5 +91,20 @@ public class InternalVehicleServiceImpl implements InternalVehicleService {
         }
         repository.saveAll(entities);
         return entities.size();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, Object> fetchChangesSince(String companyUuid, OffsetDateTime cursor, int limit) {
+        Map<String, Object> result = new HashMap<>();
+        List<InternalVehicle> updates = repository.findByCompanyUuidAndUpdatedAtGreaterThanEqual(companyUuid, cursor, PageRequest.of(0, limit));
+        result.put("updated", updates.stream().map(mapper::toDto).toList());
+        int remaining = limit - updates.size();
+        List<String> tombstones = remaining > 0
+                ? repository.findByCompanyUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(companyUuid, cursor, PageRequest.of(0, remaining))
+                .stream().map(InternalVehicle::getVehicleId).toList()
+                : Collections.emptyList();
+        result.put("tombstones", tombstones);
+        return result;
     }
 }

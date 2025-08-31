@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
+import java.time.OffsetDateTime;
 
 public interface DailyExpenseService {
     ApiResponse<DailyExpenseResponseDto> create(DailyExpenseRequestDto dto);
@@ -15,4 +17,5 @@ public interface DailyExpenseService {
     ApiResponse<DailyExpenseResponseDto> get(String id);
     ApiResponse<Page<DailyExpenseResponseDto>> list(Pageable pageable);
     int bulkSync(List<DailyExpenseRequestDto> dtos);
+    Map<String, Object> fetchChangesSince(String companyUuid, OffsetDateTime cursor, int limit);
 }
