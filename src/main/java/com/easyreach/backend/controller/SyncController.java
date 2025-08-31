@@ -1,6 +1,7 @@
 package com.easyreach.backend.controller;
 
 import com.easyreach.backend.dto.ApiResponse;
+import com.easyreach.backend.dto.SyncDownloadResponseDto;
 import com.easyreach.backend.dto.SyncRequestDto;
 import com.easyreach.backend.dto.SyncResponseDto;
 import com.easyreach.backend.service.*;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.time.OffsetDateTime;
 
 @RestController
 @RequestMapping("/api")
@@ -26,6 +28,7 @@ public class SyncController {
     private final PayerSettlementService payerSettlementService;
     private final VehicleEntryService vehicleEntryService;
     private final VehicleTypeService vehicleTypeService;
+    private final SyncService syncService;
 
     @PostMapping("/sync")
     @Operation(summary = "Bulk synchronize entities", description = "Accepts lists of entity DTOs and persists them with isSynced=true")
@@ -62,6 +65,14 @@ public class SyncController {
             response.setVehicleTypes(vehicleTypeService.bulkSync(request.getVehicleTypes()));
         }
         return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @GetMapping("/sync/download")
+    @Operation(summary = "Download changes since cursor")
+    public ResponseEntity<ApiResponse<SyncDownloadResponseDto>> download(
+            @RequestParam(required = false) OffsetDateTime cursor,
+            @RequestParam(defaultValue = "100") int limit) {
+        return ResponseEntity.ok(ApiResponse.success(syncService.download(cursor, limit)));
     }
 }
 

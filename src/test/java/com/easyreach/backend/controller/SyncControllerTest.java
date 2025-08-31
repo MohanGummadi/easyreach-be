@@ -41,6 +41,7 @@ class SyncControllerTest {
     @MockBean private PayerSettlementService payerSettlementService;
     @MockBean private VehicleEntryService vehicleEntryService;
     @MockBean private VehicleTypeService vehicleTypeService;
+    @MockBean private SyncService syncService;
 
     private CompanyRequestDto sampleCompany() {
         return new CompanyRequestDto(
