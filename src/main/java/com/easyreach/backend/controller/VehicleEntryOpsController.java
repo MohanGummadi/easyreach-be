@@ -5,6 +5,7 @@ import com.easyreach.backend.dto.vehicle_entries.VehicleEntryResponseDto;
 import com.easyreach.backend.service.VehicleEntryOpsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.time.OffsetDateTime;
 @RequestMapping("/api/vehicle-entries-ops")
 @RequiredArgsConstructor
 @Tag(name = "VehicleEntryOps")
+@SecurityRequirement(name = "bearerAuth")
 public class VehicleEntryOpsController {
 
     private final VehicleEntryOpsService service;

@@ -5,6 +5,7 @@ import com.easyreach.backend.dto.payers.PayerResponseDto;
 import com.easyreach.backend.service.PayerQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/payers-ops")
 @RequiredArgsConstructor
 @Tag(name = "PayerOps")
+@SecurityRequirement(name = "bearerAuth")
 public class PayerOpsController {
 
     private final PayerQueryService service;

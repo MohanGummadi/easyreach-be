@@ -6,6 +6,7 @@ import com.easyreach.backend.dto.users.UserResponseDto;
 import com.easyreach.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 @Tag(name="User")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
     private final UserService service;
 

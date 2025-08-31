@@ -6,6 +6,7 @@ import com.easyreach.backend.dto.companies.CompanyResponseDto;
 import com.easyreach.backend.service.CompanyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/companies")
 @RequiredArgsConstructor
 @Tag(name="Company")
+@SecurityRequirement(name = "bearerAuth")
 public class CompanyController {
     private final CompanyService service;
 
