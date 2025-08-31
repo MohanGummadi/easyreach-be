@@ -89,28 +89,22 @@ public class SyncDownloadServiceImpl implements SyncDownloadService {
                 continue;
             }
 
-            List<?> items = (List<?>) data.getOrDefault("updated", Collections.emptyList());
+            List<?> items = (List<?>) data.getOrDefault("items", Collections.emptyList());
             List<?> tombstones = (List<?>) data.getOrDefault("tombstones", Collections.emptyList());
+            OffsetDateTime entityCursorEnd = (OffsetDateTime) data.getOrDefault("cursorEnd", cursor);
+            boolean entityHasMore = (boolean) data.getOrDefault("hasMore", false);
 
             Map<String, Object> perEntity = new HashMap<>();
             perEntity.put("items", items);
             perEntity.put("tombstones", tombstones);
+            perEntity.put("cursorEnd", entityCursorEnd);
+            perEntity.put("hasMore", entityHasMore);
             response.put(entity, perEntity);
 
-            for (Object item : items) {
-                OffsetDateTime ts = extractTimestamp(item);
-                if (ts != null && ts.isAfter(cursorEnd)) {
-                    cursorEnd = ts;
-                }
+            if (entityCursorEnd != null && entityCursorEnd.isAfter(cursorEnd)) {
+                cursorEnd = entityCursorEnd;
             }
-            for (Object tombstone : tombstones) {
-                OffsetDateTime ts = extractTimestamp(tombstone);
-                if (ts != null && ts.isAfter(cursorEnd)) {
-                    cursorEnd = ts;
-                }
-            }
-
-            if (items.size() + tombstones.size() >= fetchLimit) {
+            if (entityHasMore) {
                 hasMore = true;
             }
         }
