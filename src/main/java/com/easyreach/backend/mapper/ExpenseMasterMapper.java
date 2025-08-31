@@ -12,4 +12,7 @@ public interface ExpenseMasterMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(@MappingTarget ExpenseMaster entity, ExpenseMasterRequestDto dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void merge(ExpenseMasterRequestDto dto, @MappingTarget ExpenseMaster entity);
 }

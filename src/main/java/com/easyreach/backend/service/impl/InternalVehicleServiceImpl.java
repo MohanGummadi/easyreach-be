@@ -14,7 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.time.OffsetDateTime;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,10 +62,31 @@ public class InternalVehicleServiceImpl implements InternalVehicleService {
     @Override
     public int bulkSync(List<InternalVehicleRequestDto> dtos) {
         if (dtos == null || dtos.isEmpty()) return 0;
-        List<InternalVehicle> entities = dtos.stream()
-                .map(mapper::toEntity)
-                .peek(e -> e.setIsSynced(true))
-                .toList();
+        Map<String, InternalVehicleRequestDto> dtoMap = dtos.stream()
+                .filter(d -> d.getVehicleId() != null)
+                .collect(Collectors.toMap(InternalVehicleRequestDto::getVehicleId, Function.identity(), (a, b) -> b, LinkedHashMap::new));
+        if (dtoMap.isEmpty()) return 0;
+
+        Map<String, InternalVehicle> existing = repository.findAllById(dtoMap.keySet()).stream()
+                .collect(Collectors.toMap(InternalVehicle::getVehicleId, Function.identity()));
+
+        OffsetDateTime now = OffsetDateTime.now();
+        List<InternalVehicle> entities = new ArrayList<>();
+        for (InternalVehicleRequestDto dto : dtoMap.values()) {
+            InternalVehicle entity = existing.get(dto.getVehicleId());
+            if (entity != null) {
+                mapper.merge(dto, entity);
+                entity.setUpdatedAt(now);
+                entity.setIsSynced(true);
+                entities.add(entity);
+            } else {
+                InternalVehicle e = mapper.toEntity(dto);
+                e.setCreatedAt(now);
+                e.setUpdatedAt(now);
+                e.setIsSynced(true);
+                entities.add(e);
+            }
+        }
         repository.saveAll(entities);
         return entities.size();
     }

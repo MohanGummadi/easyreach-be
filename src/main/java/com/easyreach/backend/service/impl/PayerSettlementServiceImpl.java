@@ -14,7 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.time.OffsetDateTime;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,10 +62,31 @@ public class PayerSettlementServiceImpl implements PayerSettlementService {
     @Override
     public int bulkSync(List<PayerSettlementRequestDto> dtos) {
         if (dtos == null || dtos.isEmpty()) return 0;
-        List<PayerSettlement> entities = dtos.stream()
-                .map(mapper::toEntity)
-                .peek(e -> e.setIsSynced(true))
-                .toList();
+        Map<String, PayerSettlementRequestDto> dtoMap = dtos.stream()
+                .filter(d -> d.getSettlementId() != null)
+                .collect(Collectors.toMap(PayerSettlementRequestDto::getSettlementId, Function.identity(), (a, b) -> b, LinkedHashMap::new));
+        if (dtoMap.isEmpty()) return 0;
+
+        Map<String, PayerSettlement> existing = repository.findAllById(dtoMap.keySet()).stream()
+                .collect(Collectors.toMap(PayerSettlement::getSettlementId, Function.identity()));
+
+        OffsetDateTime now = OffsetDateTime.now();
+        List<PayerSettlement> entities = new ArrayList<>();
+        for (PayerSettlementRequestDto dto : dtoMap.values()) {
+            PayerSettlement entity = existing.get(dto.getSettlementId());
+            if (entity != null) {
+                mapper.merge(dto, entity);
+                entity.setUpdatedAt(now);
+                entity.setIsSynced(true);
+                entities.add(entity);
+            } else {
+                PayerSettlement e = mapper.toEntity(dto);
+                e.setCreatedAt(now);
+                e.setUpdatedAt(now);
+                e.setIsSynced(true);
+                entities.add(e);
+            }
+        }
         repository.saveAll(entities);
         return entities.size();
     }

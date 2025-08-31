@@ -12,4 +12,7 @@ public interface DailyExpenseMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(@MappingTarget DailyExpense entity, DailyExpenseRequestDto dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void merge(DailyExpenseRequestDto dto, @MappingTarget DailyExpense entity);
 }

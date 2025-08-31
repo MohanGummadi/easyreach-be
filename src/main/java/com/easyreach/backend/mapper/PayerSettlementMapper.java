@@ -12,4 +12,7 @@ public interface PayerSettlementMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(@MappingTarget PayerSettlement entity, PayerSettlementRequestDto dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void merge(PayerSettlementRequestDto dto, @MappingTarget PayerSettlement entity);
 }

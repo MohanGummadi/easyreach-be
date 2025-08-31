@@ -14,7 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.time.OffsetDateTime;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,10 +62,31 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public int bulkSync(List<CompanyRequestDto> dtos) {
         if (dtos == null || dtos.isEmpty()) return 0;
-        List<Company> entities = dtos.stream()
-                .map(mapper::toEntity)
-                .peek(e -> e.setIsSynced(true))
-                .toList();
+        Map<String, CompanyRequestDto> dtoMap = dtos.stream()
+                .filter(d -> d.getUuid() != null)
+                .collect(Collectors.toMap(CompanyRequestDto::getUuid, Function.identity(), (a, b) -> b, LinkedHashMap::new));
+        if (dtoMap.isEmpty()) return 0;
+
+        Map<String, Company> existing = repository.findAllById(dtoMap.keySet()).stream()
+                .collect(Collectors.toMap(Company::getUuid, Function.identity()));
+
+        OffsetDateTime now = OffsetDateTime.now();
+        List<Company> entities = new ArrayList<>();
+        for (CompanyRequestDto dto : dtoMap.values()) {
+            Company entity = existing.get(dto.getUuid());
+            if (entity != null) {
+                mapper.merge(dto, entity);
+                entity.setUpdatedAt(now);
+                entity.setIsSynced(true);
+                entities.add(entity);
+            } else {
+                Company e = mapper.toEntity(dto);
+                e.setCreatedAt(now);
+                e.setUpdatedAt(now);
+                e.setIsSynced(true);
+                entities.add(e);
+            }
+        }
         repository.saveAll(entities);
         return entities.size();
     }

@@ -12,4 +12,7 @@ public interface VehicleTypeMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(@MappingTarget VehicleType entity, VehicleTypeRequestDto dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void merge(VehicleTypeRequestDto dto, @MappingTarget VehicleType entity);
 }

@@ -14,7 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.time.OffsetDateTime;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,10 +62,31 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
     @Override
     public int bulkSync(List<VehicleTypeRequestDto> dtos) {
         if (dtos == null || dtos.isEmpty()) return 0;
-        List<VehicleType> entities = dtos.stream()
-                .map(mapper::toEntity)
-                .peek(e -> e.setIsSynced(true))
-                .toList();
+        Map<String, VehicleTypeRequestDto> dtoMap = dtos.stream()
+                .filter(d -> d.getId() != null)
+                .collect(Collectors.toMap(VehicleTypeRequestDto::getId, Function.identity(), (a, b) -> b, LinkedHashMap::new));
+        if (dtoMap.isEmpty()) return 0;
+
+        Map<String, VehicleType> existing = repository.findAllById(dtoMap.keySet()).stream()
+                .collect(Collectors.toMap(VehicleType::getId, Function.identity()));
+
+        OffsetDateTime now = OffsetDateTime.now();
+        List<VehicleType> entities = new ArrayList<>();
+        for (VehicleTypeRequestDto dto : dtoMap.values()) {
+            VehicleType entity = existing.get(dto.getId());
+            if (entity != null) {
+                mapper.merge(dto, entity);
+                entity.setUpdatedAt(now);
+                entity.setIsSynced(true);
+                entities.add(entity);
+            } else {
+                VehicleType e = mapper.toEntity(dto);
+                e.setCreatedAt(now);
+                e.setUpdatedAt(now);
+                e.setIsSynced(true);
+                entities.add(e);
+            }
+        }
         repository.saveAll(entities);
         return entities.size();
     }
