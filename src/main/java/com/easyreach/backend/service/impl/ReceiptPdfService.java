@@ -190,7 +190,8 @@ public class ReceiptPdfService {
 
     /** Add a key/value row. Labels are left & single-line (NBSP). Values right-aligned & may wrap. */
     private void addKV(Table t, String k, String v) {
-        boolean isAddress = k.toLowerCase().startsWith("address"); // spelling per your sample
+        String lower = k == null ? "" : k.toLowerCase();
+        boolean isAddress = lower.startsWith("address") || lower.startsWith("adress"); // accept both spellings
 
         Paragraph key = new Paragraph(k)
                 .setFontSize(BASE_FONT_SIZE)
