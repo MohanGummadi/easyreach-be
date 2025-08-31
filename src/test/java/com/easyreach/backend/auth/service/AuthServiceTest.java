@@ -12,6 +12,7 @@ import com.easyreach.backend.security.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -77,20 +78,55 @@ class AuthServiceTest {
     }
 
     @Test
-    void refresh_rotatesToken() {
+    void refresh_rotatesToken_persistsRevocationAndNewToken_inOrder() {
+        // Arrange
         RefreshRequest req = new RefreshRequest();
         req.setRefreshToken("token");
-        when(jwtService.extractJti("token")).thenReturn("jti");
-        RefreshToken stored = RefreshToken.builder().jti("jti").userId("u1").expiresAt(OffsetDateTime.now(ZoneOffset.UTC).plusDays(1)).build();
-        when(refreshTokenRepository.findByJtiAndRevokedAtIsNull("jti")).thenReturn(Optional.of(stored));
-        when(userRepository.findById("u1")).thenReturn(Optional.of(user));
-        when(jwtService.generateAccessToken(user)).thenReturn("a");
-        when(jwtService.generateRefreshToken(eq(user), anyString())).thenReturn("r");
 
+        RefreshToken stored = RefreshToken.builder()
+                .jti("jti-old")
+                .userId("u1")
+                .expiresAt(OffsetDateTime.now(ZoneOffset.UTC).plusDays(1))
+                .build();
+
+        when(jwtService.extractJti("token")).thenReturn("jti-old");
+        when(refreshTokenRepository.findByJtiAndRevokedAtIsNull("jti-old"))
+                .thenReturn(Optional.of(stored));
+        when(userRepository.findById("u1")).thenReturn(Optional.of(user));
+        when(jwtService.generateAccessToken(user)).thenReturn("access-new");
+        when(jwtService.generateRefreshToken(eq(user), anyString())).thenReturn("refresh-new");
+
+        // Act
         AuthResponse resp = authService.refresh(req);
-        assertNotNull(resp.getRefreshToken());
-        verify(refreshTokenRepository).save(any(RefreshToken.class));
+
+        // Assert response
+        assertNotNull(resp);
+        assertEquals("access-new", resp.getAccessToken());
+        assertEquals("refresh-new", resp.getRefreshToken());
+
+        // Assert order + semantics of the two saves (don't use a prior plain verify on save)
+        InOrder inOrder = inOrder(refreshTokenRepository);
+
+        // 1) First save: revoke the existing token
+        inOrder.verify(refreshTokenRepository).save(argThat(t ->
+                t != null
+                        && "jti-old".equals(t.getJti())
+                        && "u1".equals(t.getUserId())
+                        && t.getRevokedAt() != null // must be marked revoked
+        ));
+
+        // 2) Second save: persist the new token (fresh JTI, not revoked)
+        inOrder.verify(refreshTokenRepository).save(argThat(t ->
+                t != null
+                        && "u1".equals(t.getUserId())
+                        && t.getRevokedAt() == null
+                        && t.getJti() != null
+                        && !"jti-old".equals(t.getJti())
+        ));
+
+        inOrder.verifyNoMoreInteractions();
     }
+
 
     @Test
     void logout_revokesToken() {
