@@ -8,6 +8,7 @@ import com.easyreach.backend.repository.PayerRepository;
 import com.easyreach.backend.service.PayerQueryService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.time.OffsetDateTime;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class PayerQueryServiceImpl extends CompanyScopedService implements PayerQueryService {
 
     private final PayerRepository repository;
@@ -26,17 +28,27 @@ public class PayerQueryServiceImpl extends CompanyScopedService implements Payer
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<PayerResponseDto>> searchActive(String companyUuid, String q, Pageable pageable) {
+        log.debug("Entering searchActive companyUuid={} q={} pageable={}", companyUuid, q, pageable);
         Page<Payer> page = (q == null || q.isBlank())
                 ? repository.findByCompanyUuidAndDeletedAtIsNull(companyUuid, pageable)
                 : repository.findByCompanyUuidAndPayerNameContainingIgnoreCaseAndDeletedAtIsNull(companyUuid, q, pageable);
-        return ApiResponse.success(page.map(mapper::toDto));
+        ApiResponse<Page<PayerResponseDto>> response = ApiResponse.success(page.map(mapper::toDto));
+        log.debug("Exiting searchActive with {} results", page.getTotalElements());
+        return response;
     }
 
     @Override
     public ApiResponse<Void> softDelete(String payerId) {
-        Payer p = repository.findByPayerIdAndCompanyUuidAndDeletedIsFalse(payerId, currentCompany()).orElseThrow(() -> new EntityNotFoundException("Payer not found: " + payerId));
+        log.debug("Entering softDelete with payerId={}", payerId);
+        Payer p = repository.findByPayerIdAndCompanyUuidAndDeletedIsFalse(payerId, currentCompany())
+                .orElseThrow(() -> {
+                    log.error("Payer not found: {}", payerId);
+                    return new EntityNotFoundException("Payer not found: " + payerId);
+                });
         p.setDeletedAt(OffsetDateTime.now());
         repository.save(p);
-        return ApiResponse.success(null);
+        ApiResponse<Void> response = ApiResponse.success(null);
+        log.debug("Exiting softDelete with response={}", response);
+        return response;
     }
 }
