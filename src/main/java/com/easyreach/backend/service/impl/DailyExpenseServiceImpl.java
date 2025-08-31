@@ -9,6 +9,7 @@ import com.easyreach.backend.repository.DailyExpenseRepository;
 import com.easyreach.backend.service.DailyExpenseService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,56 +24,88 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class DailyExpenseServiceImpl extends CompanyScopedService implements DailyExpenseService {
     private final DailyExpenseRepository repository;
     private final DailyExpenseMapper mapper;
 
     @Override
     public ApiResponse<DailyExpenseResponseDto> create(DailyExpenseRequestDto dto) {
+        log.debug("Entering create with dto={}", dto);
         DailyExpense entity = mapper.toEntity(dto);
         entity.setCompanyUuid(currentCompany());
-        return ApiResponse.success(mapper.toDto(repository.save(entity)));
+        ApiResponse<DailyExpenseResponseDto> response = ApiResponse.success(mapper.toDto(repository.save(entity)));
+        log.debug("Exiting create with response={}", response);
+        return response;
     }
 
     @Override
     public ApiResponse<DailyExpenseResponseDto> update(String id, DailyExpenseRequestDto dto) {
+        log.debug("Entering update with id={} dto={}", id, dto);
         DailyExpense e = repository.findByExpenseIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
-                .orElseThrow(() -> new EntityNotFoundException("DailyExpense not found: " + id));
+                .orElseThrow(() -> {
+                    log.error("DailyExpense not found: {}", id);
+                    return new EntityNotFoundException("DailyExpense not found: " + id);
+                });
         mapper.update(e, dto);
-        return ApiResponse.success(mapper.toDto(repository.save(e)));
+        ApiResponse<DailyExpenseResponseDto> response = ApiResponse.success(mapper.toDto(repository.save(e)));
+        log.debug("Exiting update with response={}", response);
+        return response;
     }
 
     @Override
     public ApiResponse<Void> delete(String id) {
+        log.debug("Entering delete with id={}", id);
         DailyExpense e = repository.findByExpenseIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
-                .orElseThrow(() -> new EntityNotFoundException("DailyExpense not found: " + id));
+                .orElseThrow(() -> {
+                    log.error("DailyExpense not found: {}", id);
+                    return new EntityNotFoundException("DailyExpense not found: " + id);
+                });
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
         repository.save(e);
-        return ApiResponse.success(null);
+        ApiResponse<Void> response = ApiResponse.success(null);
+        log.debug("Exiting delete with response={}", response);
+        return response;
     }
 
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<DailyExpenseResponseDto> get(String id) {
+        log.debug("Entering get with id={}", id);
         DailyExpense e = repository.findByExpenseIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
-                .orElseThrow(() -> new EntityNotFoundException("DailyExpense not found: " + id));
-        return ApiResponse.success(mapper.toDto(e));
+                .orElseThrow(() -> {
+                    log.error("DailyExpense not found: {}", id);
+                    return new EntityNotFoundException("DailyExpense not found: " + id);
+                });
+        ApiResponse<DailyExpenseResponseDto> response = ApiResponse.success(mapper.toDto(e));
+        log.debug("Exiting get with response={}", response);
+        return response;
     }
 
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<DailyExpenseResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
+        log.debug("Entering list with pageable={}", pageable);
+        ApiResponse<Page<DailyExpenseResponseDto>> response = ApiResponse.success(repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
+        log.debug("Exiting list with response={}", response);
+        return response;
     }
 
     @Override
     public int bulkSync(List<DailyExpenseRequestDto> dtos) {
-        if (dtos == null || dtos.isEmpty()) return 0;
+        log.debug("Entering bulkSync with {} dtos", dtos != null ? dtos.size() : 0);
+        if (dtos == null || dtos.isEmpty()) {
+            log.warn("bulkSync called with empty dto list");
+            return 0;
+        }
         Map<String, DailyExpenseRequestDto> dtoMap = dtos.stream()
                 .filter(d -> d.getExpenseId() != null)
                 .collect(Collectors.toMap(DailyExpenseRequestDto::getExpenseId, Function.identity(), (a, b) -> b, LinkedHashMap::new));
-        if (dtoMap.isEmpty()) return 0;
+        if (dtoMap.isEmpty()) {
+            log.warn("bulkSync dtoMap empty after filtering ids");
+            return 0;
+        }
 
         Map<String, DailyExpense> existing = repository.findAllById(dtoMap.keySet()).stream()
                 .collect(Collectors.toMap(DailyExpense::getExpenseId, Function.identity()));
@@ -96,12 +129,15 @@ public class DailyExpenseServiceImpl extends CompanyScopedService implements Dai
             }
         }
         repository.saveAll(entities);
-        return entities.size();
+        int size = entities.size();
+        log.debug("Exiting bulkSync with size={}", size);
+        return size;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Map<String, Object> fetchChangesSince(String companyUuid, OffsetDateTime cursor, int limit) {
+        log.debug("Entering fetchChangesSince companyUuid={} cursor={} limit={}", companyUuid, cursor, limit);
         Map<String, Object> result = new HashMap<>();
         boolean hasMore = false;
 
@@ -136,6 +172,7 @@ public class DailyExpenseServiceImpl extends CompanyScopedService implements Dai
         }
         result.put("cursorEnd", cursorEnd);
         result.put("hasMore", hasMore);
+        log.debug("Exiting fetchChangesSince with hasMore={} cursorEnd={}", hasMore, cursorEnd);
         return result;
     }
 }

@@ -9,6 +9,7 @@ import com.easyreach.backend.repository.VehicleEntryRepository;
 import com.easyreach.backend.service.VehicleEntryService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,56 +24,89 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class VehicleEntryServiceImpl extends CompanyScopedService implements VehicleEntryService {
     private final VehicleEntryRepository repository;
     private final VehicleEntryMapper mapper;
 
     @Override
     public ApiResponse<VehicleEntryResponseDto> create(VehicleEntryRequestDto dto) {
+        log.debug("Entering create with dto={}", dto);
         VehicleEntry entity = mapper.toEntity(dto);
         entity.setCompanyUuid(currentCompany());
-        return ApiResponse.success(mapper.toDto(repository.save(entity)));
+        ApiResponse<VehicleEntryResponseDto> response = ApiResponse.success(mapper.toDto(repository.save(entity)));
+        log.debug("Exiting create with response={}", response);
+        return response;
     }
 
     @Override
     public ApiResponse<VehicleEntryResponseDto> update(String id, VehicleEntryRequestDto dto) {
+        log.debug("Entering update with id={} dto={}", id, dto);
         VehicleEntry e = repository.findByEntryIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
-                .orElseThrow(() -> new EntityNotFoundException("VehicleEntry not found: " + id));
+                .orElseThrow(() -> {
+                    log.error("VehicleEntry not found: {}", id);
+                    return new EntityNotFoundException("VehicleEntry not found: " + id);
+                });
         mapper.update(e, dto);
-        return ApiResponse.success(mapper.toDto(repository.save(e)));
+        ApiResponse<VehicleEntryResponseDto> response = ApiResponse.success(mapper.toDto(repository.save(e)));
+        log.debug("Exiting update with response={}", response);
+        return response;
     }
 
     @Override
     public ApiResponse<Void> delete(String id) {
+        log.debug("Entering delete with id={}", id);
         VehicleEntry e = repository.findByEntryIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
-                .orElseThrow(() -> new EntityNotFoundException("VehicleEntry not found: " + id));
+                .orElseThrow(() -> {
+                    log.error("VehicleEntry not found: {}", id);
+                    return new EntityNotFoundException("VehicleEntry not found: " + id);
+                });
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
         repository.save(e);
-        return ApiResponse.success(null);
+        ApiResponse<Void> response = ApiResponse.success(null);
+        log.debug("Exiting delete with response={}", response);
+        return response;
     }
 
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<VehicleEntryResponseDto> get(String id) {
+        log.debug("Entering get with id={}", id);
         VehicleEntry e = repository.findByEntryIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
-                .orElseThrow(() -> new EntityNotFoundException("VehicleEntry not found: " + id));
-        return ApiResponse.success(mapper.toDto(e));
+                .orElseThrow(() -> {
+                    log.error("VehicleEntry not found: {}", id);
+                    return new EntityNotFoundException("VehicleEntry not found: " + id);
+                });
+        ApiResponse<VehicleEntryResponseDto> response = ApiResponse.success(mapper.toDto(e));
+        log.debug("Exiting get with response={}", response);
+        return response;
     }
 
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<VehicleEntryResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
+        log.debug("Entering list with pageable={}", pageable);
+        ApiResponse<Page<VehicleEntryResponseDto>> response = ApiResponse.success(
+                repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
+        log.debug("Exiting list with response={}", response);
+        return response;
     }
 
     @Override
     public int bulkSync(List<VehicleEntryRequestDto> dtos) {
-        if (dtos == null || dtos.isEmpty()) return 0;
+        log.debug("Entering bulkSync with {} dtos", dtos != null ? dtos.size() : 0);
+        if (dtos == null || dtos.isEmpty()) {
+            log.warn("bulkSync called with empty dto list");
+            return 0;
+        }
         Map<String, VehicleEntryRequestDto> dtoMap = dtos.stream()
                 .filter(d -> d.getEntryId() != null)
                 .collect(Collectors.toMap(VehicleEntryRequestDto::getEntryId, Function.identity(), (a, b) -> b, LinkedHashMap::new));
-        if (dtoMap.isEmpty()) return 0;
+        if (dtoMap.isEmpty()) {
+            log.warn("bulkSync dtoMap empty after filtering ids");
+            return 0;
+        }
 
         Map<String, VehicleEntry> existing = repository.findAllById(dtoMap.keySet()).stream()
                 .collect(Collectors.toMap(VehicleEntry::getEntryId, Function.identity()));
@@ -96,12 +130,15 @@ public class VehicleEntryServiceImpl extends CompanyScopedService implements Veh
             }
         }
         repository.saveAll(entities);
-        return entities.size();
+        int size = entities.size();
+        log.debug("Exiting bulkSync with size={}", size);
+        return size;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Map<String, Object> fetchChangesSince(String companyUuid, OffsetDateTime cursor, int limit) {
+        log.debug("Entering fetchChangesSince companyUuid={} cursor={} limit={}", companyUuid, cursor, limit);
         Map<String, Object> result = new HashMap<>();
         boolean hasMore = false;
 
@@ -136,6 +173,7 @@ public class VehicleEntryServiceImpl extends CompanyScopedService implements Veh
         }
         result.put("cursorEnd", cursorEnd);
         result.put("hasMore", hasMore);
+        log.debug("Exiting fetchChangesSince cursorEnd={} hasMore={}", cursorEnd, hasMore);
         return result;
     }
 }
