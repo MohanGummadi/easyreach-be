@@ -65,12 +65,12 @@ public class AuthService {
      */
     @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
+        authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
-        // After successful auth, load our domain User by email (principal may not be our entity)
-        User user = userRepository.findByEmailIgnoreCase(request.getEmail())
+        // After successful auth, load our domain User by email and company
+        User user = userRepository.findByEmailIgnoreCaseAndCompanyUuid(request.getEmail(), request.getCompanyUuid())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + request.getEmail()));
 
         return createTokens(user, null);
