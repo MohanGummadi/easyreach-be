@@ -6,6 +6,7 @@ import com.easyreach.backend.dto.vehicle_types.VehicleTypeResponseDto;
 import com.easyreach.backend.entity.VehicleType;
 import com.easyreach.backend.mapper.VehicleTypeMapper;
 import com.easyreach.backend.repository.VehicleTypeRepository;
+import com.easyreach.backend.security.CompanyContext;
 import com.easyreach.backend.service.VehicleTypeService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -27,15 +28,24 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
     private final VehicleTypeRepository repository;
     private final VehicleTypeMapper mapper;
 
+    private String currentCompany() {
+        String companyUuid = CompanyContext.getCompanyId();
+        if (companyUuid == null) {
+            throw new IllegalStateException("Company ID is not set in context");
+        }
+        return companyUuid;
+    }
+
     @Override
     public ApiResponse<VehicleTypeResponseDto> create(VehicleTypeRequestDto dto) {
         VehicleType entity = mapper.toEntity(dto);
+        entity.setCompanyUuid(currentCompany());
         return ApiResponse.success(mapper.toDto(repository.save(entity)));
     }
 
     @Override
     public ApiResponse<VehicleTypeResponseDto> update(String id, VehicleTypeRequestDto dto) {
-        VehicleType e = repository.findByIdAndDeletedIsFalse(id)
+        VehicleType e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("VehicleType not found: " + id));
         mapper.update(e, dto);
         return ApiResponse.success(mapper.toDto(repository.save(e)));
@@ -43,7 +53,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
 
     @Override
     public ApiResponse<Void> delete(String id) {
-        VehicleType e = repository.findByIdAndDeletedIsFalse(id)
+        VehicleType e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("VehicleType not found: " + id));
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
@@ -54,7 +64,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<VehicleTypeResponseDto> get(String id) {
-        VehicleType e = repository.findByIdAndDeletedIsFalse(id)
+        VehicleType e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("VehicleType not found: " + id));
         return ApiResponse.success(mapper.toDto(e));
     }
@@ -62,7 +72,9 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<VehicleTypeResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findByDeletedIsFalse(pageable).map(mapper::toDto));
+        return ApiResponse.success(repository
+                .findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable)
+                .map(mapper::toDto));
     }
 
     @Override
@@ -90,6 +102,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
                 e.setCreatedAt(now);
                 e.setUpdatedAt(now);
                 e.setIsSynced(true);
+                e.setCompanyUuid(currentCompany());
                 entities.add(e);
             }
         }
