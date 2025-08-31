@@ -3,6 +3,7 @@ package com.easyreach.backend.service.impl;
 import com.easyreach.backend.auth.entity.UserAdapter;
 import com.easyreach.backend.service.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class SyncDownloadServiceImpl implements SyncDownloadService {
 
     private final CompanyService companyService;
@@ -33,6 +35,7 @@ public class SyncDownloadServiceImpl implements SyncDownloadService {
 
     @Override
     public Map<String, Object> downloadChanges(String sinceCursor, List<String> entities, Integer limit) {
+        log.debug("Entering downloadChanges sinceCursor={} entities={} limit={}", sinceCursor, entities, limit);
         int fetchLimit = limit != null ? limit : 100;
 
         OffsetDateTime cursor;
@@ -41,6 +44,7 @@ public class SyncDownloadServiceImpl implements SyncDownloadService {
                     ? OffsetDateTime.parse(sinceCursor)
                     : OffsetDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC);
         } catch (DateTimeParseException ex) {
+            log.warn("Invalid sinceCursor {}, defaulting to epoch", sinceCursor);
             cursor = OffsetDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC);
         }
 
@@ -86,6 +90,7 @@ public class SyncDownloadServiceImpl implements SyncDownloadService {
                 default -> null;
             };
             if (data == null) {
+                log.warn("Unknown entity requested: {}", entity);
                 continue;
             }
 
@@ -111,14 +116,17 @@ public class SyncDownloadServiceImpl implements SyncDownloadService {
 
         response.put("cursorEnd", cursorEnd);
         response.put("hasMore", hasMore);
+        log.debug("Exiting downloadChanges with hasMore={} cursorEnd={}", hasMore, cursorEnd);
         return response;
     }
 
     private OffsetDateTime extractTimestamp(Object obj) {
+        log.debug("Extracting timestamp from {}", obj);
         try {
             Method deletedAt = obj.getClass().getMethod("getDeletedAt");
             Object val = deletedAt.invoke(obj);
             if (val instanceof OffsetDateTime odt && odt != null) {
+                log.debug("Found deletedAt timestamp={}", odt);
                 return odt;
             }
         } catch (Exception ignored) {
@@ -127,10 +135,12 @@ public class SyncDownloadServiceImpl implements SyncDownloadService {
             Method updatedAt = obj.getClass().getMethod("getUpdatedAt");
             Object val = updatedAt.invoke(obj);
             if (val instanceof OffsetDateTime odt) {
+                log.debug("Found updatedAt timestamp={}", odt);
                 return odt;
             }
         } catch (Exception ignored) {
         }
+        log.debug("No timestamp found for {}", obj);
         return null;
     }
 }
