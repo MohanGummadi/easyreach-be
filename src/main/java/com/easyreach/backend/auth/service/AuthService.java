@@ -11,6 +11,7 @@ import com.easyreach.backend.repository.RefreshTokenRepository;
 import com.easyreach.backend.repository.UserRepository;
 import com.easyreach.backend.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +27,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -40,6 +42,7 @@ public class AuthService {
      */
     @Transactional
     public AuthResponse register(UserDto request) {
+        log.debug("Entering register with request={}", request);
         // Prefer IDs coming from the client (Android), fall back to generated when absent
         String userId = request.getId() != null ? request.getId() : UUID.randomUUID().toString();
         String employeeId = request.getEmployeeId() != null ? request.getEmployeeId() : UUID.randomUUID().toString();
@@ -57,7 +60,9 @@ public class AuthService {
                 .build();
 
         userRepository.save(user);
-        return createTokens(user, null);
+        AuthResponse response = createTokens(user, null);
+        log.debug("Exiting register with response={}", response);
+        return response;
     }
 
     /**
@@ -65,15 +70,21 @@ public class AuthService {
      */
     @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request) {
+        log.debug("Entering login with email={}", request.getEmail());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
         // After successful auth, load our domain User by email and company
         User user = userRepository.findByEmailIgnoreCaseAndCompanyUuid(request.getEmail(), request.getCompanyUuid())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + request.getEmail()));
+                .orElseThrow(() -> {
+                    log.warn("User not found during login: {}", request.getEmail());
+                    return new UsernameNotFoundException("User not found: " + request.getEmail());
+                });
 
-        return createTokens(user, null);
+        AuthResponse response = createTokens(user, null);
+        log.debug("Exiting login with response={}", response);
+        return response;
     }
 
     /**
@@ -81,25 +92,35 @@ public class AuthService {
      */
     @Transactional
     public AuthResponse refresh(RefreshRequest request) {
+        log.debug("Entering refresh with token={}", request.getRefreshToken());
         String token = request.getRefreshToken();
         String jti = jwtService.extractJti(token);
 
         RefreshToken stored = refreshTokenRepository.findByJtiAndRevokedAtIsNull(jti)
-                .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
+                .orElseThrow(() -> {
+                    log.error("Invalid refresh token jti={}", jti);
+                    return new RuntimeException("Invalid refresh token");
+                });
 
         if (stored.getExpiresAt().isBefore(OffsetDateTime.now(ZoneOffset.UTC))) {
+            log.warn("Refresh token expired jti={}", jti);
             throw new RuntimeException("Refresh token expired");
         }
 
         User user = userRepository.findById(stored.getUserId())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + stored.getUserId()));
+                .orElseThrow(() -> {
+                    log.warn("User not found for id={} during refresh", stored.getUserId());
+                    return new UsernameNotFoundException("User not found: " + stored.getUserId());
+                });
 
         // revoke the used refresh token
         stored.setRevokedAt(OffsetDateTime.now(ZoneOffset.UTC));
         refreshTokenRepository.save(stored);
 
         // issue fresh pair; record rotation chain
-        return createTokens(user, jti);
+        AuthResponse response = createTokens(user, jti);
+        log.debug("Exiting refresh with response={}", response);
+        return response;
     }
 
     /**
@@ -107,17 +128,20 @@ public class AuthService {
      */
     @Transactional
     public void logout(RefreshRequest request) {
+        log.debug("Entering logout with token={}", request.getRefreshToken());
         String jti = jwtService.extractJti(request.getRefreshToken());
         refreshTokenRepository.findById(jti).ifPresent(token -> {
             token.setRevokedAt(OffsetDateTime.now(ZoneOffset.UTC));
             refreshTokenRepository.save(token);
         });
+        log.debug("Exiting logout for jti={}", jti);
     }
 
     /**
      * Helper: creates access + refresh token pair and persists refresh token metadata.
      */
     private AuthResponse createTokens(User user, String rotatedFrom) {
+        log.debug("Entering createTokens for userId={} rotatedFrom={}", user.getId(), rotatedFrom);
         String jti = UUID.randomUUID().toString();
 
         String accessToken = jwtService.generateAccessToken(user);
@@ -132,6 +156,8 @@ public class AuthService {
                 .build();
 
         refreshTokenRepository.save(entity);
-        return new AuthResponse(accessToken, refreshToken);
+        AuthResponse response = new AuthResponse(accessToken, refreshToken);
+        log.debug("Exiting createTokens with jti={} response={}", jti, response);
+        return response;
     }
 }
