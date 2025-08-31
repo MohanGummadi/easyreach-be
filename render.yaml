@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: easyreach-be
+    env: java
+    buildCommand: mvn -q package -DskipTests
+    startCommand: java -jar target/*.jar
+    envVars:
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+
