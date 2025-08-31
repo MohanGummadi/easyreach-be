@@ -7,7 +7,14 @@ import com.easyreach.backend.dto.internal_vehicles.InternalVehicleResponseDto;
 
 @Mapper(componentModel = "spring")
 public interface InternalVehicleMapper {
+    @Mapping(target = "deleted", source = "deleted")
+    @Mapping(target = "deletedAt", source = "deletedAt")
+    @Mapping(target = "changeId", source = "changeId")
     InternalVehicle toEntity(InternalVehicleRequestDto dto);
+
+    @Mapping(target = "deleted", source = "deleted")
+    @Mapping(target = "deletedAt", source = "deletedAt")
+    @Mapping(target = "changeId", source = "changeId")
     InternalVehicleResponseDto toDto(InternalVehicle entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

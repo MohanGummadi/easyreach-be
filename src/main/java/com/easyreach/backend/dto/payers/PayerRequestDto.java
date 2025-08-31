@@ -34,5 +34,10 @@ public class PayerRequestDto {
   @NotNull
   private OffsetDateTime updatedAt;
 
+  @NotNull
+  private Boolean deleted;
+
   private OffsetDateTime deletedAt;
+
+  private Long changeId;
 }

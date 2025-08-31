@@ -24,4 +24,8 @@ public class UserResponseDto {
   private Boolean isActive;
   private OffsetDateTime createdAt;
   private OffsetDateTime updatedAt;
+
+  private Boolean deleted;
+  private OffsetDateTime deletedAt;
+  private Long changeId;
 }

@@ -7,7 +7,14 @@ import com.easyreach.backend.dto.equipment_usage.EquipmentUsageResponseDto;
 
 @Mapper(componentModel = "spring")
 public interface EquipmentUsageMapper {
+    @Mapping(target = "deleted", source = "deleted")
+    @Mapping(target = "deletedAt", source = "deletedAt")
+    @Mapping(target = "changeId", source = "changeId")
     EquipmentUsage toEntity(EquipmentUsageRequestDto dto);
+
+    @Mapping(target = "deleted", source = "deleted")
+    @Mapping(target = "deletedAt", source = "deletedAt")
+    @Mapping(target = "changeId", source = "changeId")
     EquipmentUsageResponseDto toDto(EquipmentUsage entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

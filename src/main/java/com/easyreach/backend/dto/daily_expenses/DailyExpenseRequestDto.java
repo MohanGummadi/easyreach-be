@@ -41,4 +41,11 @@ public class DailyExpenseRequestDto {
   private String updatedBy;
   @NotNull
   private OffsetDateTime updatedAt;
+
+  @NotNull
+  private Boolean deleted;
+
+  private OffsetDateTime deletedAt;
+
+  private Long changeId;
 }
