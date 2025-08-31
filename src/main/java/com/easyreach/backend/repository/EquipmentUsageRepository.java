@@ -14,7 +14,7 @@ public interface EquipmentUsageRepository extends JpaRepository<EquipmentUsage, 
 
     List<EquipmentUsage> findByCompanyUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(String companyUuid, OffsetDateTime cursor, Pageable pageable);
 
-    Optional<EquipmentUsage> findByEquipmentUsageIdAndDeletedIsFalse(String equipmentUsageId);
+    Optional<EquipmentUsage> findByEquipmentUsageIdAndCompanyUuidAndDeletedIsFalse(String equipmentUsageId, String companyUuid);
 
-    Page<EquipmentUsage> findByDeletedIsFalse(Pageable pageable);
+    Page<EquipmentUsage> findByCompanyUuidAndDeletedIsFalse(String companyUuid, Pageable pageable);
 }

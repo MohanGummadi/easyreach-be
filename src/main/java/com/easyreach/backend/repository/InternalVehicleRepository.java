@@ -14,7 +14,7 @@ public interface InternalVehicleRepository extends JpaRepository<InternalVehicle
 
     List<InternalVehicle> findByCompanyUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(String companyUuid, OffsetDateTime cursor, Pageable pageable);
 
-    Optional<InternalVehicle> findByVehicleIdAndDeletedIsFalse(String vehicleId);
+    Optional<InternalVehicle> findByVehicleIdAndCompanyUuidAndDeletedIsFalse(String vehicleId, String companyUuid);
 
-    Page<InternalVehicle> findByDeletedIsFalse(Pageable pageable);
+    Page<InternalVehicle> findByCompanyUuidAndDeletedIsFalse(String companyUuid, Pageable pageable);
 }

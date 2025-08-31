@@ -1,5 +1,7 @@
 package com.easyreach.backend.service;
 
+import com.easyreach.backend.security.CompanyContext;
+
 import com.easyreach.backend.dto.ApiResponse;
 import com.easyreach.backend.dto.vehicle_entries.VehicleEntryResponseDto;
 import com.easyreach.backend.entity.VehicleEntry;
@@ -38,6 +40,7 @@ class VehicleEntryOpsServiceImplTest {
     @BeforeEach
     void init() {
         entity = new VehicleEntry();
+        CompanyContext.setCompanyId("test");
         entity.setEntryId("1");
         entity.setPaidAmount(BigDecimal.ZERO);
         entity.setAmount(new BigDecimal("100"));
@@ -49,7 +52,7 @@ class VehicleEntryOpsServiceImplTest {
 
     @Test
     void addPayment_updatesFields() {
-        when(repository.findById("1")).thenReturn(Optional.of(entity));
+        when(repository.findByEntryIdAndCompanyUuidAndDeletedIsFalse("1", "test")).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(response);
 
         ApiResponse<VehicleEntryResponseDto> res = service.addPayment("1", new BigDecimal("50"), "user", OffsetDateTime.now());
@@ -62,7 +65,7 @@ class VehicleEntryOpsServiceImplTest {
     @Test
     void markExit_setsExitTime() {
         OffsetDateTime when = OffsetDateTime.now();
-        when(repository.findById("1")).thenReturn(Optional.of(entity));
+        when(repository.findByEntryIdAndCompanyUuidAndDeletedIsFalse("1", "test")).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(response);
 
         ApiResponse<VehicleEntryResponseDto> res = service.markExit("1", when);
@@ -73,7 +76,7 @@ class VehicleEntryOpsServiceImplTest {
 
     @Test
     void addPayment_notFound() {
-        when(repository.findById("1")).thenReturn(Optional.empty());
+        when(repository.findByEntryIdAndCompanyUuidAndDeletedIsFalse("1", "test")).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> service.addPayment("1", BigDecimal.ONE, "u", null));
     }
 }

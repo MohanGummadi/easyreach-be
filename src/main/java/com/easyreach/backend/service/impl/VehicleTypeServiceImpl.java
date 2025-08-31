@@ -6,7 +6,6 @@ import com.easyreach.backend.dto.vehicle_types.VehicleTypeResponseDto;
 import com.easyreach.backend.entity.VehicleType;
 import com.easyreach.backend.mapper.VehicleTypeMapper;
 import com.easyreach.backend.repository.VehicleTypeRepository;
-import com.easyreach.backend.security.CompanyContext;
 import com.easyreach.backend.service.VehicleTypeService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -24,17 +23,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class VehicleTypeServiceImpl implements VehicleTypeService {
+public class VehicleTypeServiceImpl extends CompanyScopedService implements VehicleTypeService {
     private final VehicleTypeRepository repository;
     private final VehicleTypeMapper mapper;
-
-    private String currentCompany() {
-        String companyUuid = CompanyContext.getCompanyId();
-        if (companyUuid == null) {
-            throw new IllegalStateException("Company ID is not set in context");
-        }
-        return companyUuid;
-    }
 
     @Override
     public ApiResponse<VehicleTypeResponseDto> create(VehicleTypeRequestDto dto) {

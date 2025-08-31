@@ -14,7 +14,7 @@ public interface ExpenseMasterRepository extends JpaRepository<ExpenseMaster, St
 
     List<ExpenseMaster> findByCompanyUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(String companyUuid, OffsetDateTime cursor, Pageable pageable);
 
-    Optional<ExpenseMaster> findByIdAndDeletedIsFalse(String id);
+    Optional<ExpenseMaster> findByIdAndCompanyUuidAndDeletedIsFalse(String id, String companyUuid);
 
-    Page<ExpenseMaster> findByDeletedIsFalse(Pageable pageable);
+    Page<ExpenseMaster> findByCompanyUuidAndDeletedIsFalse(String companyUuid, Pageable pageable);
 }

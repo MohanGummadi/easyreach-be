@@ -20,19 +20,20 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends CompanyScopedService implements UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
 
     @Override
     public ApiResponse<UserResponseDto> create(UserRequestDto dto) {
         User entity = mapper.toEntity(dto);
+        entity.setCompanyUuid(currentCompany());
         return ApiResponse.success(mapper.toDto(repository.save(entity)));
     }
 
     @Override
     public ApiResponse<UserResponseDto> update(String id, UserRequestDto dto) {
-        User e = repository.findByIdAndDeletedIsFalse(id)
+        User e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
         mapper.update(e, dto);
         return ApiResponse.success(mapper.toDto(repository.save(e)));
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse<Void> delete(String id) {
-        User e = repository.findByIdAndDeletedIsFalse(id)
+        User e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<UserResponseDto> get(String id) {
-        User e = repository.findByIdAndDeletedIsFalse(id)
+        User e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
         return ApiResponse.success(mapper.toDto(e));
     }
@@ -59,7 +60,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<UserResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findByDeletedIsFalse(pageable).map(mapper::toDto));
+        return ApiResponse.success(repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
     }
 
     @Override

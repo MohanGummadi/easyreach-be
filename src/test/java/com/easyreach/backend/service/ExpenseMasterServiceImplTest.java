@@ -1,5 +1,7 @@
 package com.easyreach.backend.service;
 
+import com.easyreach.backend.security.CompanyContext;
+
 import com.easyreach.backend.dto.expense_master.ExpenseMasterRequestDto;
 import com.easyreach.backend.entity.ExpenseMaster;
 import com.easyreach.backend.mapper.ExpenseMasterMapper;
@@ -33,6 +35,7 @@ class ExpenseMasterServiceImplTest {
     @BeforeEach
     void setUp() {
         service = new ExpenseMasterServiceImpl(repository, mapper);
+        CompanyContext.setCompanyId("test");
     }
 
     @Test

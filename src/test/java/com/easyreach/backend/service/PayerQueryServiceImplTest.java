@@ -1,5 +1,7 @@
 package com.easyreach.backend.service;
 
+import com.easyreach.backend.security.CompanyContext;
+
 import com.easyreach.backend.dto.ApiResponse;
 import com.easyreach.backend.dto.payers.PayerResponseDto;
 import com.easyreach.backend.entity.Payer;
@@ -41,6 +43,7 @@ class PayerQueryServiceImplTest {
     @BeforeEach
     void init() {
         entity = new Payer();
+        CompanyContext.setCompanyId("test");
         response = new PayerResponseDto();
     }
 
@@ -57,7 +60,7 @@ class PayerQueryServiceImplTest {
 
     @Test
     void softDelete_marksDeleted() {
-        when(repository.findById("1")).thenReturn(Optional.of(entity));
+        when(repository.findByPayerIdAndCompanyUuidAndDeletedIsFalse("1", "test")).thenReturn(Optional.of(entity));
 
         ApiResponse<Void> res = service.softDelete("1");
         assertTrue(res.isSuccess());
@@ -67,7 +70,7 @@ class PayerQueryServiceImplTest {
 
     @Test
     void softDelete_notFound() {
-        when(repository.findById("1")).thenReturn(Optional.empty());
+        when(repository.findByPayerIdAndCompanyUuidAndDeletedIsFalse("1", "test")).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> service.softDelete("1"));
     }
 }

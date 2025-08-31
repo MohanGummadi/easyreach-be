@@ -23,19 +23,20 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class DailyExpenseServiceImpl implements DailyExpenseService {
+public class DailyExpenseServiceImpl extends CompanyScopedService implements DailyExpenseService {
     private final DailyExpenseRepository repository;
     private final DailyExpenseMapper mapper;
 
     @Override
     public ApiResponse<DailyExpenseResponseDto> create(DailyExpenseRequestDto dto) {
         DailyExpense entity = mapper.toEntity(dto);
+        entity.setCompanyUuid(currentCompany());
         return ApiResponse.success(mapper.toDto(repository.save(entity)));
     }
 
     @Override
     public ApiResponse<DailyExpenseResponseDto> update(String id, DailyExpenseRequestDto dto) {
-        DailyExpense e = repository.findByExpenseIdAndDeletedIsFalse(id)
+        DailyExpense e = repository.findByExpenseIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("DailyExpense not found: " + id));
         mapper.update(e, dto);
         return ApiResponse.success(mapper.toDto(repository.save(e)));
@@ -43,7 +44,7 @@ public class DailyExpenseServiceImpl implements DailyExpenseService {
 
     @Override
     public ApiResponse<Void> delete(String id) {
-        DailyExpense e = repository.findByExpenseIdAndDeletedIsFalse(id)
+        DailyExpense e = repository.findByExpenseIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("DailyExpense not found: " + id));
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
@@ -54,7 +55,7 @@ public class DailyExpenseServiceImpl implements DailyExpenseService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<DailyExpenseResponseDto> get(String id) {
-        DailyExpense e = repository.findByExpenseIdAndDeletedIsFalse(id)
+        DailyExpense e = repository.findByExpenseIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("DailyExpense not found: " + id));
         return ApiResponse.success(mapper.toDto(e));
     }
@@ -62,7 +63,7 @@ public class DailyExpenseServiceImpl implements DailyExpenseService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<DailyExpenseResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findByDeletedIsFalse(pageable).map(mapper::toDto));
+        return ApiResponse.success(repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
     }
 
     @Override
@@ -87,6 +88,7 @@ public class DailyExpenseServiceImpl implements DailyExpenseService {
                 entities.add(entity);
             } else {
                 DailyExpense e = mapper.toEntity(dto);
+                e.setCompanyUuid(currentCompany());
                 e.setCreatedAt(now);
                 e.setUpdatedAt(now);
                 e.setIsSynced(true);

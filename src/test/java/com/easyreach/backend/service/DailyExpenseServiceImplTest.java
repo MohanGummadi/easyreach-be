@@ -1,5 +1,7 @@
 package com.easyreach.backend.service;
 
+import com.easyreach.backend.security.CompanyContext;
+
 import com.easyreach.backend.dto.daily_expenses.DailyExpenseRequestDto;
 import com.easyreach.backend.entity.DailyExpense;
 import com.easyreach.backend.mapper.DailyExpenseMapper;
@@ -33,6 +35,7 @@ class DailyExpenseServiceImplTest {
     @BeforeEach
     void setUp() {
         service = new DailyExpenseServiceImpl(repository, mapper);
+        CompanyContext.setCompanyId("test");
     }
 
     @Test

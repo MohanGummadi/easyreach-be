@@ -14,7 +14,7 @@ public interface DailyExpenseRepository extends JpaRepository<DailyExpense, Stri
 
     List<DailyExpense> findByCompanyUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(String companyUuid, OffsetDateTime cursor, Pageable pageable);
 
-    Optional<DailyExpense> findByExpenseIdAndDeletedIsFalse(String expenseId);
+    Optional<DailyExpense> findByExpenseIdAndCompanyUuidAndDeletedIsFalse(String expenseId, String companyUuid);
 
-    Page<DailyExpense> findByDeletedIsFalse(Pageable pageable);
+    Page<DailyExpense> findByCompanyUuidAndDeletedIsFalse(String companyUuid, Pageable pageable);
 }

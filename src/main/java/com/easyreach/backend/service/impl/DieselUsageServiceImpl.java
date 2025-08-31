@@ -23,19 +23,20 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class DieselUsageServiceImpl implements DieselUsageService {
+public class DieselUsageServiceImpl extends CompanyScopedService implements DieselUsageService {
     private final DieselUsageRepository repository;
     private final DieselUsageMapper mapper;
 
     @Override
     public ApiResponse<DieselUsageResponseDto> create(DieselUsageRequestDto dto) {
         DieselUsage entity = mapper.toEntity(dto);
+        entity.setCompanyUuid(currentCompany());
         return ApiResponse.success(mapper.toDto(repository.save(entity)));
     }
 
     @Override
     public ApiResponse<DieselUsageResponseDto> update(String id, DieselUsageRequestDto dto) {
-        DieselUsage e = repository.findByDieselUsageIdAndDeletedIsFalse(id)
+        DieselUsage e = repository.findByDieselUsageIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("DieselUsage not found: " + id));
         mapper.update(e, dto);
         return ApiResponse.success(mapper.toDto(repository.save(e)));
@@ -43,7 +44,7 @@ public class DieselUsageServiceImpl implements DieselUsageService {
 
     @Override
     public ApiResponse<Void> delete(String id) {
-        DieselUsage e = repository.findByDieselUsageIdAndDeletedIsFalse(id)
+        DieselUsage e = repository.findByDieselUsageIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("DieselUsage not found: " + id));
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
@@ -54,7 +55,7 @@ public class DieselUsageServiceImpl implements DieselUsageService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<DieselUsageResponseDto> get(String id) {
-        DieselUsage e = repository.findByDieselUsageIdAndDeletedIsFalse(id)
+        DieselUsage e = repository.findByDieselUsageIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("DieselUsage not found: " + id));
         return ApiResponse.success(mapper.toDto(e));
     }
@@ -62,7 +63,7 @@ public class DieselUsageServiceImpl implements DieselUsageService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<DieselUsageResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findByDeletedIsFalse(pageable).map(mapper::toDto));
+        return ApiResponse.success(repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
     }
 
     @Override
@@ -87,6 +88,7 @@ public class DieselUsageServiceImpl implements DieselUsageService {
                 entities.add(entity);
             } else {
                 DieselUsage e = mapper.toEntity(dto);
+                e.setCompanyUuid(currentCompany());
                 e.setCreatedAt(now);
                 e.setUpdatedAt(now);
                 e.setIsSynced(true);

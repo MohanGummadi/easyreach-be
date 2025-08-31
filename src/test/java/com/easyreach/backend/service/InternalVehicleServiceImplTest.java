@@ -1,5 +1,7 @@
 package com.easyreach.backend.service;
 
+import com.easyreach.backend.security.CompanyContext;
+
 import com.easyreach.backend.dto.internal_vehicles.InternalVehicleRequestDto;
 import com.easyreach.backend.entity.InternalVehicle;
 import com.easyreach.backend.mapper.InternalVehicleMapper;
@@ -33,6 +35,7 @@ class InternalVehicleServiceImplTest {
     @BeforeEach
     void setUp() {
         service = new InternalVehicleServiceImpl(repository, mapper);
+        CompanyContext.setCompanyId("test");
     }
 
     @Test

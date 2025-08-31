@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     List<User> findByCompanyUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(String companyUuid, OffsetDateTime cursor, Pageable pageable);
 
-    Optional<User> findByIdAndDeletedIsFalse(String id);
+    Optional<User> findByIdAndCompanyUuidAndDeletedIsFalse(String id, String companyUuid);
 
-    Page<User> findByDeletedIsFalse(Pageable pageable);
+    Page<User> findByCompanyUuidAndDeletedIsFalse(String companyUuid, Pageable pageable);
 }

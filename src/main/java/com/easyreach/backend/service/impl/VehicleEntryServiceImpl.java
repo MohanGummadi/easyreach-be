@@ -23,19 +23,20 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class VehicleEntryServiceImpl implements VehicleEntryService {
+public class VehicleEntryServiceImpl extends CompanyScopedService implements VehicleEntryService {
     private final VehicleEntryRepository repository;
     private final VehicleEntryMapper mapper;
 
     @Override
     public ApiResponse<VehicleEntryResponseDto> create(VehicleEntryRequestDto dto) {
         VehicleEntry entity = mapper.toEntity(dto);
+        entity.setCompanyUuid(currentCompany());
         return ApiResponse.success(mapper.toDto(repository.save(entity)));
     }
 
     @Override
     public ApiResponse<VehicleEntryResponseDto> update(String id, VehicleEntryRequestDto dto) {
-        VehicleEntry e = repository.findByEntryIdAndDeletedIsFalse(id)
+        VehicleEntry e = repository.findByEntryIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("VehicleEntry not found: " + id));
         mapper.update(e, dto);
         return ApiResponse.success(mapper.toDto(repository.save(e)));
@@ -43,7 +44,7 @@ public class VehicleEntryServiceImpl implements VehicleEntryService {
 
     @Override
     public ApiResponse<Void> delete(String id) {
-        VehicleEntry e = repository.findByEntryIdAndDeletedIsFalse(id)
+        VehicleEntry e = repository.findByEntryIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("VehicleEntry not found: " + id));
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
@@ -54,7 +55,7 @@ public class VehicleEntryServiceImpl implements VehicleEntryService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<VehicleEntryResponseDto> get(String id) {
-        VehicleEntry e = repository.findByEntryIdAndDeletedIsFalse(id)
+        VehicleEntry e = repository.findByEntryIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("VehicleEntry not found: " + id));
         return ApiResponse.success(mapper.toDto(e));
     }
@@ -62,7 +63,7 @@ public class VehicleEntryServiceImpl implements VehicleEntryService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<VehicleEntryResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findByDeletedIsFalse(pageable).map(mapper::toDto));
+        return ApiResponse.success(repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
     }
 
     @Override
@@ -87,6 +88,7 @@ public class VehicleEntryServiceImpl implements VehicleEntryService {
                 entities.add(entity);
             } else {
                 VehicleEntry e = mapper.toEntity(dto);
+                e.setCompanyUuid(currentCompany());
                 e.setCreatedAt(now);
                 e.setUpdatedAt(now);
                 e.setIsSynced(true);

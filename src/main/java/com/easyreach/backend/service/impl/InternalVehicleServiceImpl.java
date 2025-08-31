@@ -23,19 +23,20 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class InternalVehicleServiceImpl implements InternalVehicleService {
+public class InternalVehicleServiceImpl extends CompanyScopedService implements InternalVehicleService {
     private final InternalVehicleRepository repository;
     private final InternalVehicleMapper mapper;
 
     @Override
     public ApiResponse<InternalVehicleResponseDto> create(InternalVehicleRequestDto dto) {
         InternalVehicle entity = mapper.toEntity(dto);
+        entity.setCompanyUuid(currentCompany());
         return ApiResponse.success(mapper.toDto(repository.save(entity)));
     }
 
     @Override
     public ApiResponse<InternalVehicleResponseDto> update(String id, InternalVehicleRequestDto dto) {
-        InternalVehicle e = repository.findByVehicleIdAndDeletedIsFalse(id)
+        InternalVehicle e = repository.findByVehicleIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("InternalVehicle not found: " + id));
         mapper.update(e, dto);
         return ApiResponse.success(mapper.toDto(repository.save(e)));
@@ -43,7 +44,7 @@ public class InternalVehicleServiceImpl implements InternalVehicleService {
 
     @Override
     public ApiResponse<Void> delete(String id) {
-        InternalVehicle e = repository.findByVehicleIdAndDeletedIsFalse(id)
+        InternalVehicle e = repository.findByVehicleIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("InternalVehicle not found: " + id));
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
@@ -54,7 +55,7 @@ public class InternalVehicleServiceImpl implements InternalVehicleService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<InternalVehicleResponseDto> get(String id) {
-        InternalVehicle e = repository.findByVehicleIdAndDeletedIsFalse(id)
+        InternalVehicle e = repository.findByVehicleIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("InternalVehicle not found: " + id));
         return ApiResponse.success(mapper.toDto(e));
     }
@@ -62,7 +63,7 @@ public class InternalVehicleServiceImpl implements InternalVehicleService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<InternalVehicleResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findByDeletedIsFalse(pageable).map(mapper::toDto));
+        return ApiResponse.success(repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
     }
 
     @Override
@@ -87,6 +88,7 @@ public class InternalVehicleServiceImpl implements InternalVehicleService {
                 entities.add(entity);
             } else {
                 InternalVehicle e = mapper.toEntity(dto);
+                e.setCompanyUuid(currentCompany());
                 e.setCreatedAt(now);
                 e.setUpdatedAt(now);
                 e.setIsSynced(true);

@@ -17,14 +17,14 @@ import java.time.OffsetDateTime;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class VehicleEntryOpsServiceImpl implements VehicleEntryOpsService {
+public class VehicleEntryOpsServiceImpl extends CompanyScopedService implements VehicleEntryOpsService {
 
     private final VehicleEntryRepository repository;
     private final VehicleEntryMapper mapper;
 
     @Override
     public ApiResponse<VehicleEntryResponseDto> addPayment(String entryId, BigDecimal amount, String receivedBy, OffsetDateTime when) {
-        VehicleEntry e = repository.findById(entryId).orElseThrow(() -> new EntityNotFoundException("VehicleEntry not found: " + entryId));
+        VehicleEntry e = repository.findByEntryIdAndCompanyUuidAndDeletedIsFalse(entryId, currentCompany()).orElseThrow(() -> new EntityNotFoundException("VehicleEntry not found: " + entryId));
         if (amount == null || amount.signum() <= 0) throw new IllegalArgumentException("Amount must be positive");
         e.setPaidAmount(e.getPaidAmount().add(amount));
         e.setPaymentReceivedBy(receivedBy);
@@ -44,7 +44,7 @@ public class VehicleEntryOpsServiceImpl implements VehicleEntryOpsService {
 
     @Override
     public ApiResponse<VehicleEntryResponseDto> markExit(String entryId, OffsetDateTime when) {
-        VehicleEntry e = repository.findById(entryId).orElseThrow(() -> new EntityNotFoundException("VehicleEntry not found: " + entryId));
+        VehicleEntry e = repository.findByEntryIdAndCompanyUuidAndDeletedIsFalse(entryId, currentCompany()).orElseThrow(() -> new EntityNotFoundException("VehicleEntry not found: " + entryId));
         e.setExitTime(when != null ? when : OffsetDateTime.now());
         repository.save(e);
         return ApiResponse.success(mapper.toDto(e));

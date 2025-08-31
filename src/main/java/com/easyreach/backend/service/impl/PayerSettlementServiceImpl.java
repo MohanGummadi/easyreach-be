@@ -23,19 +23,20 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PayerSettlementServiceImpl implements PayerSettlementService {
+public class PayerSettlementServiceImpl extends CompanyScopedService implements PayerSettlementService {
     private final PayerSettlementRepository repository;
     private final PayerSettlementMapper mapper;
 
     @Override
     public ApiResponse<PayerSettlementResponseDto> create(PayerSettlementRequestDto dto) {
         PayerSettlement entity = mapper.toEntity(dto);
+        entity.setCompanyUuid(currentCompany());
         return ApiResponse.success(mapper.toDto(repository.save(entity)));
     }
 
     @Override
     public ApiResponse<PayerSettlementResponseDto> update(String id, PayerSettlementRequestDto dto) {
-        PayerSettlement e = repository.findBySettlementIdAndDeletedIsFalse(id)
+        PayerSettlement e = repository.findBySettlementIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("PayerSettlement not found: " + id));
         mapper.update(e, dto);
         return ApiResponse.success(mapper.toDto(repository.save(e)));
@@ -43,7 +44,7 @@ public class PayerSettlementServiceImpl implements PayerSettlementService {
 
     @Override
     public ApiResponse<Void> delete(String id) {
-        PayerSettlement e = repository.findBySettlementIdAndDeletedIsFalse(id)
+        PayerSettlement e = repository.findBySettlementIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("PayerSettlement not found: " + id));
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
@@ -54,7 +55,7 @@ public class PayerSettlementServiceImpl implements PayerSettlementService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<PayerSettlementResponseDto> get(String id) {
-        PayerSettlement e = repository.findBySettlementIdAndDeletedIsFalse(id)
+        PayerSettlement e = repository.findBySettlementIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("PayerSettlement not found: " + id));
         return ApiResponse.success(mapper.toDto(e));
     }
@@ -62,7 +63,7 @@ public class PayerSettlementServiceImpl implements PayerSettlementService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<PayerSettlementResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findByDeletedIsFalse(pageable).map(mapper::toDto));
+        return ApiResponse.success(repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
     }
 
     @Override
@@ -87,6 +88,7 @@ public class PayerSettlementServiceImpl implements PayerSettlementService {
                 entities.add(entity);
             } else {
                 PayerSettlement e = mapper.toEntity(dto);
+                e.setCompanyUuid(currentCompany());
                 e.setCreatedAt(now);
                 e.setUpdatedAt(now);
                 e.setIsSynced(true);
