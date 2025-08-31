@@ -55,11 +55,26 @@ class JwtAuthenticationFilterTest {
 
         when(jwtService.extractUsername("token")).thenReturn("user");
         when(userDetailsService.loadUserByUsername("user")).thenReturn(userDetails);
-        when(jwtService.isTokenExpired("token")).thenReturn(false);
+        when(jwtService.isTokenValid("token", userDetails)).thenReturn(true);
 
         filter.doFilterInternal(request, response, chain);
 
         verify(chain).doFilter(request, response);
         assertThat(SecurityContextHolder.getContext().getAuthentication()).isNotNull();
+    }
+
+    @Test
+    void invalidToken_returnsUnauthorized() throws ServletException, IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("Authorization", "Bearer bad");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        FilterChain chain = mock(FilterChain.class);
+
+        when(jwtService.extractUsername("bad")).thenThrow(new RuntimeException("invalid"));
+
+        filter.doFilterInternal(request, response, chain);
+
+        verify(chain, never()).doFilter(request, response);
+        assertThat(response.getStatus()).isEqualTo(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
