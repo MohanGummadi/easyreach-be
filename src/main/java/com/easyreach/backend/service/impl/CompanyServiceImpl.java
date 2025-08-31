@@ -106,7 +106,7 @@ public class CompanyServiceImpl implements CompanyService {
             return 0;
         }
 
-        Map<String, Company> existing = repository.findAllById(dtoMap.keySet()).stream()
+        Map<String, Company> existing = repository.findByUuidInAndUuid(dtoMap.keySet(), currentCompany()).stream()
                 .collect(Collectors.toMap(Company::getUuid, Function.identity()));
 
         OffsetDateTime now = OffsetDateTime.now();

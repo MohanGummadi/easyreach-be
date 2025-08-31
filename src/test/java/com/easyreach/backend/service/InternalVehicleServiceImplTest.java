@@ -53,7 +53,7 @@ class InternalVehicleServiceImplTest {
         existing.setCreatedAt(old);
         existing.setUpdatedAt(old);
 
-        when(repository.findAllById(any())).thenReturn(List.of(existing));
+        when(repository.findByVehicleIdInAndCompanyUuid(any(), anyString())).thenReturn(List.of(existing));
 
         InternalVehicle newEntity = new InternalVehicle();
         newEntity.setVehicleId("iv2");

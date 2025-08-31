@@ -108,7 +108,7 @@ public class DieselUsageServiceImpl extends CompanyScopedService implements Dies
             return 0;
         }
 
-        Map<String, DieselUsage> existing = repository.findAllById(dtoMap.keySet()).stream()
+        Map<String, DieselUsage> existing = repository.findByDieselUsageIdInAndCompanyUuid(dtoMap.keySet(), currentCompany()).stream()
                 .collect(Collectors.toMap(DieselUsage::getDieselUsageId, Function.identity()));
 
         OffsetDateTime now = OffsetDateTime.now();

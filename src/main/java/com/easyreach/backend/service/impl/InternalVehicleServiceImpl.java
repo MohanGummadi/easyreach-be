@@ -108,7 +108,7 @@ public class InternalVehicleServiceImpl extends CompanyScopedService implements 
             return 0;
         }
 
-        Map<String, InternalVehicle> existing = repository.findAllById(dtoMap.keySet()).stream()
+        Map<String, InternalVehicle> existing = repository.findByVehicleIdInAndCompanyUuid(dtoMap.keySet(), currentCompany()).stream()
                 .collect(Collectors.toMap(InternalVehicle::getVehicleId, Function.identity()));
 
         OffsetDateTime now = OffsetDateTime.now();

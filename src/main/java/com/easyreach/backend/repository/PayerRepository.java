@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,4 +21,6 @@ public interface PayerRepository extends JpaRepository<Payer, String> {
     Optional<Payer> findByPayerIdAndCompanyUuidAndDeletedIsFalse(String payerId, String companyUuid);
 
     Page<Payer> findByCompanyUuidAndDeletedIsFalse(String companyUuid, Pageable pageable);
+
+    List<Payer> findByPayerIdInAndCompanyUuid(Collection<String> payerIds, String companyUuid);
 }
