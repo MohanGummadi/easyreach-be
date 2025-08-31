@@ -97,14 +97,39 @@ public class PayerServiceImpl implements PayerService {
     @Transactional(readOnly = true)
     public Map<String, Object> fetchChangesSince(String companyUuid, OffsetDateTime cursor, int limit) {
         Map<String, Object> result = new HashMap<>();
-        List<Payer> updates = repository.findByCompanyUuidAndUpdatedAtGreaterThanEqual(companyUuid, cursor, PageRequest.of(0, limit));
-        result.put("updated", updates.stream().map(mapper::toDto).toList());
+        boolean hasMore = false;
+
+        List<Payer> updates = repository.findByCompanyUuidAndUpdatedAtGreaterThanEqual(
+                companyUuid, cursor, PageRequest.of(0, limit + 1));
+        if (updates.size() > limit) {
+            hasMore = true;
+            updates = updates.subList(0, limit);
+        }
+        result.put("items", updates.stream().map(mapper::toDto).toList());
+
         int remaining = limit - updates.size();
-        List<String> tombstones = remaining > 0
-                ? repository.findByCompanyUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(companyUuid, cursor, PageRequest.of(0, remaining))
-                .stream().map(Payer::getPayerId).toList()
-                : Collections.emptyList();
-        result.put("tombstones", tombstones);
+        List<Payer> tombstoneEntities = Collections.emptyList();
+        if (remaining > 0) {
+            tombstoneEntities = repository.findByCompanyUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(
+                    companyUuid, cursor, PageRequest.of(0, remaining + 1));
+            if (tombstoneEntities.size() > remaining) {
+                hasMore = true;
+                tombstoneEntities = tombstoneEntities.subList(0, remaining);
+            }
+        }
+        result.put("tombstones", tombstoneEntities.stream().map(Payer::getPayerId).toList());
+
+        OffsetDateTime cursorEnd = cursor;
+        for (Payer e : updates) {
+            OffsetDateTime ts = e.getUpdatedAt();
+            if (ts != null && ts.isAfter(cursorEnd)) cursorEnd = ts;
+        }
+        for (Payer e : tombstoneEntities) {
+            OffsetDateTime ts = e.getDeletedAt();
+            if (ts != null && ts.isAfter(cursorEnd)) cursorEnd = ts;
+        }
+        result.put("cursorEnd", cursorEnd);
+        result.put("hasMore", hasMore);
         return result;
     }
 }
