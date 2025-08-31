@@ -13,6 +13,8 @@ public class JwtServiceTest {
     void setUp() {
         service = new JwtService();
         ReflectionTestUtils.setField(service, "secretBase64", "123456789012345678901234567890123456789012345678901234567890");
+        ReflectionTestUtils.setField(service, "accessTtlMinutes", 15L);
+        ReflectionTestUtils.setField(service, "refreshTtlDays", 7L);
     }
 
     @Test
