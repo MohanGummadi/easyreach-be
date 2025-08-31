@@ -55,23 +55,42 @@ ALTER TABLE vehicle_types RENAME COLUMN companyId TO company_uuid;
 ALTER TABLE vehicle_types RENAME COLUMN createdAt TO created_at;
 ALTER TABLE vehicle_types RENAME COLUMN updatedAt TO updated_at;
 
--- Rename existing indexes on companyId
-ALTER INDEX idx_users_companyId RENAME TO idx_users_company_uuid;
-ALTER INDEX idx_internal_vehicles_companyId RENAME TO idx_internal_vehicles_company_uuid;
-ALTER INDEX idx_vehicle_entries_companyId RENAME TO idx_vehicle_entries_company_uuid;
-ALTER INDEX idx_payer_settlements_companyId RENAME TO idx_payer_settlements_company_uuid;
-ALTER INDEX idx_payers_companyId RENAME TO idx_payers_company_uuid;
-ALTER INDEX idx_expense_master_companyId RENAME TO idx_expense_master_company_uuid;
-ALTER INDEX idx_daily_expenses_companyId RENAME TO idx_daily_expenses_company_uuid;
-ALTER INDEX idx_diesel_usage_companyId RENAME TO idx_diesel_usage_company_uuid;
-ALTER INDEX idx_equipment_usage_companyId RENAME TO idx_equipment_usage_company_uuid;
-ALTER INDEX idx_vehicle_types_companyId RENAME TO idx_vehicle_types_company_uuid;
+-- Recreate indexes on company_uuid
+DROP INDEX IF EXISTS idx_users_companyId;
+CREATE INDEX IF NOT EXISTS idx_users_company_uuid ON users(company_uuid);
+
+DROP INDEX IF EXISTS idx_internal_vehicles_companyId;
+CREATE INDEX IF NOT EXISTS idx_internal_vehicles_company_uuid ON internal_vehicles(company_uuid);
+
+DROP INDEX IF EXISTS idx_vehicle_entries_companyId;
+CREATE INDEX IF NOT EXISTS idx_vehicle_entries_company_uuid ON vehicle_entries(company_uuid);
+
+DROP INDEX IF EXISTS idx_payer_settlements_companyId;
+CREATE INDEX IF NOT EXISTS idx_payer_settlements_company_uuid ON payer_settlements(company_uuid);
+
+DROP INDEX IF EXISTS idx_payers_companyId;
+CREATE INDEX IF NOT EXISTS idx_payers_company_uuid ON payers(company_uuid);
+
+DROP INDEX IF EXISTS idx_expense_master_companyId;
+CREATE INDEX IF NOT EXISTS idx_expense_master_company_uuid ON expense_master(company_uuid);
+
+DROP INDEX IF EXISTS idx_daily_expenses_companyId;
+CREATE INDEX IF NOT EXISTS idx_daily_expenses_company_uuid ON daily_expenses(company_uuid);
+
+DROP INDEX IF EXISTS idx_diesel_usage_companyId;
+CREATE INDEX IF NOT EXISTS idx_diesel_usage_company_uuid ON diesel_usage(company_uuid);
+
+DROP INDEX IF EXISTS idx_equipment_usage_companyId;
+CREATE INDEX IF NOT EXISTS idx_equipment_usage_company_uuid ON equipment_usage(company_uuid);
+
+DROP INDEX IF EXISTS idx_vehicle_types_companyId;
+CREATE INDEX IF NOT EXISTS idx_vehicle_types_company_uuid ON vehicle_types(company_uuid);
 
 -- Indexes to support synchronization queries
 CREATE INDEX IF NOT EXISTS idx_companies_uuid_updated_at ON companies(uuid, updated_at);
 CREATE INDEX IF NOT EXISTS idx_companies_uuid_deleted_deleted_at ON companies(uuid, deleted, deleted_at);
 
-CREATE INDEX IF NOT EXISTS idx_users_company_uuid_updated_at ON users(company_uuid, updated_at);
+-- Users table lacks updated_at in initial schema, so only create index on company_uuid and deletion markers
 CREATE INDEX IF NOT EXISTS idx_users_company_uuid_deleted_deleted_at ON users(company_uuid, deleted, deleted_at);
 
 CREATE INDEX IF NOT EXISTS idx_internal_vehicles_company_uuid_updated_at ON internal_vehicles(company_uuid, updated_at);
