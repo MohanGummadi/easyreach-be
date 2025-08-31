@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -37,6 +38,7 @@ public class AuthService {
      * Registers a user using the new String-id User entity.
      * If the mobile app supplies IDs, we use them; otherwise we fall back to generated values.
      */
+    @Transactional
     public AuthResponse register(UserDto request) {
         // Prefer IDs coming from the client (Android), fall back to generated when absent
         String userId = request.getId() != null ? request.getId() : UUID.randomUUID().toString();
@@ -61,6 +63,7 @@ public class AuthService {
     /**
      * Authenticates via Spring Security, then loads our User entity by email.
      */
+    @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
@@ -76,6 +79,7 @@ public class AuthService {
     /**
      * Rotates refresh tokens: revoke old, issue new pair.
      */
+    @Transactional
     public AuthResponse refresh(RefreshRequest request) {
         String token = request.getRefreshToken();
         String jti = jwtService.extractJti(token);
@@ -101,6 +105,7 @@ public class AuthService {
     /**
      * Soft revoke a refresh token (logout current session).
      */
+    @Transactional
     public void logout(RefreshRequest request) {
         String jti = jwtService.extractJti(request.getRefreshToken());
         refreshTokenRepository.findById(jti).ifPresent(token -> {
