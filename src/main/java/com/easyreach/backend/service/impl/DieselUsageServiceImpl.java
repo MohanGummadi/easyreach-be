@@ -47,7 +47,6 @@ public class DieselUsageServiceImpl implements DieselUsageService {
                 .orElseThrow(() -> new EntityNotFoundException("DieselUsage not found: " + id));
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
-        e.setChangeId(e.getChangeId() == null ? 0L : e.getChangeId() + 1);
         repository.save(e);
         return ApiResponse.success(null);
     }
@@ -84,7 +83,6 @@ public class DieselUsageServiceImpl implements DieselUsageService {
             if (entity != null) {
                 mapper.merge(dto, entity);
                 entity.setUpdatedAt(now);
-                entity.setChangeId(entity.getChangeId() == null ? 0L : entity.getChangeId() + 1);
                 entity.setIsSynced(true);
                 entities.add(entity);
             } else {

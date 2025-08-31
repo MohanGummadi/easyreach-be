@@ -44,7 +44,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
-        e.setChangeId(e.getChangeId() == null ? 0L : e.getChangeId() + 1);
         repository.save(e);
         return ApiResponse.success(null);
     }
