@@ -3,7 +3,6 @@ package com.easyreach.backend.dto.users;
 import lombok.*;
 import jakarta.validation.constraints.*;
 import java.time.*;
-import java.math.*;
 
 @Data
 @NoArgsConstructor
@@ -37,15 +36,4 @@ public class UserRequestDto {
   private LocalDate joiningDate;
   @NotNull
   private Boolean isActive;
-  @NotNull
-  private OffsetDateTime createdAt;
-  @NotNull
-  private OffsetDateTime updatedAt;
-
-  @NotNull
-  private Boolean deleted;
-
-  private OffsetDateTime deletedAt;
-
-  private Long changeId;
 }

@@ -7,14 +7,8 @@ import com.easyreach.backend.dto.users.UserResponseDto;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    @Mapping(target = "deleted", source = "deleted")
-    @Mapping(target = "deletedAt", source = "deletedAt")
-    @Mapping(target = "changeId", source = "changeId")
     User toEntity(UserRequestDto dto);
 
-    @Mapping(target = "deleted", source = "deleted")
-    @Mapping(target = "deletedAt", source = "deletedAt")
-    @Mapping(target = "changeId", source = "changeId")
     UserResponseDto toDto(User entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
