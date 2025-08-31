@@ -36,34 +36,34 @@ public class SyncController {
     @Operation(summary = "Bulk synchronize entities", description = "Accepts lists of entity DTOs and persists them with isSynced=true")
     public ResponseEntity<ApiResponse<SyncResponseDto>> sync(@Valid @RequestBody SyncRequestDto request) {
         SyncResponseDto response = new SyncResponseDto();
-        if (request.getCompanies() != null && !request.getCompanies().isEmpty()) {
+        if (request.getCompanies() != null) {
             response.setCompanies(companyService.bulkSync(request.getCompanies()));
         }
-        if (request.getDailyExpenses() != null && !request.getDailyExpenses().isEmpty()) {
+        if (request.getDailyExpenses() != null) {
             response.setDailyExpenses(dailyExpenseService.bulkSync(request.getDailyExpenses()));
         }
-        if (request.getDieselUsages() != null && !request.getDieselUsages().isEmpty()) {
+        if (request.getDieselUsages() != null) {
             response.setDieselUsages(dieselUsageService.bulkSync(request.getDieselUsages()));
         }
-        if (request.getEquipmentUsages() != null && !request.getEquipmentUsages().isEmpty()) {
+        if (request.getEquipmentUsages() != null) {
             response.setEquipmentUsages(equipmentUsageService.bulkSync(request.getEquipmentUsages()));
         }
-        if (request.getExpenseMasters() != null && !request.getExpenseMasters().isEmpty()) {
+        if (request.getExpenseMasters() != null) {
             response.setExpenseMasters(expenseMasterService.bulkSync(request.getExpenseMasters()));
         }
-        if (request.getInternalVehicles() != null && !request.getInternalVehicles().isEmpty()) {
+        if (request.getInternalVehicles() != null) {
             response.setInternalVehicles(internalVehicleService.bulkSync(request.getInternalVehicles()));
         }
-        if (request.getPayers() != null && !request.getPayers().isEmpty()) {
+        if (request.getPayers() != null) {
             response.setPayers(payerService.bulkSync(request.getPayers()));
         }
-        if (request.getPayerSettlements() != null && !request.getPayerSettlements().isEmpty()) {
+        if (request.getPayerSettlements() != null) {
             response.setPayerSettlements(payerSettlementService.bulkSync(request.getPayerSettlements()));
         }
-        if (request.getVehicleEntries() != null && !request.getVehicleEntries().isEmpty()) {
+        if (request.getVehicleEntries() != null) {
             response.setVehicleEntries(vehicleEntryService.bulkSync(request.getVehicleEntries()));
         }
-        if (request.getVehicleTypes() != null && !request.getVehicleTypes().isEmpty()) {
+        if (request.getVehicleTypes() != null) {
             response.setVehicleTypes(vehicleTypeService.bulkSync(request.getVehicleTypes()));
         }
         return ResponseEntity.ok(ApiResponse.success(response));

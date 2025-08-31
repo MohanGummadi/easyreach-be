@@ -1,5 +1,6 @@
 package com.easyreach.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,16 +8,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SyncResponseDto {
-    private int companies;
-    private int dailyExpenses;
-    private int dieselUsages;
-    private int equipmentUsages;
-    private int expenseMasters;
-    private int internalVehicles;
-    private int payers;
-    private int payerSettlements;
-    private int vehicleEntries;
-    private int vehicleTypes;
+    private Integer companies;
+    private Integer dailyExpenses;
+    private Integer dieselUsages;
+    private Integer equipmentUsages;
+    private Integer expenseMasters;
+    private Integer internalVehicles;
+    private Integer payers;
+    private Integer payerSettlements;
+    private Integer vehicleEntries;
+    private Integer vehicleTypes;
 }
 
