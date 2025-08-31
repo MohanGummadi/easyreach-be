@@ -6,6 +6,7 @@ import com.easyreach.backend.dto.vehicle_types.VehicleTypeResponseDto;
 import com.easyreach.backend.entity.VehicleType;
 import com.easyreach.backend.mapper.VehicleTypeMapper;
 import com.easyreach.backend.repository.VehicleTypeRepository;
+import com.easyreach.backend.security.CompanyContext;
 import com.easyreach.backend.service.VehicleTypeService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -30,12 +31,13 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
     @Override
     public ApiResponse<VehicleTypeResponseDto> create(VehicleTypeRequestDto dto) {
         VehicleType entity = mapper.toEntity(dto);
+        entity.setCompanyUuid(CompanyContext.getRequiredCompanyId());
         return ApiResponse.success(mapper.toDto(repository.save(entity)));
     }
 
     @Override
     public ApiResponse<VehicleTypeResponseDto> update(String id, VehicleTypeRequestDto dto) {
-        VehicleType e = repository.findByIdAndDeletedIsFalse(id)
+        VehicleType e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, CompanyContext.getRequiredCompanyId())
                 .orElseThrow(() -> new EntityNotFoundException("VehicleType not found: " + id));
         mapper.update(e, dto);
         return ApiResponse.success(mapper.toDto(repository.save(e)));
@@ -43,7 +45,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
 
     @Override
     public ApiResponse<Void> delete(String id) {
-        VehicleType e = repository.findByIdAndDeletedIsFalse(id)
+        VehicleType e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, CompanyContext.getRequiredCompanyId())
                 .orElseThrow(() -> new EntityNotFoundException("VehicleType not found: " + id));
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
@@ -54,7 +56,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<VehicleTypeResponseDto> get(String id) {
-        VehicleType e = repository.findByIdAndDeletedIsFalse(id)
+        VehicleType e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, CompanyContext.getRequiredCompanyId())
                 .orElseThrow(() -> new EntityNotFoundException("VehicleType not found: " + id));
         return ApiResponse.success(mapper.toDto(e));
     }
@@ -62,7 +64,9 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<VehicleTypeResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findByDeletedIsFalse(pageable).map(mapper::toDto));
+        return ApiResponse.success(repository
+                .findByCompanyUuidAndDeletedIsFalse(CompanyContext.getRequiredCompanyId(), pageable)
+                .map(mapper::toDto));
     }
 
     @Override
@@ -73,7 +77,9 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
                 .collect(Collectors.toMap(VehicleTypeRequestDto::getId, Function.identity(), (a, b) -> b, LinkedHashMap::new));
         if (dtoMap.isEmpty()) return 0;
 
-        Map<String, VehicleType> existing = repository.findAllById(dtoMap.keySet()).stream()
+        String companyUuid = CompanyContext.getRequiredCompanyId();
+        Map<String, VehicleType> existing = repository
+                .findByIdInAndCompanyUuid(dtoMap.keySet(), companyUuid).stream()
                 .collect(Collectors.toMap(VehicleType::getId, Function.identity()));
 
         OffsetDateTime now = OffsetDateTime.now();
@@ -90,6 +96,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
                 e.setCreatedAt(now);
                 e.setUpdatedAt(now);
                 e.setIsSynced(true);
+                e.setCompanyUuid(companyUuid);
                 entities.add(e);
             }
         }
@@ -100,11 +107,16 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
     @Override
     @Transactional(readOnly = true)
     public Map<String, Object> fetchChangesSince(String companyUuid, OffsetDateTime cursor, int limit) {
+        String currentCompany = CompanyContext.getRequiredCompanyId();
+        if (!currentCompany.equals(companyUuid)) {
+            throw new IllegalArgumentException("Company mismatch");
+        }
+
         Map<String, Object> result = new HashMap<>();
         boolean hasMore = false;
 
         List<VehicleType> updates = repository.findByCompanyUuidAndUpdatedAtGreaterThanEqual(
-                companyUuid, cursor, PageRequest.of(0, limit + 1));
+                currentCompany, cursor, PageRequest.of(0, limit + 1));
         if (updates.size() > limit) {
             hasMore = true;
             updates = updates.subList(0, limit);
@@ -115,7 +127,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
         List<VehicleType> tombstoneEntities = Collections.emptyList();
         if (remaining > 0) {
             tombstoneEntities = repository.findByCompanyUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(
-                    companyUuid, cursor, PageRequest.of(0, remaining + 1));
+                    currentCompany, cursor, PageRequest.of(0, remaining + 1));
             if (tombstoneEntities.size() > remaining) {
                 hasMore = true;
                 tombstoneEntities = tombstoneEntities.subList(0, remaining);
