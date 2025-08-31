@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://dpg-d2ioktje5dus73b8gv9g-a.singapore-postgres.render.com:5432/easyreach_db?sslmode=require&application_name=easyreach
-    username: easyreach_db_user
-    password: WHqcz59yKp5km8BN0t6K1fsjSCKhxKnu
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
     # --- HikariCP tuning (all in milliseconds) ---
@@ -40,7 +40,7 @@ springdoc:
     path: /swagger-ui.html
 
 jwt:
-  secret-base64: ls5XjEgc1ZX71gWfnEFtLfVaZZNmc4ajasvvm1mw0Q4=
+  secret-base64: ${JWT_SECRET}
   access-token:
     ttl-minutes: 15
   refresh-token:
