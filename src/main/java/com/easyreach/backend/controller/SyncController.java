@@ -4,6 +4,8 @@ import com.easyreach.backend.dto.ApiResponse;
 import com.easyreach.backend.dto.SyncRequestDto;
 import com.easyreach.backend.dto.SyncResponseDto;
 import com.easyreach.backend.service.*;
+import java.util.List;
+import java.util.Map;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,6 +28,7 @@ public class SyncController {
     private final PayerSettlementService payerSettlementService;
     private final VehicleEntryService vehicleEntryService;
     private final VehicleTypeService vehicleTypeService;
+    private final SyncDownloadService syncDownloadService;
 
     @PostMapping("/sync")
     @Operation(summary = "Bulk synchronize entities", description = "Accepts lists of entity DTOs and persists them with isSynced=true")
@@ -62,6 +65,16 @@ public class SyncController {
             response.setVehicleTypes(vehicleTypeService.bulkSync(request.getVehicleTypes()));
         }
         return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @GetMapping("/sync/download")
+    @Operation(summary = "Download changed entities", description = "Returns entity deltas since a cursor")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> downloadChanges(
+            @RequestParam(required = false) String sinceCursor,
+            @RequestParam(required = false) List<String> entities,
+            @RequestParam(required = false) Integer limit) {
+        Map<String, Object> result = syncDownloadService.downloadChanges(sinceCursor, entities, limit);
+        return ResponseEntity.ok(ApiResponse.success(result));
     }
 }
 
