@@ -40,7 +40,7 @@ springdoc:
     path: /swagger-ui.html
 
 jwt:
-  secret: change-me
+  secret-base64: ls5XjEgc1ZX71gWfnEFtLfVaZZNmc4ajasvvm1mw0Q4=
   access-token:
     ttl-minutes: 15
   refresh-token:

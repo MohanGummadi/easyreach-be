@@ -16,11 +16,11 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    @Value("${jwt.secret:secret-key}")
-    private String secret;
+    @Value("${jwt.secret-base64:}")
+    private String secretBase64;
 
     private Key getSignInKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        return Keys.hmacShaKeyFor(secretBase64.getBytes(StandardCharsets.UTF_8));
     }
 
     private static final long ACCESS_EXPIRATION = 15 * 60 * 1000; // 15 minutes
