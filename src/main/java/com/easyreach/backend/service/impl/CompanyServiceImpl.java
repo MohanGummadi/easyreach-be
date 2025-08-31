@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class CompanyServiceImpl implements CompanyService {
+public class CompanyServiceImpl extends CompanyScopedService implements CompanyService {
     private final CompanyRepository repository;
     private final CompanyMapper mapper;
 
