@@ -1,5 +1,3 @@
-# Multi-stage build for the EasyReach backend
-
 # ---- Build stage ----
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
@@ -15,15 +13,10 @@ RUN mvn -q package -DskipTests
 # ---- Runtime stage ----
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-
 COPY --from=build /app/target/*.jar app.jar
 
-# Expect credentials to be supplied at runtime
-ENV DB_URL=""
-ENV DB_USERNAME=""
-ENV DB_PASSWORD=""
-ENV JWT_SECRET=""
-
+# Render injects PORT; default to 8080 if not set
+ENV PORT=8080
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app/app.jar"]
 
+CMD ["java", "-jar", "app.jar"]
