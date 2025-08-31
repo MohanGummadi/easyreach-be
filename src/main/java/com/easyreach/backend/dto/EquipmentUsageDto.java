@@ -26,4 +26,8 @@ public class EquipmentUsageDto {
   private Instant createdAt;
   private String updatedBy;
   private Instant updatedAt;
+
+  private Boolean deleted;
+  private Instant deletedAt;
+  private Long changeId;
 }

@@ -29,4 +29,11 @@ public class PayerSettlementRequestDto {
   private String updatedBy;
   @NotNull
   private OffsetDateTime updatedAt;
+
+  @NotNull
+  private Boolean deleted;
+
+  private OffsetDateTime deletedAt;
+
+  private Long changeId;
 }

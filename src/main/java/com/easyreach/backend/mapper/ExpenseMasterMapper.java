@@ -7,7 +7,14 @@ import com.easyreach.backend.dto.expense_master.ExpenseMasterResponseDto;
 
 @Mapper(componentModel = "spring")
 public interface ExpenseMasterMapper {
+    @Mapping(target = "deleted", source = "deleted")
+    @Mapping(target = "deletedAt", source = "deletedAt")
+    @Mapping(target = "changeId", source = "changeId")
     ExpenseMaster toEntity(ExpenseMasterRequestDto dto);
+
+    @Mapping(target = "deleted", source = "deleted")
+    @Mapping(target = "deletedAt", source = "deletedAt")
+    @Mapping(target = "changeId", source = "changeId")
     ExpenseMasterResponseDto toDto(ExpenseMaster entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

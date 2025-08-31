@@ -7,7 +7,14 @@ import com.easyreach.backend.dto.daily_expenses.DailyExpenseResponseDto;
 
 @Mapper(componentModel = "spring")
 public interface DailyExpenseMapper {
+    @Mapping(target = "deleted", source = "deleted")
+    @Mapping(target = "deletedAt", source = "deletedAt")
+    @Mapping(target = "changeId", source = "changeId")
     DailyExpense toEntity(DailyExpenseRequestDto dto);
+
+    @Mapping(target = "deleted", source = "deleted")
+    @Mapping(target = "deletedAt", source = "deletedAt")
+    @Mapping(target = "changeId", source = "changeId")
     DailyExpenseResponseDto toDto(DailyExpense entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

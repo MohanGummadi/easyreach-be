@@ -25,4 +25,8 @@ public class CompanyResponseDto {
   private OffsetDateTime createdAt;
   private String updatedBy;
   private OffsetDateTime updatedAt;
+
+  private Boolean deleted;
+  private OffsetDateTime deletedAt;
+  private Long changeId;
 }

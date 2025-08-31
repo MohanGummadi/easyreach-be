@@ -54,6 +54,16 @@ public class User implements UserDetails {
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted;
+
+    @Column(name = "deleted_at")
+    private OffsetDateTime deletedAt;
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "change_id")
+    private Long changeId;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role));

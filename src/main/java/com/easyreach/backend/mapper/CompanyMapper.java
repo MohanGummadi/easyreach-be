@@ -7,7 +7,14 @@ import com.easyreach.backend.dto.companies.CompanyResponseDto;
 
 @Mapper(componentModel = "spring")
 public interface CompanyMapper {
+    @Mapping(target = "deleted", source = "deleted")
+    @Mapping(target = "deletedAt", source = "deletedAt")
+    @Mapping(target = "changeId", source = "changeId")
     Company toEntity(CompanyRequestDto dto);
+
+    @Mapping(target = "deleted", source = "deleted")
+    @Mapping(target = "deletedAt", source = "deletedAt")
+    @Mapping(target = "changeId", source = "changeId")
     CompanyResponseDto toDto(Company entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

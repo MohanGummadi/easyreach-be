@@ -7,7 +7,14 @@ import com.easyreach.backend.dto.payers.PayerResponseDto;
 
 @Mapper(componentModel = "spring")
 public interface PayerMapper {
+    @Mapping(target = "deleted", source = "deleted")
+    @Mapping(target = "deletedAt", source = "deletedAt")
+    @Mapping(target = "changeId", source = "changeId")
     Payer toEntity(PayerRequestDto dto);
+
+    @Mapping(target = "deleted", source = "deleted")
+    @Mapping(target = "deletedAt", source = "deletedAt")
+    @Mapping(target = "changeId", source = "changeId")
     PayerResponseDto toDto(Payer entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
