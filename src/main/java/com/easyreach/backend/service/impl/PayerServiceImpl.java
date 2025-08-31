@@ -108,7 +108,7 @@ public class PayerServiceImpl extends CompanyScopedService implements PayerServi
             return 0;
         }
 
-        Map<String, Payer> existing = repository.findAllById(dtoMap.keySet()).stream()
+        Map<String, Payer> existing = repository.findByPayerIdInAndCompanyUuid(dtoMap.keySet(), currentCompany()).stream()
                 .collect(Collectors.toMap(Payer::getPayerId, Function.identity()));
 
         OffsetDateTime now = OffsetDateTime.now();

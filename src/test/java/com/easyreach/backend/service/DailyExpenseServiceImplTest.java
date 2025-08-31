@@ -53,7 +53,7 @@ class DailyExpenseServiceImplTest {
         existing.setCreatedAt(old);
         existing.setUpdatedAt(old);
 
-        when(repository.findAllById(any())).thenReturn(List.of(existing));
+        when(repository.findByExpenseIdInAndCompanyUuid(any(), anyString())).thenReturn(List.of(existing));
 
         DailyExpense newEntity = new DailyExpense();
         newEntity.setExpenseId("e2");

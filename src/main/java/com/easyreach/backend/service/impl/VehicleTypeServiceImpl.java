@@ -109,7 +109,7 @@ public class VehicleTypeServiceImpl extends CompanyScopedService implements Vehi
             return 0;
         }
 
-        Map<String, VehicleType> existing = repository.findAllById(dtoMap.keySet()).stream()
+        Map<String, VehicleType> existing = repository.findByIdInAndCompanyUuid(dtoMap.keySet(), currentCompany()).stream()
                 .collect(Collectors.toMap(VehicleType::getId, Function.identity()));
 
         OffsetDateTime now = OffsetDateTime.now();

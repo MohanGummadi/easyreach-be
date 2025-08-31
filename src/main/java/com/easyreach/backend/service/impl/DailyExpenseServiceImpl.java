@@ -107,7 +107,7 @@ public class DailyExpenseServiceImpl extends CompanyScopedService implements Dai
             return 0;
         }
 
-        Map<String, DailyExpense> existing = repository.findAllById(dtoMap.keySet()).stream()
+        Map<String, DailyExpense> existing = repository.findByExpenseIdInAndCompanyUuid(dtoMap.keySet(), currentCompany()).stream()
                 .collect(Collectors.toMap(DailyExpense::getExpenseId, Function.identity()));
 
         OffsetDateTime now = OffsetDateTime.now();
