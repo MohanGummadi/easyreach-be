@@ -23,19 +23,20 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ExpenseMasterServiceImpl implements ExpenseMasterService {
+public class ExpenseMasterServiceImpl extends CompanyScopedService implements ExpenseMasterService {
     private final ExpenseMasterRepository repository;
     private final ExpenseMasterMapper mapper;
 
     @Override
     public ApiResponse<ExpenseMasterResponseDto> create(ExpenseMasterRequestDto dto) {
         ExpenseMaster entity = mapper.toEntity(dto);
+        entity.setCompanyUuid(currentCompany());
         return ApiResponse.success(mapper.toDto(repository.save(entity)));
     }
 
     @Override
     public ApiResponse<ExpenseMasterResponseDto> update(String id, ExpenseMasterRequestDto dto) {
-        ExpenseMaster e = repository.findByIdAndDeletedIsFalse(id)
+        ExpenseMaster e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("ExpenseMaster not found: " + id));
         mapper.update(e, dto);
         return ApiResponse.success(mapper.toDto(repository.save(e)));
@@ -43,7 +44,7 @@ public class ExpenseMasterServiceImpl implements ExpenseMasterService {
 
     @Override
     public ApiResponse<Void> delete(String id) {
-        ExpenseMaster e = repository.findByIdAndDeletedIsFalse(id)
+        ExpenseMaster e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("ExpenseMaster not found: " + id));
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
@@ -54,7 +55,7 @@ public class ExpenseMasterServiceImpl implements ExpenseMasterService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<ExpenseMasterResponseDto> get(String id) {
-        ExpenseMaster e = repository.findByIdAndDeletedIsFalse(id)
+        ExpenseMaster e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("ExpenseMaster not found: " + id));
         return ApiResponse.success(mapper.toDto(e));
     }
@@ -62,7 +63,7 @@ public class ExpenseMasterServiceImpl implements ExpenseMasterService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<ExpenseMasterResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findByDeletedIsFalse(pageable).map(mapper::toDto));
+        return ApiResponse.success(repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
     }
 
     @Override
@@ -87,6 +88,7 @@ public class ExpenseMasterServiceImpl implements ExpenseMasterService {
                 entities.add(entity);
             } else {
                 ExpenseMaster e = mapper.toEntity(dto);
+                e.setCompanyUuid(currentCompany());
                 e.setCreatedAt(now);
                 e.setUpdatedAt(now);
                 e.setIsSynced(true);

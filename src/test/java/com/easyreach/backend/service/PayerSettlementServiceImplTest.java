@@ -1,5 +1,7 @@
 package com.easyreach.backend.service;
 
+import com.easyreach.backend.security.CompanyContext;
+
 import com.easyreach.backend.dto.payer_settlements.PayerSettlementRequestDto;
 import com.easyreach.backend.entity.PayerSettlement;
 import com.easyreach.backend.mapper.PayerSettlementMapper;
@@ -33,6 +35,7 @@ class PayerSettlementServiceImplTest {
     @BeforeEach
     void setUp() {
         service = new PayerSettlementServiceImpl(repository, mapper);
+        CompanyContext.setCompanyId("test");
     }
 
     @Test

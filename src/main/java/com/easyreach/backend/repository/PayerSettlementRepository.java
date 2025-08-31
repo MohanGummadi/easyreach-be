@@ -14,7 +14,7 @@ public interface PayerSettlementRepository extends JpaRepository<PayerSettlement
 
     List<PayerSettlement> findByCompanyUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(String companyUuid, OffsetDateTime cursor, Pageable pageable);
 
-    Optional<PayerSettlement> findBySettlementIdAndDeletedIsFalse(String settlementId);
+    Optional<PayerSettlement> findBySettlementIdAndCompanyUuidAndDeletedIsFalse(String settlementId, String companyUuid);
 
-    Page<PayerSettlement> findByDeletedIsFalse(Pageable pageable);
+    Page<PayerSettlement> findByCompanyUuidAndDeletedIsFalse(String companyUuid, Pageable pageable);
 }

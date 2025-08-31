@@ -14,7 +14,7 @@ public interface VehicleEntryRepository extends JpaRepository<VehicleEntry, Stri
 
     List<VehicleEntry> findByCompanyUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(String companyUuid, OffsetDateTime cursor, Pageable pageable);
 
-    Optional<VehicleEntry> findByEntryIdAndDeletedIsFalse(String entryId);
+    Optional<VehicleEntry> findByEntryIdAndCompanyUuidAndDeletedIsFalse(String entryId, String companyUuid);
 
-    Page<VehicleEntry> findByDeletedIsFalse(Pageable pageable);
+    Page<VehicleEntry> findByCompanyUuidAndDeletedIsFalse(String companyUuid, Pageable pageable);
 }

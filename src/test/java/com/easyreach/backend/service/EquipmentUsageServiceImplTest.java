@@ -1,5 +1,7 @@
 package com.easyreach.backend.service;
 
+import com.easyreach.backend.security.CompanyContext;
+
 import com.easyreach.backend.dto.equipment_usage.EquipmentUsageRequestDto;
 import com.easyreach.backend.entity.EquipmentUsage;
 import com.easyreach.backend.mapper.EquipmentUsageMapper;
@@ -33,6 +35,7 @@ class EquipmentUsageServiceImplTest {
     @BeforeEach
     void setUp() {
         service = new EquipmentUsageServiceImpl(repository, mapper);
+        CompanyContext.setCompanyId("test");
     }
 
     @Test

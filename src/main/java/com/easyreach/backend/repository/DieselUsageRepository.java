@@ -14,7 +14,7 @@ public interface DieselUsageRepository extends JpaRepository<DieselUsage, String
 
     List<DieselUsage> findByCompanyUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(String companyUuid, OffsetDateTime cursor, Pageable pageable);
 
-    Optional<DieselUsage> findByDieselUsageIdAndDeletedIsFalse(String dieselUsageId);
+    Optional<DieselUsage> findByDieselUsageIdAndCompanyUuidAndDeletedIsFalse(String dieselUsageId, String companyUuid);
 
-    Page<DieselUsage> findByDeletedIsFalse(Pageable pageable);
+    Page<DieselUsage> findByCompanyUuidAndDeletedIsFalse(String companyUuid, Pageable pageable);
 }

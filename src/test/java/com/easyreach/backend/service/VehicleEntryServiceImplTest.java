@@ -1,5 +1,7 @@
 package com.easyreach.backend.service;
 
+import com.easyreach.backend.security.CompanyContext;
+
 import com.easyreach.backend.dto.vehicle_entries.VehicleEntryRequestDto;
 import com.easyreach.backend.entity.VehicleEntry;
 import com.easyreach.backend.mapper.VehicleEntryMapper;
@@ -33,6 +35,7 @@ class VehicleEntryServiceImplTest {
     @BeforeEach
     void setUp() {
         service = new VehicleEntryServiceImpl(repository, mapper);
+        CompanyContext.setCompanyId("test");
     }
 
     @Test

@@ -23,19 +23,20 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PayerServiceImpl implements PayerService {
+public class PayerServiceImpl extends CompanyScopedService implements PayerService {
     private final PayerRepository repository;
     private final PayerMapper mapper;
 
     @Override
     public ApiResponse<PayerResponseDto> create(PayerRequestDto dto) {
         Payer entity = mapper.toEntity(dto);
+        entity.setCompanyUuid(currentCompany());
         return ApiResponse.success(mapper.toDto(repository.save(entity)));
     }
 
     @Override
     public ApiResponse<PayerResponseDto> update(String id, PayerRequestDto dto) {
-        Payer e = repository.findByPayerIdAndDeletedIsFalse(id)
+        Payer e = repository.findByPayerIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("Payer not found: " + id));
         mapper.update(e, dto);
         return ApiResponse.success(mapper.toDto(repository.save(e)));
@@ -43,7 +44,7 @@ public class PayerServiceImpl implements PayerService {
 
     @Override
     public ApiResponse<Void> delete(String id) {
-        Payer e = repository.findByPayerIdAndDeletedIsFalse(id)
+        Payer e = repository.findByPayerIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("Payer not found: " + id));
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
@@ -54,7 +55,7 @@ public class PayerServiceImpl implements PayerService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<PayerResponseDto> get(String id) {
-        Payer e = repository.findByPayerIdAndDeletedIsFalse(id)
+        Payer e = repository.findByPayerIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("Payer not found: " + id));
         return ApiResponse.success(mapper.toDto(e));
     }
@@ -62,7 +63,7 @@ public class PayerServiceImpl implements PayerService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<PayerResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findByDeletedIsFalse(pageable).map(mapper::toDto));
+        return ApiResponse.success(repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
     }
 
     @Override
@@ -87,6 +88,7 @@ public class PayerServiceImpl implements PayerService {
                 entities.add(entity);
             } else {
                 Payer e = mapper.toEntity(dto);
+                e.setCompanyUuid(currentCompany());
                 e.setCreatedAt(now);
                 e.setUpdatedAt(now);
                 e.setIsSynced(true);

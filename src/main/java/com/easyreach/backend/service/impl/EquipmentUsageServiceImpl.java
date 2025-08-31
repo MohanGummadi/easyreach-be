@@ -23,19 +23,20 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class EquipmentUsageServiceImpl implements EquipmentUsageService {
+public class EquipmentUsageServiceImpl extends CompanyScopedService implements EquipmentUsageService {
     private final EquipmentUsageRepository repository;
     private final EquipmentUsageMapper mapper;
 
     @Override
     public ApiResponse<EquipmentUsageResponseDto> create(EquipmentUsageRequestDto dto) {
         EquipmentUsage entity = mapper.toEntity(dto);
+        entity.setCompanyUuid(currentCompany());
         return ApiResponse.success(mapper.toDto(repository.save(entity)));
     }
 
     @Override
     public ApiResponse<EquipmentUsageResponseDto> update(String id, EquipmentUsageRequestDto dto) {
-        EquipmentUsage e = repository.findByEquipmentUsageIdAndDeletedIsFalse(id)
+        EquipmentUsage e = repository.findByEquipmentUsageIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("EquipmentUsage not found: " + id));
         mapper.update(e, dto);
         return ApiResponse.success(mapper.toDto(repository.save(e)));
@@ -43,7 +44,7 @@ public class EquipmentUsageServiceImpl implements EquipmentUsageService {
 
     @Override
     public ApiResponse<Void> delete(String id) {
-        EquipmentUsage e = repository.findByEquipmentUsageIdAndDeletedIsFalse(id)
+        EquipmentUsage e = repository.findByEquipmentUsageIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("EquipmentUsage not found: " + id));
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
@@ -54,7 +55,7 @@ public class EquipmentUsageServiceImpl implements EquipmentUsageService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<EquipmentUsageResponseDto> get(String id) {
-        EquipmentUsage e = repository.findByEquipmentUsageIdAndDeletedIsFalse(id)
+        EquipmentUsage e = repository.findByEquipmentUsageIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
                 .orElseThrow(() -> new EntityNotFoundException("EquipmentUsage not found: " + id));
         return ApiResponse.success(mapper.toDto(e));
     }
@@ -62,7 +63,7 @@ public class EquipmentUsageServiceImpl implements EquipmentUsageService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<EquipmentUsageResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findByDeletedIsFalse(pageable).map(mapper::toDto));
+        return ApiResponse.success(repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
     }
 
     @Override
@@ -87,6 +88,7 @@ public class EquipmentUsageServiceImpl implements EquipmentUsageService {
                 entities.add(entity);
             } else {
                 EquipmentUsage e = mapper.toEntity(dto);
+                e.setCompanyUuid(currentCompany());
                 e.setCreatedAt(now);
                 e.setUpdatedAt(now);
                 e.setIsSynced(true);

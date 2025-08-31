@@ -1,5 +1,7 @@
 package com.easyreach.backend.service;
 
+import com.easyreach.backend.security.CompanyContext;
+
 import com.easyreach.backend.dto.diesel_usage.DieselUsageRequestDto;
 import com.easyreach.backend.entity.DieselUsage;
 import com.easyreach.backend.mapper.DieselUsageMapper;
@@ -33,6 +35,7 @@ class DieselUsageServiceImplTest {
     @BeforeEach
     void setUp() {
         service = new DieselUsageServiceImpl(repository, mapper);
+        CompanyContext.setCompanyId("test");
     }
 
     @Test

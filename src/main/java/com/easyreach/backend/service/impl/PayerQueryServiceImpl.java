@@ -18,7 +18,7 @@ import java.time.OffsetDateTime;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PayerQueryServiceImpl implements PayerQueryService {
+public class PayerQueryServiceImpl extends CompanyScopedService implements PayerQueryService {
 
     private final PayerRepository repository;
     private final PayerMapper mapper;
@@ -34,7 +34,7 @@ public class PayerQueryServiceImpl implements PayerQueryService {
 
     @Override
     public ApiResponse<Void> softDelete(String payerId) {
-        Payer p = repository.findById(payerId).orElseThrow(() -> new EntityNotFoundException("Payer not found: " + payerId));
+        Payer p = repository.findByPayerIdAndCompanyUuidAndDeletedIsFalse(payerId, currentCompany()).orElseThrow(() -> new EntityNotFoundException("Payer not found: " + payerId));
         p.setDeletedAt(OffsetDateTime.now());
         repository.save(p);
         return ApiResponse.success(null);

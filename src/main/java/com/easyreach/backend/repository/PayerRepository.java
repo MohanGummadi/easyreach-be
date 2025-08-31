@@ -17,7 +17,7 @@ public interface PayerRepository extends JpaRepository<Payer, String> {
 
     List<Payer> findByCompanyUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(String companyUuid, OffsetDateTime cursor, Pageable pageable);
 
-    Optional<Payer> findByPayerIdAndDeletedIsFalse(String payerId);
+    Optional<Payer> findByPayerIdAndCompanyUuidAndDeletedIsFalse(String payerId, String companyUuid);
 
-    Page<Payer> findByDeletedIsFalse(Pageable pageable);
+    Page<Payer> findByCompanyUuidAndDeletedIsFalse(String companyUuid, Pageable pageable);
 }
