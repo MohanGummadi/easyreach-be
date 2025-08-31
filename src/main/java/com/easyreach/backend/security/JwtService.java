@@ -36,6 +36,7 @@ public class JwtService {
                 .setSubject(user.getEmail()) // or username field
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(accessTtlMinutes)))
+                .claim("companyId", user.getCompanyUuid())
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -46,6 +47,7 @@ public class JwtService {
                 .setId(jti)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(refreshTtlDays)))
+                .claim("companyId", user.getCompanyUuid())
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -56,6 +58,10 @@ public class JwtService {
 
     public String extractJti(String token) {
         return extractAllClaims(token).getId();
+    }
+
+    public String extractCompanyId(String token) {
+        return extractAllClaims(token).get("companyId", String.class);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {

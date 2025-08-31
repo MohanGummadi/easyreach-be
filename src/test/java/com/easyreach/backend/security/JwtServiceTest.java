@@ -21,8 +21,10 @@ public class JwtServiceTest {
     void generateAndValidateToken() {
         com.easyreach.backend.entity.User user = new com.easyreach.backend.entity.User();
         user.setEmail("a@b.com");
+        user.setCompanyUuid("c1");
         String token = service.generateAccessToken(user);
         assertThat(service.extractUsername(token)).isEqualTo("a@b.com");
+        assertThat(service.extractCompanyId(token)).isEqualTo("c1");
         org.springframework.security.core.userdetails.User details =
                 new org.springframework.security.core.userdetails.User("a@b.com", "", java.util.List.of());
         assertThat(service.isTokenValid(token, details)).isTrue();

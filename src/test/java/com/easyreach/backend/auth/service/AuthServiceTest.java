@@ -43,7 +43,7 @@ class AuthServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = User.builder().id("u1").email("e@e.com").password("pass").build();
+        user = User.builder().id("u1").email("e@e.com").password("pass").companyUuid("c1").build();
     }
 
     @Test
@@ -51,6 +51,7 @@ class AuthServiceTest {
         UserDto dto = new UserDto();
         dto.setEmail("e@e.com");
         dto.setPassword("p");
+        dto.setCompanyId("c1");
         when(passwordEncoder.encode("p")).thenReturn("enc");
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(jwtService.generateAccessToken(any())).thenReturn("a");
