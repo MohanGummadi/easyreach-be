@@ -6,6 +6,7 @@ import com.easyreach.backend.dto.expense_master.ExpenseMasterResponseDto;
 import com.easyreach.backend.service.ExpenseMasterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/expense-master")
 @RequiredArgsConstructor
 @Tag(name="ExpenseMaster")
+@SecurityRequirement(name = "bearerAuth")
 public class ExpenseMasterController {
     private final ExpenseMasterService service;
 

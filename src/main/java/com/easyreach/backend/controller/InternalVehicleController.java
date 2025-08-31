@@ -6,6 +6,7 @@ import com.easyreach.backend.dto.internal_vehicles.InternalVehicleResponseDto;
 import com.easyreach.backend.service.InternalVehicleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/internal-vehicles")
 @RequiredArgsConstructor
 @Tag(name="InternalVehicle")
+@SecurityRequirement(name = "bearerAuth")
 public class InternalVehicleController {
     private final InternalVehicleService service;
 
