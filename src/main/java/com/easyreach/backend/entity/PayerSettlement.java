@@ -16,7 +16,7 @@ import java.math.*;
 public class PayerSettlement {
   @Id
   @EqualsAndHashCode.Include
-  @Column(name = "settlementId", length = 20, nullable = false)
+  @Column(name = "settlement_id", length = 20, nullable = false)
   private String settlementId;
   @Column(name = "payer_id", nullable = false)
   private String payerId;
