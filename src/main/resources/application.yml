@@ -28,7 +28,7 @@ spring:
       hibernate.jdbc.time_zone: Asia/Kolkata
 
   flyway:
-    enabled: false
+    enabled: true
 
   jackson:
     time-zone: Asia/Kolkata
