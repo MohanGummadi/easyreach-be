@@ -21,8 +21,10 @@ class LoginRequestTest {
         LoginRequest req = new LoginRequest();
         req.setEmail("user@example.com");
         req.setPassword("pass");
+        req.setCompanyUuid("c1");
         assertThat(req.getEmail()).isEqualTo("user@example.com");
         assertThat(req.getPassword()).isEqualTo("pass");
+        assertThat(req.getCompanyUuid()).isEqualTo("c1");
         assertThat(validator.validate(req)).isEmpty();
     }
 }

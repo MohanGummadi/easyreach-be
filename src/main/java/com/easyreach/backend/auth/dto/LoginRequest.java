@@ -11,4 +11,6 @@ public class LoginRequest {
     private String email;
     @NotBlank
     private String password;
+    @NotBlank
+    private String companyUuid;
 }
