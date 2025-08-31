@@ -14,7 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.time.OffsetDateTime;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,10 +62,31 @@ public class DieselUsageServiceImpl implements DieselUsageService {
     @Override
     public int bulkSync(List<DieselUsageRequestDto> dtos) {
         if (dtos == null || dtos.isEmpty()) return 0;
-        List<DieselUsage> entities = dtos.stream()
-                .map(mapper::toEntity)
-                .peek(e -> e.setIsSynced(true))
-                .toList();
+        Map<String, DieselUsageRequestDto> dtoMap = dtos.stream()
+                .filter(d -> d.getDieselUsageId() != null)
+                .collect(Collectors.toMap(DieselUsageRequestDto::getDieselUsageId, Function.identity(), (a, b) -> b, LinkedHashMap::new));
+        if (dtoMap.isEmpty()) return 0;
+
+        Map<String, DieselUsage> existing = repository.findAllById(dtoMap.keySet()).stream()
+                .collect(Collectors.toMap(DieselUsage::getDieselUsageId, Function.identity()));
+
+        OffsetDateTime now = OffsetDateTime.now();
+        List<DieselUsage> entities = new ArrayList<>();
+        for (DieselUsageRequestDto dto : dtoMap.values()) {
+            DieselUsage entity = existing.get(dto.getDieselUsageId());
+            if (entity != null) {
+                mapper.merge(dto, entity);
+                entity.setUpdatedAt(now);
+                entity.setIsSynced(true);
+                entities.add(entity);
+            } else {
+                DieselUsage e = mapper.toEntity(dto);
+                e.setCreatedAt(now);
+                e.setUpdatedAt(now);
+                e.setIsSynced(true);
+                entities.add(e);
+            }
+        }
         repository.saveAll(entities);
         return entities.size();
     }

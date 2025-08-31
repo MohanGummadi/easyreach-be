@@ -14,7 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.time.OffsetDateTime;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,10 +62,31 @@ public class DailyExpenseServiceImpl implements DailyExpenseService {
     @Override
     public int bulkSync(List<DailyExpenseRequestDto> dtos) {
         if (dtos == null || dtos.isEmpty()) return 0;
-        List<DailyExpense> entities = dtos.stream()
-                .map(mapper::toEntity)
-                .peek(e -> e.setIsSynced(true))
-                .toList();
+        Map<String, DailyExpenseRequestDto> dtoMap = dtos.stream()
+                .filter(d -> d.getExpenseId() != null)
+                .collect(Collectors.toMap(DailyExpenseRequestDto::getExpenseId, Function.identity(), (a, b) -> b, LinkedHashMap::new));
+        if (dtoMap.isEmpty()) return 0;
+
+        Map<String, DailyExpense> existing = repository.findAllById(dtoMap.keySet()).stream()
+                .collect(Collectors.toMap(DailyExpense::getExpenseId, Function.identity()));
+
+        OffsetDateTime now = OffsetDateTime.now();
+        List<DailyExpense> entities = new ArrayList<>();
+        for (DailyExpenseRequestDto dto : dtoMap.values()) {
+            DailyExpense entity = existing.get(dto.getExpenseId());
+            if (entity != null) {
+                mapper.merge(dto, entity);
+                entity.setUpdatedAt(now);
+                entity.setIsSynced(true);
+                entities.add(entity);
+            } else {
+                DailyExpense e = mapper.toEntity(dto);
+                e.setCreatedAt(now);
+                e.setUpdatedAt(now);
+                e.setIsSynced(true);
+                entities.add(e);
+            }
+        }
         repository.saveAll(entities);
         return entities.size();
     }

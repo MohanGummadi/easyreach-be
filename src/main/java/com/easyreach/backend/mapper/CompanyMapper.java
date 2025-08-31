@@ -12,4 +12,7 @@ public interface CompanyMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(@MappingTarget Company entity, CompanyRequestDto dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void merge(CompanyRequestDto dto, @MappingTarget Company entity);
 }

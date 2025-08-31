@@ -12,4 +12,7 @@ public interface EquipmentUsageMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(@MappingTarget EquipmentUsage entity, EquipmentUsageRequestDto dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void merge(EquipmentUsageRequestDto dto, @MappingTarget EquipmentUsage entity);
 }

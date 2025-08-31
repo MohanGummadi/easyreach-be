@@ -12,4 +12,7 @@ public interface DieselUsageMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(@MappingTarget DieselUsage entity, DieselUsageRequestDto dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void merge(DieselUsageRequestDto dto, @MappingTarget DieselUsage entity);
 }

@@ -12,4 +12,7 @@ public interface InternalVehicleMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(@MappingTarget InternalVehicle entity, InternalVehicleRequestDto dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void merge(InternalVehicleRequestDto dto, @MappingTarget InternalVehicle entity);
 }

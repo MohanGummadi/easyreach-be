@@ -14,7 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.time.OffsetDateTime;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,10 +62,31 @@ public class PayerServiceImpl implements PayerService {
     @Override
     public int bulkSync(List<PayerRequestDto> dtos) {
         if (dtos == null || dtos.isEmpty()) return 0;
-        List<Payer> entities = dtos.stream()
-                .map(mapper::toEntity)
-                .peek(e -> e.setIsSynced(true))
-                .toList();
+        Map<String, PayerRequestDto> dtoMap = dtos.stream()
+                .filter(d -> d.getPayerId() != null)
+                .collect(Collectors.toMap(PayerRequestDto::getPayerId, Function.identity(), (a, b) -> b, LinkedHashMap::new));
+        if (dtoMap.isEmpty()) return 0;
+
+        Map<String, Payer> existing = repository.findAllById(dtoMap.keySet()).stream()
+                .collect(Collectors.toMap(Payer::getPayerId, Function.identity()));
+
+        OffsetDateTime now = OffsetDateTime.now();
+        List<Payer> entities = new ArrayList<>();
+        for (PayerRequestDto dto : dtoMap.values()) {
+            Payer entity = existing.get(dto.getPayerId());
+            if (entity != null) {
+                mapper.merge(dto, entity);
+                entity.setUpdatedAt(now);
+                entity.setIsSynced(true);
+                entities.add(entity);
+            } else {
+                Payer e = mapper.toEntity(dto);
+                e.setCreatedAt(now);
+                e.setUpdatedAt(now);
+                e.setIsSynced(true);
+                entities.add(e);
+            }
+        }
         repository.saveAll(entities);
         return entities.size();
     }
