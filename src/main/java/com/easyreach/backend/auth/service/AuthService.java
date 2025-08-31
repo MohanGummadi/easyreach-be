@@ -52,7 +52,7 @@ public class AuthService {
                 .name(request.getName())
                 .companyUuid(request.getCompanyId())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER.name()) // if your User entity keeps role as String; change to Role.USER if it's an enum field
+                .role(request.getRole()) // if your User entity keeps role as String; change to Role.USER if it's an enum field
                 .isActive(true)
                 .build();
 
