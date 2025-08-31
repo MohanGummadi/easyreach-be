@@ -1,24 +1,142 @@
 package com.easyreach.backend.service.impl;
 
-import com.easyreach.backend.service.SyncDownloadService;
+import com.easyreach.backend.auth.entity.UserAdapter;
+import com.easyreach.backend.service.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Method;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class SyncDownloadServiceImpl implements SyncDownloadService {
 
+    private final CompanyService companyService;
+    private final DailyExpenseService dailyExpenseService;
+    private final DieselUsageService dieselUsageService;
+    private final EquipmentUsageService equipmentUsageService;
+    private final ExpenseMasterService expenseMasterService;
+    private final InternalVehicleService internalVehicleService;
+    private final PayerService payerService;
+    private final PayerSettlementService payerSettlementService;
+    private final VehicleEntryService vehicleEntryService;
+    private final VehicleTypeService vehicleTypeService;
+    private final UserService userService;
+
     @Override
     public Map<String, Object> downloadChanges(String sinceCursor, List<String> entities, Integer limit) {
-        Map<String, Object> result = new HashMap<>();
-        if (entities == null) {
-            return result;
+        int fetchLimit = limit != null ? limit : 100;
+
+        OffsetDateTime cursor;
+        try {
+            cursor = sinceCursor != null
+                    ? OffsetDateTime.parse(sinceCursor)
+                    : OffsetDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC);
+        } catch (DateTimeParseException ex) {
+            cursor = OffsetDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC);
         }
-        for (String entity : entities) {
-            result.put(entity, Collections.emptyList());
+
+        UserAdapter adapter = (UserAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String companyUuid = adapter.getDomainUser().getCompanyUuid();
+
+        Map<String, Object> response = new HashMap<>();
+        OffsetDateTime cursorEnd = cursor;
+        boolean hasMore = false;
+
+        List<String> targets;
+        if (entities == null || entities.isEmpty()) {
+            targets = List.of(
+                    "companies",
+                    "dailyExpenses",
+                    "dieselUsages",
+                    "equipmentUsages",
+                    "expenseMasters",
+                    "internalVehicles",
+                    "payers",
+                    "payerSettlements",
+                    "vehicleEntries",
+                    "vehicleTypes",
+                    "users"
+            );
+        } else {
+            targets = entities;
         }
-        return result;
+
+        for (String entity : targets) {
+            Map<String, Object> data = switch (entity) {
+                case "companies" -> companyService.fetchChangesSince(companyUuid, cursor, fetchLimit);
+                case "dailyExpenses" -> dailyExpenseService.fetchChangesSince(companyUuid, cursor, fetchLimit);
+                case "dieselUsages" -> dieselUsageService.fetchChangesSince(companyUuid, cursor, fetchLimit);
+                case "equipmentUsages" -> equipmentUsageService.fetchChangesSince(companyUuid, cursor, fetchLimit);
+                case "expenseMasters" -> expenseMasterService.fetchChangesSince(companyUuid, cursor, fetchLimit);
+                case "internalVehicles" -> internalVehicleService.fetchChangesSince(companyUuid, cursor, fetchLimit);
+                case "payers" -> payerService.fetchChangesSince(companyUuid, cursor, fetchLimit);
+                case "payerSettlements" -> payerSettlementService.fetchChangesSince(companyUuid, cursor, fetchLimit);
+                case "vehicleEntries" -> vehicleEntryService.fetchChangesSince(companyUuid, cursor, fetchLimit);
+                case "vehicleTypes" -> vehicleTypeService.fetchChangesSince(companyUuid, cursor, fetchLimit);
+                case "users" -> userService.fetchChangesSince(companyUuid, cursor, fetchLimit);
+                default -> null;
+            };
+            if (data == null) {
+                continue;
+            }
+
+            List<?> items = (List<?>) data.getOrDefault("updated", Collections.emptyList());
+            List<?> tombstones = (List<?>) data.getOrDefault("tombstones", Collections.emptyList());
+
+            Map<String, Object> perEntity = new HashMap<>();
+            perEntity.put("items", items);
+            perEntity.put("tombstones", tombstones);
+            response.put(entity, perEntity);
+
+            for (Object item : items) {
+                OffsetDateTime ts = extractTimestamp(item);
+                if (ts != null && ts.isAfter(cursorEnd)) {
+                    cursorEnd = ts;
+                }
+            }
+            for (Object tombstone : tombstones) {
+                OffsetDateTime ts = extractTimestamp(tombstone);
+                if (ts != null && ts.isAfter(cursorEnd)) {
+                    cursorEnd = ts;
+                }
+            }
+
+            if (items.size() + tombstones.size() >= fetchLimit) {
+                hasMore = true;
+            }
+        }
+
+        response.put("cursorEnd", cursorEnd);
+        response.put("hasMore", hasMore);
+        return response;
+    }
+
+    private OffsetDateTime extractTimestamp(Object obj) {
+        try {
+            Method deletedAt = obj.getClass().getMethod("getDeletedAt");
+            Object val = deletedAt.invoke(obj);
+            if (val instanceof OffsetDateTime odt && odt != null) {
+                return odt;
+            }
+        } catch (Exception ignored) {
+        }
+        try {
+            Method updatedAt = obj.getClass().getMethod("getUpdatedAt");
+            Object val = updatedAt.invoke(obj);
+            if (val instanceof OffsetDateTime odt) {
+                return odt;
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 }
