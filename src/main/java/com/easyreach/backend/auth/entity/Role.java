@@ -1,6 +1,8 @@
 package com.easyreach.backend.auth.entity;
 
 public enum Role {
-    USER,
-    ADMIN
+    SUPERADMIN,
+    OWNER,
+    MANAGER,
+    SUPERVISOR
 }
