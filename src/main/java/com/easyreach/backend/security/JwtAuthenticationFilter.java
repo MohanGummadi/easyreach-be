@@ -42,6 +42,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(auth);
                     String companyId = jwtService.extractCompanyId(token);
+                    if (companyId == null || companyId.isBlank()) {
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing company ID");
+                        return;
+                    }
                     CompanyContext.setCompanyId(companyId);
                 }
             }

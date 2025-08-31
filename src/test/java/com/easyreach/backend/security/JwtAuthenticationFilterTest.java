@@ -56,6 +56,7 @@ class JwtAuthenticationFilterTest {
         when(jwtService.extractUsername("token")).thenReturn("user");
         when(userDetailsService.loadUserByUsername("user")).thenReturn(userDetails);
         when(jwtService.isTokenValid("token", userDetails)).thenReturn(true);
+        when(jwtService.extractCompanyId("token")).thenReturn("company1");
 
         filter.doFilterInternal(request, response, chain);
 
@@ -71,6 +72,25 @@ class JwtAuthenticationFilterTest {
         FilterChain chain = mock(FilterChain.class);
 
         when(jwtService.extractUsername("bad")).thenThrow(new RuntimeException("invalid"));
+
+        filter.doFilterInternal(request, response, chain);
+
+        verify(chain, never()).doFilter(request, response);
+        assertThat(response.getStatus()).isEqualTo(HttpServletResponse.SC_UNAUTHORIZED);
+    }
+
+    @Test
+    void missingCompanyId_returnsUnauthorized() throws ServletException, IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("Authorization", "Bearer token");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        FilterChain chain = mock(FilterChain.class);
+        UserDetails userDetails = mock(UserDetails.class);
+
+        when(jwtService.extractUsername("token")).thenReturn("user");
+        when(userDetailsService.loadUserByUsername("user")).thenReturn(userDetails);
+        when(jwtService.isTokenValid("token", userDetails)).thenReturn(true);
+        when(jwtService.extractCompanyId("token")).thenReturn(null);
 
         filter.doFilterInternal(request, response, chain);
 
