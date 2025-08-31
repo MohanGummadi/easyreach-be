@@ -9,6 +9,7 @@ import com.easyreach.backend.repository.UserRepository;
 import com.easyreach.backend.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,52 +21,79 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class UserServiceImpl extends CompanyScopedService implements UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
 
     @Override
     public ApiResponse<UserResponseDto> create(UserRequestDto dto) {
+        log.debug("Entering create with dto={}", dto);
         User entity = mapper.toEntity(dto);
         entity.setCompanyUuid(currentCompany());
-        return ApiResponse.success(mapper.toDto(repository.save(entity)));
+        ApiResponse<UserResponseDto> response = ApiResponse.success(mapper.toDto(repository.save(entity)));
+        log.debug("Exiting create with response={}", response);
+        return response;
     }
 
     @Override
     public ApiResponse<UserResponseDto> update(String id, UserRequestDto dto) {
+        log.debug("Entering update with id={} dto={}", id, dto);
         User e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
-                .orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
+                .orElseThrow(() -> {
+                    log.error("User not found: {}", id);
+                    return new EntityNotFoundException("User not found: " + id);
+                });
         mapper.update(e, dto);
-        return ApiResponse.success(mapper.toDto(repository.save(e)));
+        ApiResponse<UserResponseDto> response = ApiResponse.success(mapper.toDto(repository.save(e)));
+        log.debug("Exiting update with response={}", response);
+        return response;
     }
 
     @Override
     public ApiResponse<Void> delete(String id) {
+        log.debug("Entering delete with id={}", id);
         User e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
-                .orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
+                .orElseThrow(() -> {
+                    log.error("User not found: {}", id);
+                    return new EntityNotFoundException("User not found: " + id);
+                });
         e.setDeleted(true);
         e.setDeletedAt(OffsetDateTime.now());
         repository.save(e);
-        return ApiResponse.success(null);
+        ApiResponse<Void> response = ApiResponse.success(null);
+        log.debug("Exiting delete with response={}", response);
+        return response;
     }
 
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<UserResponseDto> get(String id) {
+        log.debug("Entering get with id={}", id);
         User e = repository.findByIdAndCompanyUuidAndDeletedIsFalse(id, currentCompany())
-                .orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
-        return ApiResponse.success(mapper.toDto(e));
+                .orElseThrow(() -> {
+                    log.error("User not found: {}", id);
+                    return new EntityNotFoundException("User not found: " + id);
+                });
+        ApiResponse<UserResponseDto> response = ApiResponse.success(mapper.toDto(e));
+        log.debug("Exiting get with response={}", response);
+        return response;
     }
 
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<UserResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
+        log.debug("Entering list with pageable={}", pageable);
+        ApiResponse<Page<UserResponseDto>> response = ApiResponse.success(
+                repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
+        log.debug("Exiting list with response={}", response);
+        return response;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Map<String, Object> fetchChangesSince(String companyUuid, OffsetDateTime cursor, int limit) {
+        log.debug("Entering fetchChangesSince companyUuid={} cursor={} limit={}", companyUuid, cursor, limit);
         Map<String, Object> result = new HashMap<>();
         boolean hasMore = false;
 
@@ -100,6 +128,7 @@ public class UserServiceImpl extends CompanyScopedService implements UserService
         }
         result.put("cursorEnd", cursorEnd);
         result.put("hasMore", hasMore);
+        log.debug("Exiting fetchChangesSince cursorEnd={} hasMore={}", cursorEnd, hasMore);
         return result;
     }
 }

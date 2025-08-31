@@ -2,6 +2,7 @@ package com.easyreach.backend.security;
 
 import com.easyreach.backend.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableMethodSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -27,6 +29,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        log.debug("Configuring SecurityFilterChain");
         http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -41,24 +44,30 @@ public class SecurityConfig {
                 )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+        SecurityFilterChain chain = http.build();
+        log.debug("SecurityFilterChain configured");
+        return chain;
     }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
+        log.debug("Initializing AuthenticationProvider");
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService); // our bean
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance() );
+        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        log.debug("AuthenticationProvider initialized");
         return provider;
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration cfg) throws Exception {
+        log.debug("Retrieving AuthenticationManager");
         return cfg.getAuthenticationManager();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        log.debug("Providing PasswordEncoder");
         return NoOpPasswordEncoder.getInstance(); // matches your stored password hashes
     }
 }

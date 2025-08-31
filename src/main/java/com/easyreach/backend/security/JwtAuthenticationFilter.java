@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,6 +16,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
@@ -26,14 +28,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            log.debug("No Bearer token found on request {}", request.getRequestURI());
             chain.doFilter(request, response);
             return;
         }
 
         String token = authHeader.substring(7);
+        log.debug("Processing JWT for request {}", request.getRequestURI());
 
         try {
             String username = jwtService.extractUsername(token);
+            log.debug("Extracted username {} from token", username);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 var userDetails = userDetailsService.loadUserByUsername(username);
@@ -43,14 +48,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(auth);
                     String companyId = jwtService.extractCompanyId(token);
                     if (companyId == null || companyId.isBlank()) {
+                        log.warn("Token missing company ID for user {}", username);
                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing company ID");
                         return;
                     }
                     CompanyContext.setCompanyId(companyId);
+                    log.debug("Authentication successful for user {} company {}", username, companyId);
+                } else {
+                    log.warn("Token validation failed for user {}", username);
                 }
             }
             chain.doFilter(request, response);
         } catch (Exception e) {
+            log.error("JWT processing failed", e);
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
         } finally {
             CompanyContext.clear();
