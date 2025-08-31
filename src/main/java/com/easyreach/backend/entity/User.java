@@ -64,8 +64,8 @@ public class User implements UserDetails {
     @Column(name = "deleted_at")
     private OffsetDateTime deletedAt;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "change_id")
+    @Version
+    @Column(name = "change_id", nullable = false)
     private Long changeId;
 
     @Override
