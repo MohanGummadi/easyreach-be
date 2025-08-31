@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface PayerRepository extends JpaRepository<Payer, String> {
     Page<Payer> findByCompanyUuidAndDeletedAtIsNull(String companyUuid, Pageable pageable);
@@ -15,4 +16,8 @@ public interface PayerRepository extends JpaRepository<Payer, String> {
     List<Payer> findByCompanyUuidAndUpdatedAtGreaterThanEqual(String companyUuid, OffsetDateTime cursor, Pageable pageable);
 
     List<Payer> findByCompanyUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(String companyUuid, OffsetDateTime cursor, Pageable pageable);
+
+    Optional<Payer> findByPayerIdAndDeletedIsFalse(String payerId);
+
+    Page<Payer> findByDeletedIsFalse(Pageable pageable);
 }

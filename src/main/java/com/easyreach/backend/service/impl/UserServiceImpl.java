@@ -32,29 +32,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse<UserResponseDto> update(String id, UserRequestDto dto) {
-        User e = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
+        User e = repository.findByIdAndDeletedIsFalse(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
         mapper.update(e, dto);
         return ApiResponse.success(mapper.toDto(repository.save(e)));
     }
 
     @Override
     public ApiResponse<Void> delete(String id) {
-        if (!repository.existsById(id)) throw new EntityNotFoundException("User not found: " + id);
-        repository.deleteById(id);
+        User e = repository.findByIdAndDeletedIsFalse(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
+        e.setDeleted(true);
+        e.setDeletedAt(OffsetDateTime.now());
+        e.setChangeId(e.getChangeId() == null ? 0L : e.getChangeId() + 1);
+        repository.save(e);
         return ApiResponse.success(null);
     }
 
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<UserResponseDto> get(String id) {
-        User e = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
+        User e = repository.findByIdAndDeletedIsFalse(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
         return ApiResponse.success(mapper.toDto(e));
     }
 
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<UserResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findAll(pageable).map(mapper::toDto));
+        return ApiResponse.success(repository.findByDeletedIsFalse(pageable).map(mapper::toDto));
     }
 
     @Override
