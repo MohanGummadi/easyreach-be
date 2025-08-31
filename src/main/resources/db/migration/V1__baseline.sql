@@ -28,7 +28,7 @@ CREATE SEQUENCE public.companies_change_id_seq
     CACHE 1;
 ALTER SEQUENCE public.companies_change_id_seq OWNED BY public.companies.change_id;
 CREATE TABLE public.daily_expenses (
-    "expenseId" character varying(20) NOT NULL,
+    expense_id character varying(20) NOT NULL,
     expense_type character varying(30) NOT NULL,
     expense_amount numeric(10,2) NOT NULL,
     expense_date timestamp without time zone NOT NULL,
@@ -56,7 +56,7 @@ CREATE SEQUENCE public.daily_expenses_change_id_seq
     CACHE 1;
 ALTER SEQUENCE public.daily_expenses_change_id_seq OWNED BY public.daily_expenses.change_id;
 CREATE TABLE public.diesel_usage (
-    "dieselUsageId" character varying(20) NOT NULL,
+    diesel_usage_id character varying(20) NOT NULL,
     vehicle_name character varying(30) NOT NULL,
     date timestamp without time zone NOT NULL,
     liters numeric(10,2) NOT NULL,
@@ -78,7 +78,7 @@ CREATE SEQUENCE public.diesel_usage_change_id_seq
     CACHE 1;
 ALTER SEQUENCE public.diesel_usage_change_id_seq OWNED BY public.diesel_usage.change_id;
 CREATE TABLE public.equipment_usage (
-    "equipmentUsageId" character varying(20) NOT NULL,
+    equipment_usage_id character varying(20) NOT NULL,
     equipment_name character varying(30) NOT NULL,
     equipment_type character varying(15) NOT NULL,
     start_km numeric(10,2) NOT NULL,
@@ -124,7 +124,7 @@ CREATE SEQUENCE public.expense_master_change_id_seq
     CACHE 1;
 ALTER SEQUENCE public.expense_master_change_id_seq OWNED BY public.expense_master.change_id;
 CREATE TABLE public.internal_vehicles (
-    "vehicleId" character varying(20) NOT NULL,
+    vehicle_id character varying(20) NOT NULL,
     vehicle_name character varying(30) NOT NULL,
     vehicle_type character varying(15) NOT NULL,
     is_active boolean DEFAULT true NOT NULL,
@@ -146,7 +146,7 @@ CREATE SEQUENCE public.internal_vehicles_change_id_seq
     CACHE 1;
 ALTER SEQUENCE public.internal_vehicles_change_id_seq OWNED BY public.internal_vehicles.change_id;
 CREATE TABLE public.payer_settlements (
-    "settlementId" character varying(20) NOT NULL,
+    settlement_id character varying(20) NOT NULL,
     payer_id character varying(20) NOT NULL,
     amount numeric(10,2) NOT NULL,
     date timestamp without time zone NOT NULL,
@@ -168,7 +168,7 @@ CREATE SEQUENCE public.payer_settlements_change_id_seq
     CACHE 1;
 ALTER SEQUENCE public.payer_settlements_change_id_seq OWNED BY public.payer_settlements.change_id;
 CREATE TABLE public.payers (
-    "payerId" character varying(20) NOT NULL,
+    payer_id character varying(20) NOT NULL,
     payer_name character varying(30) NOT NULL,
     mobile_no character varying(20) NOT NULL,
     payer_address character varying(100),
@@ -233,7 +233,7 @@ CREATE SEQUENCE public.users_change_id_seq
     CACHE 1;
 ALTER SEQUENCE public.users_change_id_seq OWNED BY public.users.change_id;
 CREATE TABLE public.vehicle_entries (
-    "entryId" character varying(20) NOT NULL,
+    entry_id character varying(20) NOT NULL,
     company_uuid character varying(50) NOT NULL,
     payer_id character varying(20) NOT NULL,
     vehicle_number character varying(15) NOT NULL,
@@ -310,19 +310,19 @@ ALTER TABLE ONLY public.companies
 ALTER TABLE ONLY public.companies
     ADD CONSTRAINT companies_pkey PRIMARY KEY (uuid);
 ALTER TABLE ONLY public.daily_expenses
-    ADD CONSTRAINT daily_expenses_pkey PRIMARY KEY ("expenseId");
+    ADD CONSTRAINT daily_expenses_pkey PRIMARY KEY (expense_id);
 ALTER TABLE ONLY public.diesel_usage
-    ADD CONSTRAINT diesel_usage_pkey PRIMARY KEY ("dieselUsageId");
+    ADD CONSTRAINT diesel_usage_pkey PRIMARY KEY (diesel_usage_id);
 ALTER TABLE ONLY public.equipment_usage
-    ADD CONSTRAINT equipment_usage_pkey PRIMARY KEY ("equipmentUsageId");
+    ADD CONSTRAINT equipment_usage_pkey PRIMARY KEY (equipment_usage_id);
 ALTER TABLE ONLY public.expense_master
     ADD CONSTRAINT expense_master_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY public.internal_vehicles
-    ADD CONSTRAINT internal_vehicles_pkey PRIMARY KEY ("vehicleId");
+    ADD CONSTRAINT internal_vehicles_pkey PRIMARY KEY (vehicle_id);
 ALTER TABLE ONLY public.payer_settlements
-    ADD CONSTRAINT payer_settlements_pkey PRIMARY KEY ("settlementId");
+    ADD CONSTRAINT payer_settlements_pkey PRIMARY KEY (settlement_id);
 ALTER TABLE ONLY public.payers
-    ADD CONSTRAINT payers_pkey PRIMARY KEY ("payerId");
+    ADD CONSTRAINT payers_pkey PRIMARY KEY (payer_id);
 ALTER TABLE ONLY public.refresh_token
     ADD CONSTRAINT refresh_token_pkey PRIMARY KEY (jti);
 ALTER TABLE ONLY public.users
@@ -332,7 +332,7 @@ ALTER TABLE ONLY public.users
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY public.vehicle_entries
-    ADD CONSTRAINT vehicle_entries_pkey PRIMARY KEY ("entryId");
+    ADD CONSTRAINT vehicle_entries_pkey PRIMARY KEY (entry_id);
 ALTER TABLE ONLY public.vehicle_types
     ADD CONSTRAINT vehicle_types_pkey PRIMARY KEY (id);
 CREATE INDEX idx_companies_uuid_deleted_deleted_at ON public.companies USING btree (uuid, deleted, deleted_at);

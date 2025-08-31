@@ -16,7 +16,7 @@ import java.math.*;
 public class InternalVehicle {
   @Id
   @EqualsAndHashCode.Include
-  @Column(name = "vehicleId", length = 20, nullable = false)
+  @Column(name = "vehicle_id", length = 20, nullable = false)
   private String vehicleId;
   @Column(name = "vehicle_name", nullable = false)
   private String vehicleName;
