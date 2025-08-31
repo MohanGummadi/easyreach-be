@@ -1,6 +1,7 @@
 package com.easyreach.backend.service;
 
 import com.easyreach.backend.dto.companies.CompanyRequestDto;
+import com.easyreach.backend.dto.companies.CompanyResponseDto;
 import com.easyreach.backend.entity.Company;
 import com.easyreach.backend.mapper.CompanyMapper;
 import com.easyreach.backend.repository.CompanyRepository;
@@ -14,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -80,6 +82,39 @@ class CompanyServiceImplTest {
         assertNotNull(savedNew);
         assertEquals(savedNew.getCreatedAt(), savedNew.getUpdatedAt());
         assertTrue(savedNew.getIsSynced());
+    }
+
+    @Test
+    void delete_marks_entity_deleted() {
+        Company e = new Company();
+        e.setUuid("c1");
+        e.setChangeId(1L);
+        when(repository.findByUuidAndDeletedIsFalse("c1")).thenReturn(java.util.Optional.of(e));
+
+        service.delete("c1");
+
+        assertTrue(e.isDeleted());
+        assertNotNull(e.getDeletedAt());
+        assertEquals(2L, e.getChangeId());
+        verify(repository).save(e);
+    }
+
+    @Test
+    void fetchChangesSince_includes_tombstones() {
+        OffsetDateTime cursor = OffsetDateTime.now().minusDays(1);
+        Company tombstone = new Company();
+        tombstone.setUuid("c2");
+        tombstone.setDeleted(true);
+        tombstone.setDeletedAt(cursor.plusHours(1));
+
+        when(repository.findByUuidAndUpdatedAtGreaterThanEqual(anyString(), any(), any()))
+                .thenReturn(Collections.emptyList());
+        when(repository.findByUuidAndDeletedIsTrueAndDeletedAtGreaterThanEqual(anyString(), any(), any()))
+                .thenReturn(List.of(tombstone));
+        when(mapper.toDto(any())).thenReturn(new CompanyResponseDto());
+
+        Map<String, Object> result = service.fetchChangesSince("c1", cursor, 10);
+        assertEquals(List.of("c2"), result.get("tombstones"));
     }
 }
 

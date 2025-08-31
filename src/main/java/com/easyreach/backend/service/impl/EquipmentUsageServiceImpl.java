@@ -35,29 +35,35 @@ public class EquipmentUsageServiceImpl implements EquipmentUsageService {
 
     @Override
     public ApiResponse<EquipmentUsageResponseDto> update(String id, EquipmentUsageRequestDto dto) {
-        EquipmentUsage e = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("EquipmentUsage not found: " + id));
+        EquipmentUsage e = repository.findByEquipmentUsageIdAndDeletedIsFalse(id)
+                .orElseThrow(() -> new EntityNotFoundException("EquipmentUsage not found: " + id));
         mapper.update(e, dto);
         return ApiResponse.success(mapper.toDto(repository.save(e)));
     }
 
     @Override
     public ApiResponse<Void> delete(String id) {
-        if (!repository.existsById(id)) throw new EntityNotFoundException("EquipmentUsage not found: " + id);
-        repository.deleteById(id);
+        EquipmentUsage e = repository.findByEquipmentUsageIdAndDeletedIsFalse(id)
+                .orElseThrow(() -> new EntityNotFoundException("EquipmentUsage not found: " + id));
+        e.setDeleted(true);
+        e.setDeletedAt(OffsetDateTime.now());
+        e.setChangeId(e.getChangeId() == null ? 0L : e.getChangeId() + 1);
+        repository.save(e);
         return ApiResponse.success(null);
     }
 
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<EquipmentUsageResponseDto> get(String id) {
-        EquipmentUsage e = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("EquipmentUsage not found: " + id));
+        EquipmentUsage e = repository.findByEquipmentUsageIdAndDeletedIsFalse(id)
+                .orElseThrow(() -> new EntityNotFoundException("EquipmentUsage not found: " + id));
         return ApiResponse.success(mapper.toDto(e));
     }
 
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<Page<EquipmentUsageResponseDto>> list(Pageable pageable) {
-        return ApiResponse.success(repository.findAll(pageable).map(mapper::toDto));
+        return ApiResponse.success(repository.findByDeletedIsFalse(pageable).map(mapper::toDto));
     }
 
     @Override
