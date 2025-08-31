@@ -5,7 +5,9 @@ import lombok.*;
 import java.time.*;
 import java.math.*;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,6 +15,7 @@ import java.math.*;
 @Table(name = "diesel_usage")
 public class DieselUsage {
   @Id
+  @EqualsAndHashCode.Include
   @Column(name = "dieselUsageId", length = 20, nullable = false)
   private String dieselUsageId;
   @Column(name = "vehicle_name", nullable = false)
