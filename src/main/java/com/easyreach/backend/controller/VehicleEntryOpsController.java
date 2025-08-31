@@ -6,8 +6,9 @@ import com.easyreach.backend.service.VehicleEntryOpsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,8 @@ public class VehicleEntryOpsController {
 
     private final VehicleEntryOpsService service;
 
-    @Data
+    @Getter
+    @Setter
     public static class AddPaymentRequest {
         @NotNull
         private BigDecimal amount;

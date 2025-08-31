@@ -13,13 +13,17 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
+@ToString(exclude = "password")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
 
     @Id
+    @EqualsAndHashCode.Include
     @Column(name = "id", length = 15, nullable = false)
     private String id;
     @Column(name = "employee_id", nullable = false)

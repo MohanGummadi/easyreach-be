@@ -5,7 +5,9 @@ import lombok.*;
 import java.time.*;
 import java.math.*;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,6 +15,7 @@ import java.math.*;
 @Table(name = "refresh_token")
 public class RefreshToken {
   @Id
+  @EqualsAndHashCode.Include
   @Column(name = "jti", length = 100, nullable = false)
   private String jti;
   @Column(name = "user_id", nullable = false)
