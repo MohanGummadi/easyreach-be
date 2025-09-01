@@ -16,15 +16,19 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
-    // username is email here
+    // username can be email or mobile number
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        log.debug("Entering loadUserByUsername with email={}", email);
-        User user = userRepository.findByEmailIgnoreCase(email)
-                .orElseThrow(() -> {
-                    log.warn("User not found: {}", email);
-                    return new UsernameNotFoundException("User not found: " + email);
-                });
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+        log.debug("Entering loadUserByUsername with identifier={}", identifier);
+        User user = userRepository.findByEmailIgnoreCase(identifier).orElse(null);
+        if (user == null) {
+            log.debug("User not found by email, attempting mobile lookup for {}", identifier);
+            user = userRepository.findByMobileNo(identifier).orElse(null);
+        }
+        if (user == null) {
+            log.warn("User not found: {}", identifier);
+            throw new UsernameNotFoundException("User not found: " + identifier);
+        }
         UserAdapter adapter = new UserAdapter(user);
         log.debug("Exiting loadUserByUsername with userId={}", user.getId());
         return adapter;

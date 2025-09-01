@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByEmailIgnoreCase(String email);
     Optional<User> findByEmailIgnoreCaseAndCompanyUuid(String email, String companyUuid);
+    Optional<User> findByMobileNo(String mobileNo);
 
     List<User> findByCompanyUuidAndUpdatedAtGreaterThanEqual(String companyUuid, OffsetDateTime cursor, Pageable pageable);
 
