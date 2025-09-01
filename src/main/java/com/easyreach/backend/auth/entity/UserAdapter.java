@@ -26,6 +26,7 @@ public class UserAdapter implements UserDetails {
             return user.getMobileNo();
         }
         return user.getId();
+
     }
     @Override public boolean isAccountNonExpired() { return true; }
     @Override public boolean isAccountNonLocked() { return true; }

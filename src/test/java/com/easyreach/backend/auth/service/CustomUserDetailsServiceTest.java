@@ -54,6 +54,16 @@ class CustomUserDetailsServiceTest {
 
         UserAdapter adapter = (UserAdapter) service.loadUserByUsername("u1");
         assertThat(adapter.getUsername()).isEqualTo("u1");
+      
+    @Test  
+    void loadUserByUsername_returnsAdapter_whenMobileFoundWithoutEmail() {
+        User user = new User();
+        user.setMobileNo("8888888888");
+        when(userRepository.findByEmailIgnoreCase("8888888888")).thenReturn(Optional.empty());
+        when(userRepository.findByMobileNo("8888888888")).thenReturn(Optional.of(user));
+
+        UserAdapter adapter = (UserAdapter) service.loadUserByUsername("8888888888");
+        assertThat(adapter.getUsername()).isEqualTo("8888888888");
     }
 
     @Test

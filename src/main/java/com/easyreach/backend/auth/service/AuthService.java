@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -61,7 +60,7 @@ public class AuthService {
 
         userRepository.save(user);
         AuthResponse response = createTokens(user, null);
-        log.debug("Exiting register with response={}", response);
+        log.debug("Exiting register for userId={}", user.getId());
         return response;
     }
 
@@ -92,7 +91,7 @@ public class AuthService {
         }
 
         AuthResponse response = createTokens(user, null);
-        log.debug("Exiting login with response={}", response);
+        log.debug("Exiting login for userId={}", user.getId());
         return response;
     }
 
@@ -101,9 +100,9 @@ public class AuthService {
      */
     @Transactional
     public AuthResponse refresh(RefreshRequest request) {
-        log.debug("Entering refresh with token={}", request.getRefreshToken());
         String token = request.getRefreshToken();
         String jti = jwtService.extractJti(token);
+        log.debug("Entering refresh for jti={}", jti);
 
         RefreshToken stored = refreshTokenRepository.findByJtiAndRevokedAtIsNull(jti)
                 .orElseThrow(() -> {
@@ -128,7 +127,7 @@ public class AuthService {
 
         // issue fresh pair; record rotation chain
         AuthResponse response = createTokens(user, jti);
-        log.debug("Exiting refresh with response={}", response);
+        log.debug("Exiting refresh for jti={}", jti);
         return response;
     }
 
@@ -166,7 +165,7 @@ public class AuthService {
 
         refreshTokenRepository.save(entity);
         AuthResponse response = new AuthResponse(accessToken, refreshToken);
-        log.debug("Exiting createTokens with jti={} response={}", jti, response);
+        log.debug("Exiting createTokens with jti={}", jti);
         return response;
     }
 }

@@ -38,5 +38,6 @@ class UserAdapterTest {
 
         User idOnlyUser = User.builder().id("id2").build();
         assertThat(new UserAdapter(idOnlyUser).getUsername()).isEqualTo("id2");
+   
     }
 }
