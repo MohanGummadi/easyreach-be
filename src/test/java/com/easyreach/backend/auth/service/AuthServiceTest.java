@@ -59,6 +59,8 @@ class AuthServiceTest {
         dto.setEmail("e@e.com");
         dto.setPassword("p");
         dto.setCompanyId("c1");
+        dto.setMobileNo("1234567890");
+        when(userRepository.existsByMobileNo("1234567890")).thenReturn(false);
         when(passwordEncoder.encode("p")).thenReturn("enc");
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(jwtService.generateAccessToken(any())).thenReturn("a");
@@ -68,6 +70,16 @@ class AuthServiceTest {
         assertNotNull(resp.getAccessToken());
         verify(userRepository).save(any(User.class));
         verify(refreshTokenRepository).save(any(RefreshToken.class));
+    }
+
+    @Test
+    void register_duplicateMobileNo_throwsException() {
+        UserDto dto = new UserDto();
+        dto.setMobileNo("1234567890");
+        when(userRepository.existsByMobileNo("1234567890")).thenReturn(true);
+
+        assertThrows(IllegalArgumentException.class, () -> authService.register(dto));
+        verify(userRepository, never()).save(any());
     }
 
     @Test

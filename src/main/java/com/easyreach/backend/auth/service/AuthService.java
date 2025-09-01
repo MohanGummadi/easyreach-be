@@ -42,6 +42,12 @@ public class AuthService {
     @Transactional
     public AuthResponse register(UserDto request) {
         log.debug("Entering register with request={}", request);
+        // Reject duplicate mobile numbers before persisting
+        if (request.getMobileNo() != null && userRepository.existsByMobileNo(request.getMobileNo())) {
+            log.warn("Attempt to register with duplicate mobile number: {}", request.getMobileNo());
+            throw new IllegalArgumentException("Mobile number already registered");
+        }
+
         // Prefer IDs coming from the client (Android), fall back to generated when absent
         String userId = request.getId() != null ? request.getId() : UUID.randomUUID().toString();
         String employeeId = request.getEmployeeId() != null ? request.getEmployeeId() : UUID.randomUUID().toString();
@@ -58,7 +64,12 @@ public class AuthService {
                 .isActive(true)
                 .build();
 
-        userRepository.save(user);
+        try {
+            userRepository.save(user);
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            log.error("Constraint violation during registration for mobile no: {}", request.getMobileNo(), e);
+            throw new IllegalArgumentException("User information violates constraints", e);
+        }
         AuthResponse response = createTokens(user, null);
         log.debug("Exiting register for userId={}", user.getId());
         return response;
