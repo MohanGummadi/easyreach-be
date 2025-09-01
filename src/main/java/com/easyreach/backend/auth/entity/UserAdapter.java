@@ -19,8 +19,14 @@ public class UserAdapter implements UserDetails {
     }
     @Override public String getPassword() { return user.getPassword(); }
     @Override public String getUsername() {
-        String email = user.getEmail();
-        return email != null && !email.isBlank() ? email : user.getMobileNo();
+        if (user.getEmail() != null && !user.getEmail().isBlank()) {
+            return user.getEmail();
+        }
+        if (user.getMobileNo() != null && !user.getMobileNo().isBlank()) {
+            return user.getMobileNo();
+        }
+        return user.getId();
+
     }
     @Override public boolean isAccountNonExpired() { return true; }
     @Override public boolean isAccountNonLocked() { return true; }

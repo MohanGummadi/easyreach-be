@@ -32,21 +32,12 @@ class UserAdapterTest {
     }
 
     @Test
-    void getUsername_fallsBackToMobileWhenEmailMissing() {
-        OffsetDateTime now = OffsetDateTime.now();
-        User domainUser = User.builder()
-                .id("2")
-                .employeeId("E2")
-                .mobileNo("1234567890")
-                .password("pass")
-                .role("USER")
-                .isActive(true)
-                .createdAt(now)
-                .updatedAt(now)
-                .build();
+    void getUsername_fallsBackToMobileThenId() {
+        User mobileUser = User.builder().id("id1").mobileNo("9999").build();
+        assertThat(new UserAdapter(mobileUser).getUsername()).isEqualTo("9999");
 
-        UserAdapter adapter = new UserAdapter(domainUser);
-
-        assertThat(adapter.getUsername()).isEqualTo("1234567890");
+        User idOnlyUser = User.builder().id("id2").build();
+        assertThat(new UserAdapter(idOnlyUser).getUsername()).isEqualTo("id2");
+   
     }
 }
