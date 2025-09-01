@@ -95,6 +95,23 @@ class AuthServiceTest {
     }
 
     @Test
+    void login_withMobileOnlyUser_authenticatesAndReturnsTokens() {
+        LoginRequest req = new LoginRequest();
+        req.setMobileNo("5555555555");
+        req.setPassword("p");
+        Authentication auth = mock(Authentication.class);
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(auth);
+        User mobileUser = User.builder().id("u2").mobileNo("5555555555").password("pass").companyUuid("c1").build();
+        when(userRepository.findByMobileNo("5555555555")).thenReturn(Optional.of(mobileUser));
+        when(jwtService.generateAccessToken(mobileUser)).thenReturn("a");
+        when(jwtService.generateRefreshToken(eq(mobileUser), anyString())).thenReturn("r");
+
+        AuthResponse resp = authService.login(req);
+        assertEquals("a", resp.getAccessToken());
+        verify(userRepository).findByMobileNo("5555555555");
+    }
+
+    @Test
     void refresh_rotatesToken_persistsRevocationAndNewToken_inOrder() {
         // Arrange
         RefreshRequest req = new RefreshRequest();

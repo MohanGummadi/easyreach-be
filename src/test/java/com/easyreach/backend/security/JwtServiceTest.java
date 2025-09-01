@@ -29,4 +29,17 @@ public class JwtServiceTest {
                 new org.springframework.security.core.userdetails.User("a@b.com", "", java.util.List.of());
         assertThat(service.isTokenValid(token, details)).isTrue();
     }
+
+    @Test
+    void generateAndValidateToken_usesMobileWhenEmailMissing() {
+        com.easyreach.backend.entity.User user = new com.easyreach.backend.entity.User();
+        user.setMobileNo("9999999999");
+        user.setId("id1");
+        user.setCompanyUuid("c1");
+        String token = service.generateAccessToken(user);
+        assertThat(service.extractUsername(token)).isEqualTo("9999999999");
+        org.springframework.security.core.userdetails.User details =
+                new org.springframework.security.core.userdetails.User("9999999999", "", java.util.List.of());
+        assertThat(service.isTokenValid(token, details)).isTrue();
+    }
 }

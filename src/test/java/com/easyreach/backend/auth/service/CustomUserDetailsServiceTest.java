@@ -45,9 +45,22 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
+    void loadUserByUsername_returnsAdapter_whenIdFound() {
+        User user = new User();
+        user.setId("u1");
+        when(userRepository.findByEmailIgnoreCase("u1")).thenReturn(Optional.empty());
+        when(userRepository.findByMobileNo("u1")).thenReturn(Optional.empty());
+        when(userRepository.findById("u1")).thenReturn(Optional.of(user));
+
+        UserAdapter adapter = (UserAdapter) service.loadUserByUsername("u1");
+        assertThat(adapter.getUsername()).isEqualTo("u1");
+    }
+
+    @Test
     void loadUserByUsername_notFound() {
         when(userRepository.findByEmailIgnoreCase("missing@example.com")).thenReturn(Optional.empty());
         when(userRepository.findByMobileNo("missing@example.com")).thenReturn(Optional.empty());
+        when(userRepository.findById("missing@example.com")).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> service.loadUserByUsername("missing@example.com"))
                 .isInstanceOf(UsernameNotFoundException.class);
