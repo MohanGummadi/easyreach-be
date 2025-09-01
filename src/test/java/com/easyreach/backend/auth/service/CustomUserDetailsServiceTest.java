@@ -24,7 +24,7 @@ class CustomUserDetailsServiceTest {
     private CustomUserDetailsService service;
 
     @Test
-    void loadUserByUsername_returnsAdapter() {
+    void loadUserByUsername_returnsAdapter_whenEmailFound() {
         User user = new User();
         user.setEmail("test@example.com");
         when(userRepository.findByEmailIgnoreCase("test@example.com")).thenReturn(Optional.of(user));
@@ -34,8 +34,21 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
+    void loadUserByUsername_returnsAdapter_whenMobileFound() {
+        User user = new User();
+        user.setEmail("test@example.com");
+        when(userRepository.findByEmailIgnoreCase("9999999999")).thenReturn(Optional.empty());
+        when(userRepository.findByMobileNo("9999999999")).thenReturn(Optional.of(user));
+
+        UserAdapter adapter = (UserAdapter) service.loadUserByUsername("9999999999");
+        assertThat(adapter.getUsername()).isEqualTo("test@example.com");
+    }
+
+    @Test
     void loadUserByUsername_notFound() {
         when(userRepository.findByEmailIgnoreCase("missing@example.com")).thenReturn(Optional.empty());
+        when(userRepository.findByMobileNo("missing@example.com")).thenReturn(Optional.empty());
+
         assertThatThrownBy(() -> service.loadUserByUsername("missing@example.com"))
                 .isInstanceOf(UsernameNotFoundException.class);
     }

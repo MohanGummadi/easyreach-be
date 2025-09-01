@@ -26,6 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                             log.warn("User not found: {}", identifier);
                             return new UsernameNotFoundException("User not found: " + identifier);
                         }));
+
         UserAdapter adapter = new UserAdapter(user);
         log.debug("Exiting loadUserByUsername with userId={}", user.getId());
         return adapter;
