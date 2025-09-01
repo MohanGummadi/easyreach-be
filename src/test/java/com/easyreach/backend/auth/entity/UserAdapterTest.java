@@ -30,4 +30,23 @@ class UserAdapterTest {
         assertThat(adapter.isEnabled()).isTrue();
         assertThat(adapter.getDomainUser()).isSameAs(domainUser);
     }
+
+    @Test
+    void getUsername_fallsBackToMobileWhenEmailMissing() {
+        OffsetDateTime now = OffsetDateTime.now();
+        User domainUser = User.builder()
+                .id("2")
+                .employeeId("E2")
+                .mobileNo("1234567890")
+                .password("pass")
+                .role("USER")
+                .isActive(true)
+                .createdAt(now)
+                .updatedAt(now)
+                .build();
+
+        UserAdapter adapter = new UserAdapter(domainUser);
+
+        assertThat(adapter.getUsername()).isEqualTo("1234567890");
+    }
 }

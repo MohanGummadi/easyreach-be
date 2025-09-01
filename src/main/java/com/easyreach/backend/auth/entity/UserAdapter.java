@@ -18,7 +18,10 @@ public class UserAdapter implements UserDetails {
         return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
     }
     @Override public String getPassword() { return user.getPassword(); }
-    @Override public String getUsername() { return user.getEmail(); } // email used as username
+    @Override public String getUsername() {
+        String email = user.getEmail();
+        return email != null && !email.isBlank() ? email : user.getMobileNo();
+    }
     @Override public boolean isAccountNonExpired() { return true; }
     @Override public boolean isAccountNonLocked() { return true; }
     @Override public boolean isCredentialsNonExpired() { return true; }
