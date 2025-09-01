@@ -20,15 +20,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
         log.debug("Entering loadUserByUsername with identifier={}", identifier);
-        User user = userRepository.findByEmailIgnoreCase(identifier).orElse(null);
-        if (user == null) {
-            log.debug("User not found by email, attempting mobile lookup for {}", identifier);
-            user = userRepository.findByMobileNo(identifier).orElse(null);
-        }
-        if (user == null) {
-            log.warn("User not found: {}", identifier);
-            throw new UsernameNotFoundException("User not found: " + identifier);
-        }
+        User user = userRepository.findByEmailIgnoreCase(identifier)
+                .orElseGet(() -> userRepository.findByMobileNo(identifier)
+                        .orElseThrow(() -> {
+                            log.warn("User not found: {}", identifier);
+                            return new UsernameNotFoundException("User not found: " + identifier);
+                        }));
+
         UserAdapter adapter = new UserAdapter(user);
         log.debug("Exiting loadUserByUsername with userId={}", user.getId());
         return adapter;

@@ -33,11 +33,11 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
-        log.info("Login attempt for email {} and company {}", request.getEmail(), request.getCompanyUuid());
+        log.info("Login attempt for email {} or mobile {}", request.getEmail(), request.getMobileNo());
         try {
             return ResponseEntity.ok(authService.login(request));
         } catch (Exception e) {
-            log.error("Error logging in user {}", request.getEmail(), e);
+            log.error("Error logging in user with email {} or mobile {}", request.getEmail(), request.getMobileNo(), e);
             throw e;
         }
     }
