@@ -68,10 +68,9 @@ class AuthServiceTest {
         LoginRequest req = new LoginRequest();
         req.setEmail("e@e.com");
         req.setPassword("p");
-        req.setCompanyUuid("c1");
         Authentication auth = mock(Authentication.class);
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(auth);
-        when(userRepository.findByEmailIgnoreCaseAndCompanyUuid("e@e.com", "c1")).thenReturn(Optional.of(user));
+        when(userRepository.findByEmailIgnoreCase("e@e.com")).thenReturn(Optional.of(user));
         when(jwtService.generateAccessToken(user)).thenReturn("a");
         when(jwtService.generateRefreshToken(eq(user), anyString())).thenReturn("r");
 
