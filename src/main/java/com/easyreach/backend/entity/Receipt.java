@@ -65,5 +65,13 @@ public class Receipt {
 
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
+
+    @PrePersist
+    @PreUpdate
+    private void uppercaseOrderId() {
+        if (orderId != null) {
+            orderId = orderId.toUpperCase();
+        }
+    }
 }
 

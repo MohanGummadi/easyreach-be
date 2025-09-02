@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -26,7 +24,7 @@ public class ReceiptServiceImpl implements ReceiptService {
     public Receipt create(ReceiptDto dto) {
         log.debug("Creating receipt for order {}", dto.getOrderId());
         Receipt receipt = Receipt.builder()
-                .orderId(dto.getOrderId())
+                .orderId(dto.getOrderId() != null ? dto.getOrderId().toUpperCase() : null)
                 .tripNo(dto.getTripNo())
                 .customerName(dto.getCustomerName())
                 .customerMobile(dto.getCustomerMobile())
@@ -53,25 +51,27 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<ReceiptDto> findByOrderId(String orderId) {
-        return repository.findFirstByOrderId(orderId).map(r -> ReceiptDto.builder()
-                .id(r.getId())
-                .orderId(r.getOrderId())
-                .tripNo(r.getTripNo())
-                .customerName(r.getCustomerName())
-                .customerMobile(r.getCustomerMobile())
-                .sandQuantity(r.getSandQuantity())
-                .supplyPoint(r.getSupplyPoint())
-                .dispatchDateTime(r.getDispatchDateTime())
-                .driverName(null)
-                .driverMobile(null)
-                .vehicleNo(null)
-                .address(r.getAddress())
-                .footerLine(r.getFooterLine())
-                .qrUrl(r.getQrUrl())
-                .createdAt(r.getCreatedAt())
-                .updatedAt(r.getUpdatedAt())
-                .build());
+    public ReceiptDto findByOrderId(String orderId) {
+        return repository.findFirstByOrderIdIgnoreCase(orderId)
+                .map(r -> ReceiptDto.builder()
+                        .id(r.getId())
+                        .orderId(r.getOrderId())
+                        .tripNo(r.getTripNo())
+                        .customerName(r.getCustomerName())
+                        .customerMobile(r.getCustomerMobile())
+                        .sandQuantity(r.getSandQuantity())
+                        .supplyPoint(r.getSupplyPoint())
+                        .dispatchDateTime(r.getDispatchDateTime())
+                        .driverName(null)
+                        .driverMobile(null)
+                        .vehicleNo(null)
+                        .address(r.getAddress())
+                        .footerLine(r.getFooterLine())
+                        .qrUrl(r.getQrUrl())
+                        .createdAt(r.getCreatedAt())
+                        .updatedAt(r.getUpdatedAt())
+                        .build())
+                .orElse(null);
     }
 }
 
