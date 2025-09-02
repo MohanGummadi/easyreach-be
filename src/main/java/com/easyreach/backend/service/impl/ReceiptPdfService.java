@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Base64;
 import java.util.EnumMap;
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public class ReceiptPdfService {
         rows.add(Map.of("label", "Sand Supply Point Name", "value", d.supplyPoint));
         rows.add(Map.of("label", "Dispatch Date",
                 "value", d.dispatchDateTime != null
-                        ? d.dispatchDateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss a"))
+                        ? d.dispatchDateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss a", Locale.ENGLISH)).toUpperCase()
                         : ""));
         rows.add(Map.of("label", "Driver Name", "value", d.driverName));
         rows.add(Map.of("label", "Driver Mobile No", "value", d.driverMobile));

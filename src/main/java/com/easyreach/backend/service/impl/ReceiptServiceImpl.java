@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +38,7 @@ public class ReceiptServiceImpl implements ReceiptService {
                 .vehicleNo(dto.getVehicleNo())
                 .address(dto.getAddress())
                 .footerLine(dto.getFooterLine())
+                .qrUrl(dto.getQrUrl())
                 .createdAt(OffsetDateTime.now())
                 .updatedAt(OffsetDateTime.now())
                 .build();
@@ -47,6 +49,29 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Transactional(readOnly = true)
     public Page<Receipt> list(Pageable pageable) {
         return repository.findAll(pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<ReceiptDto> findByOrderId(String orderId) {
+        return repository.findFirstByOrderId(orderId).map(r -> ReceiptDto.builder()
+                .id(r.getId())
+                .orderId(r.getOrderId())
+                .tripNo(r.getTripNo())
+                .customerName(r.getCustomerName())
+                .customerMobile(r.getCustomerMobile())
+                .sandQuantity(r.getSandQuantity())
+                .supplyPoint(r.getSupplyPoint())
+                .dispatchDateTime(r.getDispatchDateTime())
+                .driverName(null)
+                .driverMobile(null)
+                .vehicleNo(null)
+                .address(r.getAddress())
+                .footerLine(r.getFooterLine())
+                .qrUrl(r.getQrUrl())
+                .createdAt(r.getCreatedAt())
+                .updatedAt(r.getUpdatedAt())
+                .build());
     }
 }
 

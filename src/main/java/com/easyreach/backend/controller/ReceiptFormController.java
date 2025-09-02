@@ -35,6 +35,7 @@ public class ReceiptFormController {
                                                 @RequestParam(value = "qrPng", required = false) MultipartFile qrPng,
                                                 @RequestParam(value = "qrUrl", required = false) String qrUrl) throws Exception {
 
+        dto.setQrUrl(qrUrl);
         receiptService.create(dto);
 
         SandReceiptData data = new SandReceiptData();
@@ -54,7 +55,7 @@ public class ReceiptFormController {
         byte[] pdf = receiptPdfService.buildReceiptPdf(
                 data,
                 (qrPng != null && !qrPng.isEmpty()) ? qrPng.getBytes() : null,
-                qrUrl
+                dto.getQrUrl()
         );
 
         HttpHeaders headers = new HttpHeaders();
