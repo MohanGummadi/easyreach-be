@@ -34,9 +34,10 @@ public class JwtService {
     }
 
     public String generateAccessToken(User user) {
-        log.debug("Generating access token for user={}", user.getEmail());
+        String subject = resolveSubject(user);
+        log.debug("Generating access token for user={}", subject);
         return Jwts.builder()
-                .setSubject(user.getEmail()) // or username field
+                .setSubject(subject)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(accessTtlMinutes)))
                 .claim("companyId", user.getCompanyUuid())
@@ -45,15 +46,26 @@ public class JwtService {
     }
 
     public String generateRefreshToken(User user, String jti) {
-        log.debug("Generating refresh token for user={} jti={}", user.getEmail(), jti);
+        String subject = resolveSubject(user);
+        log.debug("Generating refresh token for user={} jti={}", subject, jti);
         return Jwts.builder()
-                .setSubject(user.getEmail())
+                .setSubject(subject)
                 .setId(jti)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(refreshTtlDays)))
                 .claim("companyId", user.getCompanyUuid())
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    private String resolveSubject(User user) {
+        if (user.getEmail() != null && !user.getEmail().isBlank()) {
+            return user.getEmail();
+        }
+        if (user.getMobileNo() != null && !user.getMobileNo().isBlank()) {
+            return user.getMobileNo();
+        }
+        return user.getId();
     }
 
     public String extractUsername(String token) {

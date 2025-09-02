@@ -16,15 +16,18 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
-    // username is email here
+    // identifier can be email, mobile number, or immutable user ID
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        log.debug("Entering loadUserByUsername with email={}", email);
-        User user = userRepository.findByEmailIgnoreCase(email)
-                .orElseThrow(() -> {
-                    log.warn("User not found: {}", email);
-                    return new UsernameNotFoundException("User not found: " + email);
-                });
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+        log.debug("Entering loadUserByUsername with identifier={}", identifier);
+        User user = userRepository.findByEmailIgnoreCase(identifier)
+                .orElseGet(() -> userRepository.findByMobileNo(identifier)
+                        .orElseGet(() -> userRepository.findById(identifier)
+                                .orElseThrow(() -> {
+                                    log.warn("User not found: {}", identifier);
+                                    return new UsernameNotFoundException("User not found: " + identifier);
+                                })));
+
         UserAdapter adapter = new UserAdapter(user);
         log.debug("Exiting loadUserByUsername with userId={}", user.getId());
         return adapter;

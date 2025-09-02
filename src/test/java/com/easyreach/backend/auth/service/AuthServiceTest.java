@@ -21,6 +21,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
+import org.slf4j.LoggerFactory;
+import java.util.stream.Collectors;
+
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
@@ -52,6 +59,8 @@ class AuthServiceTest {
         dto.setEmail("e@e.com");
         dto.setPassword("p");
         dto.setCompanyId("c1");
+        dto.setMobileNo("1234567890");
+        when(userRepository.existsByMobileNo("1234567890")).thenReturn(false);
         when(passwordEncoder.encode("p")).thenReturn("enc");
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(jwtService.generateAccessToken(any())).thenReturn("a");
@@ -64,19 +73,61 @@ class AuthServiceTest {
     }
 
     @Test
+    void register_duplicateMobileNo_throwsException() {
+        UserDto dto = new UserDto();
+        dto.setMobileNo("1234567890");
+        when(userRepository.existsByMobileNo("1234567890")).thenReturn(true);
+
+        assertThrows(IllegalArgumentException.class, () -> authService.register(dto));
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
     void login_authenticatesAndReturnsTokens() {
         LoginRequest req = new LoginRequest();
         req.setEmail("e@e.com");
         req.setPassword("p");
-        req.setCompanyUuid("c1");
         Authentication auth = mock(Authentication.class);
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(auth);
-        when(userRepository.findByEmailIgnoreCaseAndCompanyUuid("e@e.com", "c1")).thenReturn(Optional.of(user));
+        when(userRepository.findByEmailIgnoreCase("e@e.com")).thenReturn(Optional.of(user));
         when(jwtService.generateAccessToken(user)).thenReturn("a");
         when(jwtService.generateRefreshToken(eq(user), anyString())).thenReturn("r");
 
         AuthResponse resp = authService.login(req);
         assertEquals("a", resp.getAccessToken());
+    }
+
+    @Test
+    void login_withMobile_authenticatesAndReturnsTokens() {
+        LoginRequest req = new LoginRequest();
+        req.setMobileNo("1234567890");
+        req.setPassword("p");
+        Authentication auth = mock(Authentication.class);
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(auth);
+        when(userRepository.findByMobileNo("1234567890")).thenReturn(Optional.of(user));
+        when(jwtService.generateAccessToken(user)).thenReturn("a");
+        when(jwtService.generateRefreshToken(eq(user), anyString())).thenReturn("r");
+
+        AuthResponse resp = authService.login(req);
+        assertEquals("a", resp.getAccessToken());
+        verify(userRepository).findByMobileNo("1234567890");
+    }
+
+    @Test
+    void login_withMobile_noEmail_authenticatesAndReturnsTokens() {
+        User mobileOnlyUser = User.builder().id("u2").mobileNo("2223334444").password("pass").companyUuid("c1").build();
+        LoginRequest req = new LoginRequest();
+        req.setMobileNo("2223334444");
+        req.setPassword("p");
+        Authentication auth = mock(Authentication.class);
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(auth);
+        when(userRepository.findByMobileNo("2223334444")).thenReturn(Optional.of(mobileOnlyUser));
+        when(jwtService.generateAccessToken(mobileOnlyUser)).thenReturn("a");
+        when(jwtService.generateRefreshToken(eq(mobileOnlyUser), anyString())).thenReturn("r");
+
+        AuthResponse resp = authService.login(req);
+        assertEquals("a", resp.getAccessToken());
+        verify(userRepository).findByMobileNo("2223334444");
     }
 
     @Test
@@ -140,5 +191,34 @@ class AuthServiceTest {
 
         authService.logout(req);
         verify(refreshTokenRepository).save(token);
+    }
+
+    @Test
+    void login_doesNotLogTokens() {
+        Logger logger = (Logger) LoggerFactory.getLogger(AuthService.class);
+        Level previous = logger.getLevel();
+        logger.setLevel(Level.DEBUG);
+        ListAppender<ILoggingEvent> appender = new ListAppender<>();
+        appender.start();
+        logger.addAppender(appender);
+
+        LoginRequest req = new LoginRequest();
+        req.setEmail("e@e.com");
+        req.setPassword("p");
+
+        Authentication auth = mock(Authentication.class);
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(auth);
+        when(userRepository.findByEmailIgnoreCase("e@e.com")).thenReturn(Optional.of(user));
+        when(jwtService.generateAccessToken(user)).thenReturn("access-secret");
+        when(jwtService.generateRefreshToken(eq(user), anyString())).thenReturn("refresh-secret");
+
+        authService.login(req);
+
+        String logs = appender.list.stream().map(ILoggingEvent::getFormattedMessage).collect(Collectors.joining(" "));
+        assertFalse(logs.contains("access-secret"));
+        assertFalse(logs.contains("refresh-secret"));
+
+        logger.detachAppender(appender);
+        logger.setLevel(previous);
     }
 }

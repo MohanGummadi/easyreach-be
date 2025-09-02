@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,6 +42,12 @@ public class AuthService {
     @Transactional
     public AuthResponse register(UserDto request) {
         log.debug("Entering register with request={}", request);
+        // Reject duplicate mobile numbers before persisting
+        if (request.getMobileNo() != null && userRepository.existsByMobileNo(request.getMobileNo())) {
+            log.warn("Attempt to register with duplicate mobile number: {}", request.getMobileNo());
+            throw new IllegalArgumentException("Mobile number already registered");
+        }
+
         // Prefer IDs coming from the client (Android), fall back to generated when absent
         String userId = request.getId() != null ? request.getId() : UUID.randomUUID().toString();
         String employeeId = request.getEmployeeId() != null ? request.getEmployeeId() : UUID.randomUUID().toString();
@@ -59,9 +64,14 @@ public class AuthService {
                 .isActive(true)
                 .build();
 
-        userRepository.save(user);
+        try {
+            userRepository.save(user);
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            log.error("Constraint violation during registration for mobile no: {}", request.getMobileNo(), e);
+            throw new IllegalArgumentException("User information violates constraints", e);
+        }
         AuthResponse response = createTokens(user, null);
-        log.debug("Exiting register with response={}", response);
+        log.debug("Exiting register for userId={}", user.getId());
         return response;
     }
 
@@ -70,20 +80,29 @@ public class AuthService {
      */
     @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request) {
-        log.debug("Entering login with email={}", request.getEmail());
+        String identifier = request.getEmail() != null ? request.getEmail() : request.getMobileNo();
+        log.debug("Entering login with identifier={}", identifier);
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(identifier, request.getPassword())
         );
 
-        // After successful auth, load our domain User by email and company
-        User user = userRepository.findByEmailIgnoreCaseAndCompanyUuid(request.getEmail(), request.getCompanyUuid())
-                .orElseThrow(() -> {
-                    log.warn("User not found during login: {}", request.getEmail());
-                    return new UsernameNotFoundException("User not found: " + request.getEmail());
-                });
+        User user;
+        if (request.getEmail() != null) {
+            user = userRepository.findByEmailIgnoreCase(request.getEmail())
+                    .orElseThrow(() -> {
+                        log.warn("User not found during login: {}", request.getEmail());
+                        return new UsernameNotFoundException("User not found: " + request.getEmail());
+                    });
+        } else {
+            user = userRepository.findByMobileNo(request.getMobileNo())
+                    .orElseThrow(() -> {
+                        log.warn("User not found during login: {}", request.getMobileNo());
+                        return new UsernameNotFoundException("User not found: " + request.getMobileNo());
+                    });
+        }
 
         AuthResponse response = createTokens(user, null);
-        log.debug("Exiting login with response={}", response);
+        log.debug("Exiting login for userId={}", user.getId());
         return response;
     }
 
@@ -92,9 +111,9 @@ public class AuthService {
      */
     @Transactional
     public AuthResponse refresh(RefreshRequest request) {
-        log.debug("Entering refresh with token={}", request.getRefreshToken());
         String token = request.getRefreshToken();
         String jti = jwtService.extractJti(token);
+        log.debug("Entering refresh for jti={}", jti);
 
         RefreshToken stored = refreshTokenRepository.findByJtiAndRevokedAtIsNull(jti)
                 .orElseThrow(() -> {
@@ -119,7 +138,7 @@ public class AuthService {
 
         // issue fresh pair; record rotation chain
         AuthResponse response = createTokens(user, jti);
-        log.debug("Exiting refresh with response={}", response);
+        log.debug("Exiting refresh for jti={}", jti);
         return response;
     }
 
@@ -157,7 +176,7 @@ public class AuthService {
 
         refreshTokenRepository.save(entity);
         AuthResponse response = new AuthResponse(accessToken, refreshToken);
-        log.debug("Exiting createTokens with jti={} response={}", jti, response);
+        log.debug("Exiting createTokens with jti={}", jti);
         return response;
     }
 }
