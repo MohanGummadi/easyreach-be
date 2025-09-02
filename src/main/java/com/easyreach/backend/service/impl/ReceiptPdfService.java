@@ -21,6 +21,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.EnumMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,18 +59,23 @@ public class ReceiptPdfService {
                 : ((qrUrlOrNull != null && !qrUrlOrNull.isBlank()) ? generateQrPng(qrUrlOrNull, 200, 200) : null);
 
         Context ctx = new Context();
-        ctx.setVariable("orderId", d.orderId);
-        ctx.setVariable("tripNo", d.tripNo);
-        ctx.setVariable("customerName", d.customerName);
-        ctx.setVariable("customerMobile", d.customerMobile);
-        ctx.setVariable("sandQuantity", d.sandQuantity);
-        ctx.setVariable("supplyPoint", d.supplyPoint);
-        ctx.setVariable("dispatchDate", d.dispatchDateTime != null
-                ? d.dispatchDateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss a"))
-                : "");
-        ctx.setVariable("driverName", d.driverName);
-        ctx.setVariable("driverMobile", d.driverMobile);
-        ctx.setVariable("vehicleNo", d.vehicleNo);
+
+        List<Map<String, String>> rows = new ArrayList<>();
+        rows.add(Map.of("label", "Order Id", "value", d.orderId));
+        rows.add(Map.of("label", "Trip No", "value", d.tripNo));
+        rows.add(Map.of("label", "Customer Name", "value", d.customerName));
+        rows.add(Map.of("label", "Customer Mobile", "value", d.customerMobile));
+        rows.add(Map.of("label", "Sand Quantity", "value", d.sandQuantity));
+        rows.add(Map.of("label", "Sand Supply Point Name", "value", d.supplyPoint));
+        rows.add(Map.of("label", "Dispatch Date",
+                "value", d.dispatchDateTime != null
+                        ? d.dispatchDateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss a"))
+                        : ""));
+        rows.add(Map.of("label", "Driver Name", "value", d.driverName));
+        rows.add(Map.of("label", "Driver Mobile No", "value", d.driverMobile));
+        rows.add(Map.of("label", "Vehicle No", "value", d.vehicleNo));
+
+        ctx.setVariable("rows", rows);
         ctx.setVariable("address", d.address);
         ctx.setVariable("footerLine", d.footerLine);
         if (logoBytes != null) {
