@@ -13,13 +13,14 @@
             width: 75mm;
             margin: 0;
         }
-      body { font-family: monospace; font-size: 12px; }
         .header-table { width:100%; }
-        .header-table td { vertical-align:middle; }
-        .header-table img { height:40px; }
-        .title { text-align:center; }
+        .header-table .logo { width:20%; text-align:center; }
+        .header-table .logo img { height:40px; object-fit:contain; }
+        .header-table .title { width:60%; text-align:center; }
         table { width:100%; border-collapse:collapse; }
         td { padding:2px 0; vertical-align:top; }
+        .data-table td:first-child { white-space:nowrap; }
+        .data-table td:last-child { word-break:break-word; }
         .section-title { text-align:center; margin:4px 0; font-weight:bold; }
         hr { border:0; border-top:1px dashed #000; margin:6px 0; }
         .qr { text-align:center; margin-top:10px; }
@@ -33,12 +34,13 @@
             <tr>
                 <td class="logo"><img th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" /></td>
                 <td class="title">AP SAND<br/>MANAGEMENT SYSTEM</td>
+                <td class="logo"><img th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" /></td>
             </tr>
         </table>
     </div>
     <div class="section-title">Consumer Copy</div>
     <hr/>
-    <table>
+    <table class="data-table">
         <tr><td>Order Id</td><td th:text="${orderId}"></td></tr>
         <tr><td>Trip No</td><td th:text="${tripNo}"></td></tr>
         <tr><td>Customer Name</td><td th:text="${customerName}"></td></tr>
@@ -59,12 +61,13 @@
             <tr>
                 <td class="logo"><img th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" /></td>
                 <td class="title">AP SAND<br/>MANAGEMENT SYSTEM</td>
+                <td class="logo"><img th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" /></td>
             </tr>
         </table>
     </div>
     <div class="section-title">Driver Copy</div>
     <hr/>
-    <table>
+    <table class="data-table">
         <tr><td>Order Id</td><td th:text="${orderId}"></td></tr>
         <tr><td>Trip No</td><td th:text="${tripNo}"></td></tr>
         <tr><td>Customer Name</td><td th:text="${customerName}"></td></tr>
