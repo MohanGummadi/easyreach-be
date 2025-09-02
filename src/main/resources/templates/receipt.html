@@ -43,7 +43,14 @@
             word-break: break-word;
             text-align: right;
         }
-        .address-block { text-align:left; }
+        .address-block {
+          text-align: left;
+          white-space: normal;
+          word-break: break-all;
+          overflow-wrap: anywhere;
+          display: block;
+          width: 100%;
+        }
         .section-title { text-align:center; margin:4px 0; font-weight:bold; }
         hr { border:0; border-top:1px dashed #000; margin:6px 0; }
         .qr { text-align:center; margin-top:10px; }

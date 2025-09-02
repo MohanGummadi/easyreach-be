@@ -66,7 +66,7 @@ public class ReceiptController {
                     .body("Failed to save receipt PDF");
         }
 
-        logger.info("PDF saved at: {}", savedFile.getAbsolutePath());
+        logger.info("PDF saved at: {}", savedFile.toFile().getAbsolutePath());
 
         // ✅ Return PDF in response as well
         HttpHeaders headers = new HttpHeaders();
