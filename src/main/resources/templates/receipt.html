@@ -13,10 +13,17 @@
             width: 75mm;
             margin: 0;
         }
-        .header-table { width:100%; }
-        .header-table .logo { width:20%; text-align:center; }
-        .header-table .logo img { height:40px; object-fit:contain; }
-        .header-table .title { width:60%; text-align:center; }
+        .header-flex {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-flex .title {
+            font-size: 18px;   /* 50% larger than 12px base */
+            font-weight: bold;
+            text-align: center;
+        }
         table { width:100%; border-collapse:collapse; }
         td { padding:2px 0; vertical-align:top; }
         .data-table {
@@ -41,12 +48,10 @@
 <body>
 <div class="copy">
     <div class="header">
-        <table class="header-table">
-            <tr>
-                <td class="logo"><img th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" /></td>
-                <td class="title">AP SAND<br/>MANAGEMENT SYSTEM</td>
-            </tr>
-        </table>
+        <div class="header-flex">
+            <img th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" />
+            <div class="title">AP SAND<br/>MANAGEMENT SYSTEM</div>
+        </div>
     </div>
     <div class="section-title">Consumer Copy</div>
     <hr/>
@@ -61,12 +66,10 @@
 <hr/>
 <div class="copy">
     <div class="header">
-        <table class="header-table">
-            <tr>
-                <td class="logo"><img th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" /></td>
-                <td class="title">AP SAND<br/>MANAGEMENT SYSTEM</td>
-            </tr>
-        </table>
+        <div class="header-flex">
+            <img th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" />
+            <div class="title">AP SAND<br/>MANAGEMENT SYSTEM</div>
+        </div>
     </div>
     <div class="section-title">Driver Copy</div>
     <hr/>
