@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
 
 @RestController
@@ -46,18 +49,21 @@ public class ReceiptController {
         );
 
         // ✅ Save PDF to folder (e.g., ./receipts)
-        File folder = new File("./receipts");
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
+        Path folder = Paths.get("./receipts");
+        Files.createDirectories(folder);
 
-        // Unique filename with orderId + timestamp
+        // Unique filename with sanitized orderId + timestamp
         String timestamp = java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        String fileName = "Receipt_" + data.orderId + "_" + timestamp + ".pdf";
-        File savedFile = new File(folder, fileName);
+        String sanitizedOrderId = data.orderId != null ? data.orderId.replaceAll("[^A-Za-z0-9]", "") : "unknown";
+        String fileName = "Receipt_" + sanitizedOrderId + "_" + timestamp + ".pdf";
+        Path savedFile = folder.resolve(fileName);
 
-        try (FileOutputStream fos = new FileOutputStream(savedFile)) {
-            fos.write(pdfBytes);
+        try {
+            Files.write(savedFile, pdfBytes);
+        } catch (IOException e) {
+            System.err.println("❌ Failed to save PDF: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to save receipt PDF");
         }
 
         logger.info("PDF saved at: {}", savedFile.getAbsolutePath());
