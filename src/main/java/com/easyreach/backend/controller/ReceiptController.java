@@ -1,6 +1,8 @@
 package com.easyreach.backend.controller;
 
 import com.easyreach.backend.dto.SandReceiptData;
+import com.easyreach.backend.dto.receipt.ReceiptDto;
+import com.easyreach.backend.service.ReceiptService;
 import com.easyreach.backend.service.impl.ReceiptPdfService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,11 +27,21 @@ import java.time.format.DateTimeFormatter;
 public class ReceiptController {
 
     private static final Logger logger = LoggerFactory.getLogger(ReceiptController.class);
-    private final ReceiptPdfService pdfService = new ReceiptPdfService();
+    private final ReceiptPdfService pdfService;
     private final ObjectMapper objectMapper;
+    private final ReceiptService receiptService;
 
-    public ReceiptController(ObjectMapper objectMapper) {
+    public ReceiptController(ReceiptPdfService pdfService, ObjectMapper objectMapper, ReceiptService receiptService) {
+        this.pdfService = pdfService;
         this.objectMapper = objectMapper;
+        this.receiptService = receiptService;
+    }
+
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<ReceiptDto> findByOrderId(@PathVariable String orderId) {
+        return receiptService.findByOrderId(orderId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping(value = "/pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

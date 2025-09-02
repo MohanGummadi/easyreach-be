@@ -67,6 +67,46 @@
     </div>
     <button class="btn btn-primary" type="submit">Generate PDF</button>
 </form>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const orderInput = document.querySelector('input[name="orderId"]');
+    if (!orderInput) return;
+    orderInput.addEventListener('change', async () => {
+        const orderId = orderInput.value;
+        if (!orderId) {
+            return;
+        }
+        try {
+            const res = await fetch(`/api/receipts/order/${orderId}`);
+            if (!res.ok) {
+                return;
+            }
+            const data = await res.json();
+            const mapping = {
+                tripNo: 'input[name="tripNo"]',
+                customerName: 'input[name="customerName"]',
+                customerMobile: 'input[name="customerMobile"]',
+                sandQuantity: 'input[name="sandQuantity"]',
+                supplyPoint: 'input[name="supplyPoint"]',
+                dispatchDateTime: 'input[name="dispatchDateTime"]',
+                address: 'textarea[name="address"]',
+                footerLine: 'input[name="footerLine"]',
+                qrUrl: 'input[name="qrUrl"]'
+            };
+            for (const [key, selector] of Object.entries(mapping)) {
+                if (data[key] != null) {
+                    const el = document.querySelector(selector);
+                    if (el) {
+                        el.value = data[key];
+                    }
+                }
+            }
+        } catch (e) {
+            console.error('Failed to fetch receipt by order ID', e);
+        }
+    });
+});
+</script>
 </body>
 </html>
 
