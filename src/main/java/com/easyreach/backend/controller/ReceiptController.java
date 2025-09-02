@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/api/receipts")
 public class ReceiptController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ReceiptController.class);
     private final ReceiptPdfService pdfService = new ReceiptPdfService();
 
     @PostMapping(value = "/pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -59,7 +62,7 @@ public class ReceiptController {
             fos.write(pdfBytes);
         }
 
-        System.out.println("✅ PDF saved at: " + savedFile.getAbsolutePath());
+        logger.info("PDF saved at: {}", savedFile.getAbsolutePath());
 
         // ✅ Return PDF in response as well
         HttpHeaders headers = new HttpHeaders();
