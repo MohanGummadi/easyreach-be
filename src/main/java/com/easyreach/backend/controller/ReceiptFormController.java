@@ -27,7 +27,7 @@ public class ReceiptFormController {
     @GetMapping("/receipts/new")
     public String newReceiptForm(Model model) {
         model.addAttribute("receipt", new ReceiptDto());
-        return "receipt_form";
+        return "receipt_form.html";
     }
 
     @PostMapping(value = "/receipts", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

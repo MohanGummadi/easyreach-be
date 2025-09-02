@@ -17,7 +17,9 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
@@ -92,11 +94,24 @@ public class ReceiptPdfService {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.useFastMode();
-            builder.useFont(() -> new ClassPathResource("static/fonts/CONSOLA.TTF").getInputStream(), "Consolas");
-            builder.useFont(() -> new ClassPathResource("static/fonts/CONSOLAB.TTF").getInputStream(), "Consolas", 700, PdfRendererBuilder.FontStyle.NORMAL, true);
+            builder.useFont(() -> {
+                try {
+                    return new ClassPathResource("static/fonts/CONSOLA.TTF").getInputStream();
+                } catch (IOException e) {
+                    throw new UncheckedIOException("Failed to load CONSOLA.TTF from classpath", e);
+                }
+            }, "Consolas", 400, PdfRendererBuilder.FontStyle.NORMAL, true);
+
+            builder.useFont(() -> {
+                try {
+                    return new ClassPathResource("static/fonts/CONSOLAB.TTF").getInputStream();
+                } catch (IOException e) {
+                    throw new UncheckedIOException("Failed to load CONSOLAB.TTF from classpath", e);
+                }
+            }, "Consolas", 700, PdfRendererBuilder.FontStyle.NORMAL, true);
             builder.withHtmlContent(html, "classpath:/static/");
             // Force the PDF page size to match 80mm receipt width
-            builder.useDefaultPageSize(80, 200, PdfRendererBuilder.PageSizeUnits.MM);
+            builder.useDefaultPageSize(80, 220, PdfRendererBuilder.PageSizeUnits.MM);
             builder.toStream(out);
             builder.run();
             return out.toByteArray();
