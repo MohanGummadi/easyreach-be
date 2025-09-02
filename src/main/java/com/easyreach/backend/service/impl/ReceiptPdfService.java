@@ -8,6 +8,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -28,6 +29,7 @@ import java.util.Map;
 /**
  * Builds sand receipt PDF using Thymeleaf HTML template rendered with openhtmltopdf.
  */
+@Service
 public class ReceiptPdfService {
 
     private final TemplateEngine templateEngine;
