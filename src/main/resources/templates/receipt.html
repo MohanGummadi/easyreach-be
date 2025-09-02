@@ -19,8 +19,20 @@
         .header-table .title { width:60%; text-align:center; }
         table { width:100%; border-collapse:collapse; }
         td { padding:2px 0; vertical-align:top; }
-        .data-table td:first-child { width:40%; text-align:left; }
-        .data-table td:last-child { width:60%; word-break:break-word; text-align:right; }
+        .data-table {
+            width: 100%;
+            table-layout: fixed;
+        }
+        .data-table td:first-child {
+            width: 55%;      /* adjust as needed */
+            text-align: left;
+            white-space: nowrap;
+        }
+        .data-table td:last-child {
+            width: 45%;
+            word-break: break-word;
+            text-align: right;
+        }
         .address-row td { text-align:left; }
         .section-title { text-align:center; margin:4px 0; font-weight:bold; }
         hr { border:0; border-top:1px dashed #000; margin:6px 0; }
