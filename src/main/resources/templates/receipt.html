@@ -19,8 +19,9 @@
         .header-table .title { width:60%; text-align:center; }
         table { width:100%; border-collapse:collapse; }
         td { padding:2px 0; vertical-align:top; }
-        .data-table td:first-child { white-space:nowrap; }
-        .data-table td:last-child { word-break:break-word; }
+        .data-table td:first-child { white-space:nowrap; text-align:left; }
+        .data-table td:last-child { word-break:break-word; text-align:right; }
+        .address-row td { text-align:left; }
         .section-title { text-align:center; margin:4px 0; font-weight:bold; }
         hr { border:0; border-top:1px dashed #000; margin:6px 0; }
         .qr { text-align:center; margin-top:10px; }
@@ -34,7 +35,6 @@
             <tr>
                 <td class="logo"><img th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" /></td>
                 <td class="title">AP SAND<br/>MANAGEMENT SYSTEM</td>
-                <td class="logo"><img th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" /></td>
             </tr>
         </table>
     </div>
@@ -51,7 +51,7 @@
         <tr><td>Driver Name</td><td th:text="${driverName}"></td></tr>
         <tr><td>Driver Mobile No</td><td th:text="${driverMobile}"></td></tr>
         <tr><td>Vehicle No</td><td th:text="${vehicleNo}"></td></tr>
-        <tr><td>Address</td><td th:text="${address}"></td></tr>
+        <tr class="address-row"><td colspan="2">Address: <span th:text="${address}"></span></td></tr>
     </table>
 </div>
 <hr/>
@@ -61,7 +61,6 @@
             <tr>
                 <td class="logo"><img th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" /></td>
                 <td class="title">AP SAND<br/>MANAGEMENT SYSTEM</td>
-                <td class="logo"><img th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" /></td>
             </tr>
         </table>
     </div>
@@ -78,7 +77,7 @@
         <tr><td>Driver Name</td><td th:text="${driverName}"></td></tr>
         <tr><td>Driver Mobile No</td><td th:text="${driverMobile}"></td></tr>
         <tr><td>Vehicle No</td><td th:text="${vehicleNo}"></td></tr>
-        <tr><td>Address</td><td th:text="${address}"></td></tr>
+        <tr class="address-row"><td colspan="2">Address: <span th:text="${address}"></span></td></tr>
     </table>
 </div>
 <div class="qr" th:if="${qrBase64} != null">
