@@ -13,21 +13,24 @@
             width: 75mm;
             margin: 0;
         }
-        .header-flex {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-        .header-flex .title {
-            font-size: 18px;   /* 50% larger than 12px base */
-            font-weight: bold;
-            text-align: center;
+        .header { text-align: center; }
+
+        .header-center {
+          display: inline-block;            /* shrink to content so it can be centered */
+          vertical-align: middle;
         }
         .logo {
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             object-fit: contain;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        .title {
+            display: inline-block; vertical-align: middle;
+            font-size: 16px; font-weight: bold; text-align: center; /* no extra centering shifts */
+            line-height: 1.2;
         }
         table { width:100%; border-collapse:collapse; }
         td { padding:2px 0; vertical-align:top; }
@@ -60,7 +63,7 @@
 <body>
 <div class="copy">
     <div class="header">
-        <div class="header-flex">
+        <div class="header-center">
             <img class="logo" th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" />
             <div class="title">AP SAND<br/>MANAGEMENT SYSTEM</div>
         </div>
@@ -78,7 +81,7 @@
 <hr/>
 <div class="copy">
     <div class="header">
-        <div class="header-flex">
+        <div class="header-center">
             <img class="logo" th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" />
             <div class="title">AP SAND<br/>MANAGEMENT SYSTEM</div>
         </div>
