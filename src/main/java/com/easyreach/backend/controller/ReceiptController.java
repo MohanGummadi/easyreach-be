@@ -3,8 +3,6 @@ package com.easyreach.backend.controller;
 import com.easyreach.backend.dto.SandReceiptData;
 import com.easyreach.backend.service.impl.ReceiptPdfService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +20,11 @@ import java.time.format.DateTimeFormatter;
 public class ReceiptController {
 
     private final ReceiptPdfService pdfService = new ReceiptPdfService();
+    private final ObjectMapper objectMapper;
+
+    public ReceiptController(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @PostMapping(value = "/pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> buildPdf(
@@ -30,12 +33,7 @@ public class ReceiptController {
             @RequestPart(value = "qrUrl", required = false) String qrUrl
     ) throws Exception {
 
-        // ✅ Fix: LocalDateTime parsing with JavaTimeModule
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-        SandReceiptData data = mapper.readValue(dataJson, SandReceiptData.class);
+        SandReceiptData data = objectMapper.readValue(dataJson, SandReceiptData.class);
 
         // ✅ Generate PDF
         byte[] pdfBytes = pdfService.buildReceiptPdf(
