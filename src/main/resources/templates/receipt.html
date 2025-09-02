@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        body { font-family: monospace; font-size: 12px; }
+        .header { display:flex; align-items:center; }
+        .header img { height:40px; margin-right:10px; }
+        .title { text-align:center; flex:1; }
+        table { width:100%; border-collapse:collapse; }
+        td { padding:2px 0; vertical-align:top; }
+        .section-title { text-align:center; margin:4px 0; font-weight:bold; }
+        hr { border:0; border-top:1px dashed #000; margin:6px 0; }
+        .qr { text-align:center; margin-top:10px; }
+        .footer { text-align:center; margin-top:10px; }
+    </style>
+</head>
+<body>
+<div class="copy">
+    <div class="header">
+        <img th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" />
+        <div class="title">AP SAND<br/>MANAGEMENT SYSTEM</div>
+    </div>
+    <div class="section-title">Consumer Copy</div>
+    <hr/>
+    <table>
+        <tr><td>Order Id</td><td th:text="${orderId}"></td></tr>
+        <tr><td>Trip No</td><td th:text="${tripNo}"></td></tr>
+        <tr><td>Customer Name</td><td th:text="${customerName}"></td></tr>
+        <tr><td>Customer Mobile</td><td th:text="${customerMobile}"></td></tr>
+        <tr><td>Sand Quantity</td><td th:text="${sandQuantity}"></td></tr>
+        <tr><td>Sand Supply Point Name</td><td th:text="${supplyPoint}"></td></tr>
+        <tr><td>Dispatch Date</td><td th:text="${dispatchDate}"></td></tr>
+        <tr><td>Driver Name</td><td th:text="${driverName}"></td></tr>
+        <tr><td>Driver Mobile No</td><td th:text="${driverMobile}"></td></tr>
+        <tr><td>Vehicle No</td><td th:text="${vehicleNo}"></td></tr>
+        <tr><td>Address</td><td th:text="${address}"></td></tr>
+    </table>
+</div>
+<hr/>
+<div class="copy">
+    <div class="header">
+        <img th:if="${logoBase64} != null" th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" />
+        <div class="title">AP SAND<br/>MANAGEMENT SYSTEM</div>
+    </div>
+    <div class="section-title">Driver Copy</div>
+    <hr/>
+    <table>
+        <tr><td>Order Id</td><td th:text="${orderId}"></td></tr>
+        <tr><td>Trip No</td><td th:text="${tripNo}"></td></tr>
+        <tr><td>Customer Name</td><td th:text="${customerName}"></td></tr>
+        <tr><td>Customer Mobile</td><td th:text="${customerMobile}"></td></tr>
+        <tr><td>Sand Quantity</td><td th:text="${sandQuantity}"></td></tr>
+        <tr><td>Sand Supply Point Name</td><td th:text="${supplyPoint}"></td></tr>
+        <tr><td>Dispatch Date</td><td th:text="${dispatchDate}"></td></tr>
+        <tr><td>Driver Name</td><td th:text="${driverName}"></td></tr>
+        <tr><td>Driver Mobile No</td><td th:text="${driverMobile}"></td></tr>
+        <tr><td>Vehicle No</td><td th:text="${vehicleNo}"></td></tr>
+        <tr><td>Address</td><td th:text="${address}"></td></tr>
+    </table>
+</div>
+<div class="qr" th:if="${qrBase64} != null">
+    <img th:src="'data:image/png;base64,' + ${qrBase64}" alt="qr" style="width:90px;height:90px;" />
+</div>
+<div class="footer" th:text="${footerLine}"></div>
+</body>
+</html>
