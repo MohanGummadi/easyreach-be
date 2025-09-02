@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.nio.file.Files;
 import java.time.format.DateTimeFormatter;
 
 @RestController
@@ -27,14 +26,9 @@ public class ReceiptController {
     @PostMapping(value = "/pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> buildPdf(
             @RequestPart("data") String dataJson,
-            @RequestPart("logo") MultipartFile logo,
             @RequestPart(value = "qrPng", required = false) MultipartFile qrPng,
             @RequestPart(value = "qrUrl", required = false) String qrUrl
     ) throws Exception {
-
-        if (logo == null || logo.isEmpty()) {
-            return ResponseEntity.badRequest().body("logo is required");
-        }
 
         // ✅ Fix: LocalDateTime parsing with JavaTimeModule
         ObjectMapper mapper = new ObjectMapper();
@@ -46,7 +40,6 @@ public class ReceiptController {
         // ✅ Generate PDF
         byte[] pdfBytes = pdfService.buildReceiptPdf(
                 data,
-                logo.getBytes(),
                 (qrPng != null && !qrPng.isEmpty()) ? qrPng.getBytes() : null,
                 qrUrl
         );
