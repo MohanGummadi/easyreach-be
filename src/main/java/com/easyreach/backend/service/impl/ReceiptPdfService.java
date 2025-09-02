@@ -90,9 +90,9 @@ public class ReceiptPdfService {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.useFastMode();
-            builder.useFont(new ClassPathResource("static/fonts/CONSOLA.TTF").getFile(), "Consolas");
-            builder.useFont(new ClassPathResource("static/fonts/CONSOLAB.TTF").getFile(), "Consolas", 700, PdfRendererBuilder.FontStyle.NORMAL, true);
-            builder.withHtmlContent(html, "");
+            builder.useFont(() -> new ClassPathResource("static/fonts/CONSOLA.TTF").getInputStream(), "Consolas");
+            builder.useFont(() -> new ClassPathResource("static/fonts/CONSOLAB.TTF").getInputStream(), "Consolas", 700, PdfRendererBuilder.FontStyle.NORMAL, true);
+            builder.withHtmlContent(html, "classpath:/static/");
             // Force the PDF page size to match 80mm receipt width
             builder.useDefaultPageSize(80, 200, PdfRendererBuilder.PageSizeUnits.MM);
             builder.toStream(out);
