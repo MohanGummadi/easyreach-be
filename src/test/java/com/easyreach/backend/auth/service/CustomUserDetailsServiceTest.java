@@ -54,7 +54,7 @@ class CustomUserDetailsServiceTest {
 
         UserAdapter adapter = (UserAdapter) service.loadUserByUsername("u1");
         assertThat(adapter.getUsername()).isEqualTo("u1");
-      
+    }
     @Test  
     void loadUserByUsername_returnsAdapter_whenMobileFoundWithoutEmail() {
         User user = new User();
