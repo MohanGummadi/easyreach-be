@@ -24,16 +24,14 @@
             table-layout: fixed;
         }
         .data-table td:first-child {
-            width: 55%;      /* adjust as needed */
             text-align: left;
             white-space: nowrap;
         }
         .data-table td:last-child {
-            width: 45%;
             word-break: break-word;
             text-align: right;
         }
-        .address-row td { text-align:left; }
+        .address-block { text-align:left; }
         .section-title { text-align:center; margin:4px 0; font-weight:bold; }
         hr { border:0; border-top:1px dashed #000; margin:6px 0; }
         .qr { text-align:center; margin-top:10px; }
@@ -53,18 +51,12 @@
     <div class="section-title">Consumer Copy</div>
     <hr/>
     <table class="data-table">
-        <tr><td>Order Id</td><td th:text="${orderId}"></td></tr>
-        <tr><td>Trip No</td><td th:text="${tripNo}"></td></tr>
-        <tr><td>Customer Name</td><td th:text="${customerName}"></td></tr>
-        <tr><td>Customer Mobile</td><td th:text="${customerMobile}"></td></tr>
-        <tr><td>Sand Quantity</td><td th:text="${sandQuantity}"></td></tr>
-        <tr><td>Sand Supply Point Name</td><td th:text="${supplyPoint}"></td></tr>
-        <tr><td>Dispatch Date</td><td th:text="${dispatchDate}"></td></tr>
-        <tr><td>Driver Name</td><td th:text="${driverName}"></td></tr>
-        <tr><td>Driver Mobile No</td><td th:text="${driverMobile}"></td></tr>
-        <tr><td>Vehicle No</td><td th:text="${vehicleNo}"></td></tr>
-        <tr class="address-row"><td colspan="2">Address: <span th:text="${address}"></span></td></tr>
+        <tr th:each="row : ${rows}">
+            <td th:text="${row.label}" th:style="${#strings.length(row.label) > 15 ? 'width:60%' : 'width:40%'}"></td>
+            <td th:text="${row.value}" th:style="${#strings.length(row.label) > 15 ? 'width:40%;text-align:right;' : 'width:60%;text-align:right;'}"></td>
+        </tr>
     </table>
+    <div class="address-block">Address: <span th:text="${address}"></span></div>
 </div>
 <hr/>
 <div class="copy">
@@ -79,18 +71,12 @@
     <div class="section-title">Driver Copy</div>
     <hr/>
     <table class="data-table">
-        <tr><td>Order Id</td><td th:text="${orderId}"></td></tr>
-        <tr><td>Trip No</td><td th:text="${tripNo}"></td></tr>
-        <tr><td>Customer Name</td><td th:text="${customerName}"></td></tr>
-        <tr><td>Customer Mobile</td><td th:text="${customerMobile}"></td></tr>
-        <tr><td>Sand Quantity</td><td th:text="${sandQuantity}"></td></tr>
-        <tr><td>Sand Supply Point Name</td><td th:text="${supplyPoint}"></td></tr>
-        <tr><td>Dispatch Date</td><td th:text="${dispatchDate}"></td></tr>
-        <tr><td>Driver Name</td><td th:text="${driverName}"></td></tr>
-        <tr><td>Driver Mobile No</td><td th:text="${driverMobile}"></td></tr>
-        <tr><td>Vehicle No</td><td th:text="${vehicleNo}"></td></tr>
-        <tr class="address-row"><td colspan="2">Address: <span th:text="${address}"></span></td></tr>
+        <tr th:each="row : ${rows}">
+            <td th:text="${row.label}" th:style="${#strings.length(row.label) > 15 ? 'width:60%' : 'width:40%'}"></td>
+            <td th:text="${row.value}" th:style="${#strings.length(row.label) > 15 ? 'width:40%;text-align:right;' : 'width:60%;text-align:right;'}"></td>
+        </tr>
     </table>
+    <div class="address-block">Address: <span th:text="${address}"></span></div>
 </div>
 <div class="qr" th:if="${qrBase64} != null">
     <img th:src="'data:image/png;base64,' + ${qrBase64}" alt="qr" style="width:90px;height:90px;" />
