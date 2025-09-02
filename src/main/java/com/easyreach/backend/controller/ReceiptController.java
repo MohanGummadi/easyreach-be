@@ -3,8 +3,6 @@ package com.easyreach.backend.controller;
 import com.easyreach.backend.dto.SandReceiptData;
 import com.easyreach.backend.service.impl.ReceiptPdfService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,7 +24,13 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/api/receipts")
 public class ReceiptController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ReceiptController.class);
     private final ReceiptPdfService pdfService = new ReceiptPdfService();
+    private final ObjectMapper objectMapper;
+
+    public ReceiptController(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @PostMapping(value = "/pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> buildPdf(
@@ -33,12 +39,7 @@ public class ReceiptController {
             @RequestPart(value = "qrUrl", required = false) String qrUrl
     ) throws Exception {
 
-        // ✅ Fix: LocalDateTime parsing with JavaTimeModule
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-        SandReceiptData data = mapper.readValue(dataJson, SandReceiptData.class);
+        SandReceiptData data = objectMapper.readValue(dataJson, SandReceiptData.class);
 
         // ✅ Generate PDF
         byte[] pdfBytes = pdfService.buildReceiptPdf(
@@ -65,7 +66,7 @@ public class ReceiptController {
                     .body("Failed to save receipt PDF");
         }
 
-        System.out.println("✅ PDF saved at: " + savedFile.toAbsolutePath());
+        logger.info("PDF saved at: {}", savedFile.getAbsolutePath());
 
         // ✅ Return PDF in response as well
         HttpHeaders headers = new HttpHeaders();

@@ -20,6 +20,7 @@
     </appender>
 
     <logger name="com.easyreach" level="INFO"/>
+    <logger name="com.easyreach.backend.controller" level="INFO"/>
 
     <root level="WARN">
         <appender-ref ref="CONSOLE"/>
