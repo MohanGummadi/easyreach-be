@@ -38,10 +38,13 @@ public class ReceiptController {
     }
 
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<ReceiptDto> findByOrderId(@PathVariable String orderId) {
-        return receiptService.findByOrderId(orderId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> findByOrderId(@PathVariable String orderId) {
+        orderId = orderId.toUpperCase();
+        ReceiptDto dto = receiptService.findByOrderId(orderId);
+        if (dto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No order id found");
+        }
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping(value = "/pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

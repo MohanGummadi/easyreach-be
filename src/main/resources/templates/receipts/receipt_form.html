@@ -11,7 +11,11 @@
 <form th:action="@{/receipts}" method="post" enctype="multipart/form-data">
     <div class="mb-3">
         <label class="form-label">Order ID</label>
-        <input class="form-control" type="text" name="orderId" required>
+        <div class="input-group">
+            <input class="form-control" type="text" name="orderId" required>
+            <button class="btn btn-secondary" type="button" id="searchBtn">Search</button>
+        </div>
+        <div id="searchMessage" class="form-text text-danger"></div>
     </div>
     <div class="mb-3">
         <label class="form-label">Trip No</label>
@@ -70,15 +74,30 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const orderInput = document.querySelector('input[name="orderId"]');
-    if (!orderInput) return;
-    orderInput.addEventListener('change', async () => {
+    const searchBtn = document.getElementById('searchBtn');
+    const messageEl = document.getElementById('searchMessage');
+    if (!orderInput || !searchBtn) return;
+
+    const makeUpper = () => {
+        orderInput.value = orderInput.value.toUpperCase();
+    };
+    orderInput.addEventListener('input', makeUpper);
+    orderInput.addEventListener('blur', makeUpper);
+
+    searchBtn.addEventListener('click', async () => {
         const orderId = orderInput.value;
         if (!orderId) {
             return;
         }
+        messageEl.textContent = '';
         try {
             const res = await fetch(`/api/receipts/order/${orderId}`);
+            if (res.status === 404) {
+                messageEl.textContent = 'No order id found';
+                return;
+            }
             if (!res.ok) {
+                messageEl.textContent = 'Failed to search';
                 return;
             }
             const data = await res.json();
@@ -103,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (e) {
             console.error('Failed to fetch receipt by order ID', e);
+            messageEl.textContent = 'Failed to search';
         }
     });
 });
