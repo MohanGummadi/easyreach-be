@@ -184,15 +184,12 @@ public class ReceiptPdfService {
         addKV(t, noWrap("Driver Name"),              d.driverName);
         addKV(t, noWrap("Driver Mobile No"),         d.driverMobile);
         addKV(t, noWrap("Vehicle No"),               d.vehicleNo);
-        addKV(t, noWrap("Adress:"),                  d.address);  // spelling per sample
+        addAddress(t, d.address);
         return t;
     }
 
     /** Add a key/value row. Labels are left & single-line (NBSP). Values right-aligned & may wrap. */
     private void addKV(Table t, String k, String v) {
-        String lower = k == null ? "" : k.toLowerCase();
-        boolean isAddress = lower.startsWith("address") || lower.startsWith("adress"); // accept both spellings
-
         Paragraph key = new Paragraph(k)
                 .setFontSize(BASE_FONT_SIZE)
                 .setMargin(0)
@@ -203,7 +200,7 @@ public class ReceiptPdfService {
                 .setFontSize(BASE_FONT_SIZE)
                 .setMargin(0)
                 .setPadding(0)
-                .setTextAlignment(isAddress ? TextAlignment.LEFT : TextAlignment.RIGHT); // 👈 difference
+                .setTextAlignment(TextAlignment.RIGHT);
 
         t.addCell(new Cell().add(key)
                 .setBorder(Border.NO_BORDER)
@@ -213,7 +210,20 @@ public class ReceiptPdfService {
         t.addCell(new Cell().add(val)
                 .setBorder(Border.NO_BORDER)
                 .setPadding(0)
-                .setTextAlignment(isAddress ? TextAlignment.LEFT : TextAlignment.RIGHT));
+                .setTextAlignment(TextAlignment.RIGHT));
+    }
+
+    /** Add address row spanning both columns. */
+    private void addAddress(Table t, String address) {
+        Paragraph p = new Paragraph("Address: " + (address == null ? "" : address))
+                .setFontSize(BASE_FONT_SIZE)
+                .setMargin(0)
+                .setPadding(0)
+                .setTextAlignment(TextAlignment.LEFT);
+        t.addCell(new Cell(1, 2).add(p)
+                .setBorder(Border.NO_BORDER)
+                .setPadding(0)
+                .setTextAlignment(TextAlignment.LEFT));
     }
 
 
