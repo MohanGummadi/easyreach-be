@@ -17,12 +17,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Controller
 @RequiredArgsConstructor
 public class ReceiptFormController {
 
     private final ReceiptService receiptService;
     private final ReceiptPdfService receiptPdfService;
+
+    private static final String SUPPLY_POINT = "Khandyam";
+    private static final String FOOTER_LINE = "18.4060366,83.9543993 Thank you";
 
     @GetMapping("/receipts/new")
     public String newReceiptForm(Model model) {
@@ -36,6 +42,8 @@ public class ReceiptFormController {
                                                 @RequestParam(value = "qrUrl", required = false) String qrUrl) throws Exception {
 
         dto.setQrUrl(qrUrl);
+        dto.setSupplyPoint(SUPPLY_POINT);
+        dto.setFooterLine(FOOTER_LINE);
         receiptService.create(dto);
 
         SandReceiptData data = new SandReceiptData();
@@ -44,13 +52,13 @@ public class ReceiptFormController {
         data.customerName = dto.getCustomerName();
         data.customerMobile = dto.getCustomerMobile();
         data.sandQuantity = dto.getSandQuantity();
-        data.supplyPoint = dto.getSupplyPoint();
+        data.supplyPoint = SUPPLY_POINT;
         data.dispatchDateTime = dto.getDispatchDateTime();
         data.driverName = dto.getDriverName();
         data.driverMobile = dto.getDriverMobile();
         data.vehicleNo = dto.getVehicleNo();
         data.address = dto.getAddress();
-        data.footerLine = dto.getFooterLine();
+        data.footerLine = FOOTER_LINE;
 
         byte[] pdf = receiptPdfService.buildReceiptPdf(
                 data,
@@ -58,9 +66,13 @@ public class ReceiptFormController {
                 dto.getQrUrl()
         );
 
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        String sanitizedVehicleNo = dto.getVehicleNo() != null ? dto.getVehicleNo().replaceAll("[^A-Za-z0-9]", "") : "unknown";
+        String fileName = "Receipt_" + sanitizedVehicleNo + "_" + timestamp + ".pdf";
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDisposition(ContentDisposition.attachment().filename("receipt.pdf").build());
+        headers.setContentDisposition(ContentDisposition.attachment().filename(fileName).build());
         return ResponseEntity.ok().headers(headers).body(pdf);
     }
 }

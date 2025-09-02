@@ -67,10 +67,10 @@ public class ReceiptController {
         Path folder = Paths.get("./receipts");
         Files.createDirectories(folder);
 
-        // Unique filename with sanitized orderId + timestamp
+        // Unique filename with sanitized vehicle number + timestamp
         String timestamp = java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        String sanitizedOrderId = data.orderId != null ? data.orderId.replaceAll("[^A-Za-z0-9]", "") : "unknown";
-        String fileName = "Receipt_" + sanitizedOrderId + "_" + timestamp + ".pdf";
+        String sanitizedVehicleNo = data.vehicleNo != null ? data.vehicleNo.replaceAll("[^A-Za-z0-9]", "") : "unknown";
+        String fileName = "Receipt_" + sanitizedVehicleNo + "_" + timestamp + ".pdf";
         Path savedFile = folder.resolve(fileName);
 
         try {
