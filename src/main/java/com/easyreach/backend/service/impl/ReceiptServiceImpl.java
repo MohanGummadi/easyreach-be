@@ -20,6 +20,9 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     private final ReceiptRepository repository;
 
+    private static final String SUPPLY_POINT = "Khandyam";
+    private static final String FOOTER_LINE = "18.4060366,83.9543993 Thank you";
+
     @Override
     public Receipt create(ReceiptDto dto) {
         log.debug("Creating receipt for order {}", dto.getOrderId());
@@ -29,13 +32,13 @@ public class ReceiptServiceImpl implements ReceiptService {
                 .customerName(dto.getCustomerName())
                 .customerMobile(dto.getCustomerMobile())
                 .sandQuantity(dto.getSandQuantity())
-                .supplyPoint(dto.getSupplyPoint())
+                .supplyPoint(SUPPLY_POINT)
                 .dispatchDateTime(dto.getDispatchDateTime())
                 .driverName(dto.getDriverName())
                 .driverMobile(dto.getDriverMobile())
                 .vehicleNo(dto.getVehicleNo())
                 .address(dto.getAddress())
-                .footerLine(dto.getFooterLine())
+                .footerLine(FOOTER_LINE)
                 .qrUrl(dto.getQrUrl())
                 .createdAt(OffsetDateTime.now())
                 .updatedAt(OffsetDateTime.now())

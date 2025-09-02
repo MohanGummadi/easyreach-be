@@ -37,6 +37,9 @@ public class ReceiptPdfService {
 
     private final TemplateEngine templateEngine;
 
+    private static final String SUPPLY_POINT = "Khandyam";
+    private static final String FOOTER_LINE = "18.4060366,83.9543993 Thank you";
+
     public ReceiptPdfService() {
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setPrefix("templates/");
@@ -70,8 +73,9 @@ public class ReceiptPdfService {
         rows.add(Map.of("label", "Trip No", "value", d.tripNo));
         rows.add(Map.of("label", "Customer Name", "value", d.customerName));
         rows.add(Map.of("label", "Customer Mobile", "value", d.customerMobile));
-        rows.add(Map.of("label", "Sand Quantity", "value", d.sandQuantity));
-        rows.add(Map.of("label", "Sand Supply Point Name", "value", d.supplyPoint));
+        double qty = Double.parseDouble(d.sandQuantity);
+        rows.add(Map.of("label", "Sand Quantity", "value", String.format(Locale.ENGLISH, "%.1fTons", qty)));
+        rows.add(Map.of("label", "Sand Supply Point Name", "value", SUPPLY_POINT));
         rows.add(Map.of("label", "Dispatch Date",
                 "value", d.dispatchDateTime != null
                         ? d.dispatchDateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss a", Locale.ENGLISH)).toUpperCase()
@@ -82,7 +86,7 @@ public class ReceiptPdfService {
 
         ctx.setVariable("rows", rows);
         ctx.setVariable("address", d.address);
-        ctx.setVariable("footerLine", d.footerLine);
+        ctx.setVariable("footerLine", FOOTER_LINE);
         if (logoBytes != null) {
             ctx.setVariable("logoBase64", Base64.getEncoder().encodeToString(logoBytes));
         }

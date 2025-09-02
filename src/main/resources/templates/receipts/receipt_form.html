@@ -31,11 +31,13 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Sand Quantity</label>
-        <input class="form-control" type="text" name="sandQuantity">
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Supply Point</label>
-        <input class="form-control" type="text" name="supplyPoint">
+        <select class="form-select" name="sandQuantity">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+            <option value="35">35</option>
+        </select>
     </div>
     <div class="mb-3">
         <label class="form-label">Dispatch Date/Time</label>
@@ -56,10 +58,6 @@
     <div class="mb-3">
         <label class="form-label">Address</label>
         <textarea class="form-control" name="address"></textarea>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Footer Line</label>
-        <input class="form-control" type="text" name="footerLine">
     </div>
     <div class="mb-3">
         <label class="form-label">QR Image</label>
@@ -105,11 +103,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 tripNo: 'input[name="tripNo"]',
                 customerName: 'input[name="customerName"]',
                 customerMobile: 'input[name="customerMobile"]',
-                sandQuantity: 'input[name="sandQuantity"]',
-                supplyPoint: 'input[name="supplyPoint"]',
+                sandQuantity: 'select[name="sandQuantity"]',
                 dispatchDateTime: 'input[name="dispatchDateTime"]',
                 address: 'textarea[name="address"]',
-                footerLine: 'input[name="footerLine"]',
                 qrUrl: 'input[name="qrUrl"]'
             };
             for (const [key, selector] of Object.entries(mapping)) {

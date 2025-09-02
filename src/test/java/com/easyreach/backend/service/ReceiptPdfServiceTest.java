@@ -29,13 +29,12 @@ public class ReceiptPdfServiceTest {
         d.customerName = "John";
         d.customerMobile = "1234567890";
         d.sandQuantity = "10";
-        d.supplyPoint = "Point";
         d.dispatchDateTime = LocalDateTime.of(2024, 1, 1, 10, 30);
         d.driverName = "Driver";
         d.driverMobile = "0987654321";
         d.vehicleNo = "AP09AB1234";
         d.address = "Some address";
-        d.footerLine = "Thank you";
+        d.footerLine = "18.4060366,83.9543993 Thank you";
 
         ReceiptPdfService svc = new ReceiptPdfService();
         byte[] pdf = svc.buildReceiptPdf(d, null, null);
@@ -48,6 +47,9 @@ public class ReceiptPdfServiceTest {
             assertTrue(text.contains("Consumer Copy"));
             assertTrue(text.contains("Driver Copy"));
             assertTrue(text.contains(d.orderId));
+            assertTrue(text.contains("Khandyam"));
+            assertTrue(text.contains("10.0Tons"));
+            assertTrue(text.contains("18.4060366,83.9543993 Thank you"));
         }
 
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
@@ -62,13 +64,13 @@ public class ReceiptPdfServiceTest {
         Context ctx = new Context();
         List<Map<String, String>> rows = new ArrayList<>();
         rows.add(Map.of("label", "Trip No", "value", d.tripNo));
-        rows.add(Map.of("label", "Sand Supply Point Name", "value", d.supplyPoint));
+        rows.add(Map.of("label", "Sand Supply Point Name", "value", "Khandyam"));
         ctx.setVariable("rows", rows);
         ctx.setVariable("address", d.address);
         String html = engine.process("receipt", ctx);
 
         assertTrue(html.matches("(?s).*<td style=\"width:40%\">\\s*Trip No\\s*</td>\\s*<td style=\"width:60%;text-align:right;\">\\s*" + d.tripNo + "\\s*</td>.*"));
-        assertTrue(html.matches("(?s).*<td style=\"width:60%\">\\s*Sand Supply Point Name\\s*</td>\\s*<td style=\"width:40%;text-align:right;\">\\s*" + d.supplyPoint + "\\s*</td>.*"));
+        assertTrue(html.matches("(?s).*<td style=\"width:60%\">\\s*Sand Supply Point Name\\s*</td>\\s*<td style=\"width:40%;text-align:right;\">\\s*Khandyam\\s*</td>.*"));
         assertTrue(html.contains("<div class=\"address-block\">Address: <span>" + d.address + "</span></div>"));
     }
 }
