@@ -84,6 +84,8 @@ public class ReceiptPdfService {
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.useFastMode();
             builder.withHtmlContent(html, "");
+            // Force the PDF page size to match 80mm receipt width
+            builder.useDefaultPageSize(80, 200, PdfRendererBuilder.PageSizeUnits.MM);
             builder.toStream(out);
             builder.run();
             return out.toByteArray();
