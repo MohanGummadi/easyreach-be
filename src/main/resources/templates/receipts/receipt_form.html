@@ -73,7 +73,8 @@
   document.addEventListener('DOMContentLoaded', function() {
       const token = localStorage.getItem('jwt');
       if (!token) {
-          window.location.href = '/login';
+          const redirect = encodeURIComponent(window.location.pathname + window.location.search);
+          window.location.href = `/login?redirect=${redirect}`;
           return;
       }
       const orderInput = document.querySelector('input[name="orderId"]');

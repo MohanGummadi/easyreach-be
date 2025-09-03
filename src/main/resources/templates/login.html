@@ -21,6 +21,8 @@
     <div id="loginError" class="text-danger mt-2"></div>
 </form>
 <script>
+const params = new URLSearchParams(window.location.search);
+const redirectUrl = params.get('redirect') || '/receipts/new';
 const form = document.getElementById('loginForm');
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -38,7 +40,7 @@ form.addEventListener('submit', async (e) => {
         }
         const data = await res.json();
         localStorage.setItem('jwt', data.accessToken);
-        const page = await fetch('/receipts/new', {
+        const page = await fetch(redirectUrl, {
             headers: { 'Authorization': 'Bearer ' + data.accessToken }
         });
         if (page.ok) {
