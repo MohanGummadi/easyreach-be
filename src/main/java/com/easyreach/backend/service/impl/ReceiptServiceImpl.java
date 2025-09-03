@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public Receipt create(ReceiptDto dto) {
         log.debug("Creating receipt for order {}", dto.getOrderId());
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Receipt receipt = Receipt.builder()
                 .orderId(dto.getOrderId() != null ? dto.getOrderId().toUpperCase() : null)
                 .tripNo(dto.getTripNo())
@@ -40,6 +42,7 @@ public class ReceiptServiceImpl implements ReceiptService {
                 .address(dto.getAddress())
                 .footerLine(FOOTER_LINE)
                 .qrUrl(dto.getQrUrl())
+                .createdBy(username)
                 .createdAt(OffsetDateTime.now())
                 .updatedAt(OffsetDateTime.now())
                 .build();
@@ -71,6 +74,7 @@ public class ReceiptServiceImpl implements ReceiptService {
                         .address(r.getAddress())
                         .footerLine(r.getFooterLine())
                         .qrUrl(r.getQrUrl())
+                        .createdBy(r.getCreatedBy())
                         .createdAt(r.getCreatedAt())
                         .updatedAt(r.getUpdatedAt())
                         .build())

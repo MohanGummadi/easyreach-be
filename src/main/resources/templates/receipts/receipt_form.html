@@ -70,11 +70,16 @@
     <button class="btn btn-primary" type="submit">Generate PDF</button>
 </form>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const orderInput = document.querySelector('input[name="orderId"]');
-    const searchBtn = document.getElementById('searchBtn');
-    const messageEl = document.getElementById('searchMessage');
-    if (!orderInput || !searchBtn) return;
+  document.addEventListener('DOMContentLoaded', function() {
+      const token = localStorage.getItem('jwt');
+      if (!token) {
+          window.location.href = '/login';
+          return;
+      }
+      const orderInput = document.querySelector('input[name="orderId"]');
+      const searchBtn = document.getElementById('searchBtn');
+      const messageEl = document.getElementById('searchMessage');
+      if (!orderInput || !searchBtn) return;
 
     const makeUpper = () => {
         orderInput.value = orderInput.value.toUpperCase();
@@ -82,19 +87,21 @@ document.addEventListener('DOMContentLoaded', function() {
     orderInput.addEventListener('input', makeUpper);
     orderInput.addEventListener('blur', makeUpper);
 
-    searchBtn.addEventListener('click', async () => {
-        const orderId = orderInput.value;
-        if (!orderId) {
-            return;
-        }
-        messageEl.textContent = '';
-        try {
-            const res = await fetch(`/api/receipts/order/${orderId}`);
-            if (res.status === 404) {
-                messageEl.textContent = 'No order id found';
-                return;
-            }
-            if (!res.ok) {
+      searchBtn.addEventListener('click', async () => {
+          const orderId = orderInput.value;
+          if (!orderId) {
+              return;
+          }
+          messageEl.textContent = '';
+          try {
+              const res = await fetch(`/api/receipts/order/${orderId}`, {
+                  headers: { 'Authorization': 'Bearer ' + token }
+              });
+              if (res.status === 404) {
+                  messageEl.textContent = 'No order id found';
+                  return;
+              }
+              if (!res.ok) {
                 messageEl.textContent = 'Failed to search';
                 return;
             }
@@ -119,10 +126,32 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (e) {
             console.error('Failed to fetch receipt by order ID', e);
             messageEl.textContent = 'Failed to search';
-        }
-    });
-});
-</script>
-</body>
-</html>
+          }
+      });
+
+      const form = document.querySelector('form');
+      form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const formData = new FormData(form);
+          const res = await fetch('/receipts', {
+              method: 'POST',
+              headers: { 'Authorization': 'Bearer ' + token },
+              body: formData
+          });
+          if (!res.ok) {
+              messageEl.textContent = 'Failed to create receipt';
+              return;
+          }
+          const blob = await res.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'Receipt.pdf';
+          a.click();
+          window.URL.revokeObjectURL(url);
+      });
+  });
+  </script>
+  </body>
+  </html>
 
