@@ -53,7 +53,7 @@ class VehicleTypeServiceImplTest {
         existing.setCreatedAt(old);
         existing.setUpdatedAt(old);
 
-        when(repository.findAllById(any())).thenReturn(List.of(existing));
+        when(repository.findByIdInAndCompanyUuid(any(), anyString())).thenReturn(List.of(existing));
 
         VehicleType newEntity = new VehicleType();
         newEntity.setId("t2");

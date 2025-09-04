@@ -37,25 +37,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.debug("Processing JWT for request {}", request.getRequestURI());
 
         try {
-            String username = jwtService.extractUsername(token);
-            log.debug("Extracted username {} from token", username);
+            String identifier = jwtService.extractUsername(token);
+            log.debug("Extracted subject {} from token", identifier);
 
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                var userDetails = userDetailsService.loadUserByUsername(username);
+            if (identifier != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                var userDetails = userDetailsService.loadUserByUsername(identifier);
                 if (jwtService.isTokenValid(token, userDetails)) {
                     var auth = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(auth);
                     String companyId = jwtService.extractCompanyId(token);
                     if (companyId == null || companyId.isBlank()) {
-                        log.warn("Token missing company ID for user {}", username);
+                        log.warn("Token missing company ID for user {}", identifier);
                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing company ID");
                         return;
                     }
                     CompanyContext.setCompanyId(companyId);
-                    log.debug("Authentication successful for user {} company {}", username, companyId);
+                    log.debug("Authentication successful for user {} company {}", identifier, companyId);
                 } else {
-                    log.warn("Token validation failed for user {}", username);
+                    log.warn("Token validation failed for user {}", identifier);
                 }
             }
             chain.doFilter(request, response);

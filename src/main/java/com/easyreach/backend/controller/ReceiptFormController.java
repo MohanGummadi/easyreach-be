@@ -1,0 +1,84 @@
+package com.easyreach.backend.controller;
+
+import com.easyreach.backend.dto.SandReceiptData;
+import com.easyreach.backend.dto.receipt.ReceiptDto;
+import com.easyreach.backend.service.ReceiptService;
+import com.easyreach.backend.service.impl.ReceiptPdfService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+@Controller
+@RequiredArgsConstructor
+public class ReceiptFormController {
+
+    private final ReceiptService receiptService;
+    private final ReceiptPdfService receiptPdfService;
+
+    private static final String SUPPLY_POINT = "Khandyam";
+    private static final String FOOTER_LINE = "18.4060366,83.9543993 Thank you";
+
+    @GetMapping("/receipts/new")
+    public String newReceiptForm(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        ReceiptDto dto = new ReceiptDto();
+        dto.setCreatedBy(username);
+        model.addAttribute("receipt", dto);
+        return "receipts/receipt_form";
+    }
+
+    @PostMapping(value = "/receipts", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<byte[]> createReceipt(@ModelAttribute ReceiptDto dto,
+                                                @RequestParam(value = "qrPng", required = false) MultipartFile qrPng,
+                                                @RequestParam(value = "qrUrl", required = false) String qrUrl) throws Exception {
+
+        dto.setQrUrl(qrUrl);
+        dto.setSupplyPoint(SUPPLY_POINT);
+        dto.setFooterLine(FOOTER_LINE);
+        dto.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+        receiptService.create(dto);
+
+        SandReceiptData data = new SandReceiptData();
+        data.orderId = dto.getOrderId();
+        data.tripNo = dto.getTripNo();
+        data.customerName = dto.getCustomerName();
+        data.customerMobile = dto.getCustomerMobile();
+        data.sandQuantity = dto.getSandQuantity();
+        data.supplyPoint = SUPPLY_POINT;
+        data.dispatchDateTime = dto.getDispatchDateTime();
+        data.driverName = dto.getDriverName();
+        data.driverMobile = dto.getDriverMobile();
+        data.vehicleNo = dto.getVehicleNo();
+        data.address = dto.getAddress();
+        data.footerLine = FOOTER_LINE;
+
+        byte[] pdf = receiptPdfService.buildReceiptPdf(
+                data,
+                (qrPng != null && !qrPng.isEmpty()) ? qrPng.getBytes() : null,
+                dto.getQrUrl()
+        );
+
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        String sanitizedVehicleNo = dto.getVehicleNo() != null ? dto.getVehicleNo().replaceAll("[^A-Za-z0-9]", "") : "unknown";
+        String fileName = "Receipt_" + sanitizedVehicleNo + "_" + timestamp + ".pdf";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.attachment().filename(fileName).build());
+        return ResponseEntity.ok().headers(headers).body(pdf);
+    }
+}
+

@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -34,6 +35,7 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/login",
                                 "/auth/**",
                                 "/api/auth/**",
                                 "/v3/api-docs/**",
@@ -43,6 +45,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
+                .exceptionHandling(e -> e.authenticationEntryPoint(htmlAwareAuthenticationEntryPoint()))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         SecurityFilterChain chain = http.build();
         log.debug("SecurityFilterChain configured");
@@ -69,5 +72,10 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         log.debug("Providing PasswordEncoder");
         return NoOpPasswordEncoder.getInstance(); // matches your stored password hashes
+    }
+
+    @Bean
+    public AuthenticationEntryPoint htmlAwareAuthenticationEntryPoint() {
+        return new HtmlAwareAuthenticationEntryPoint();
     }
 }

@@ -30,4 +30,14 @@ class UserAdapterTest {
         assertThat(adapter.isEnabled()).isTrue();
         assertThat(adapter.getDomainUser()).isSameAs(domainUser);
     }
+
+    @Test
+    void getUsername_fallsBackToMobileThenId() {
+        User mobileUser = User.builder().id("id1").mobileNo("9999").build();
+        assertThat(new UserAdapter(mobileUser).getUsername()).isEqualTo("9999");
+
+        User idOnlyUser = User.builder().id("id2").build();
+        assertThat(new UserAdapter(idOnlyUser).getUsername()).isEqualTo("id2");
+   
+    }
 }

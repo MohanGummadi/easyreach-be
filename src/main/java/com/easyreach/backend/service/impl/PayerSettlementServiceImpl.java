@@ -107,7 +107,7 @@ public class PayerSettlementServiceImpl extends CompanyScopedService implements 
             return 0;
         }
 
-        Map<String, PayerSettlement> existing = repository.findAllById(dtoMap.keySet()).stream()
+        Map<String, PayerSettlement> existing = repository.findBySettlementIdInAndCompanyUuid(dtoMap.keySet(), currentCompany()).stream()
                 .collect(Collectors.toMap(PayerSettlement::getSettlementId, Function.identity()));
 
         OffsetDateTime now = OffsetDateTime.now();

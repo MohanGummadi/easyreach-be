@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +18,6 @@ public interface VehicleEntryRepository extends JpaRepository<VehicleEntry, Stri
     Optional<VehicleEntry> findByEntryIdAndCompanyUuidAndDeletedIsFalse(String entryId, String companyUuid);
 
     Page<VehicleEntry> findByCompanyUuidAndDeletedIsFalse(String companyUuid, Pageable pageable);
+
+    List<VehicleEntry> findByEntryIdInAndCompanyUuid(Collection<String> entryIds, String companyUuid);
 }

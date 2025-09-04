@@ -107,7 +107,7 @@ public class EquipmentUsageServiceImpl extends CompanyScopedService implements E
             return 0;
         }
 
-        Map<String, EquipmentUsage> existing = repository.findAllById(dtoMap.keySet()).stream()
+        Map<String, EquipmentUsage> existing = repository.findByEquipmentUsageIdInAndCompanyUuid(dtoMap.keySet(), currentCompany()).stream()
                 .collect(Collectors.toMap(EquipmentUsage::getEquipmentUsageId, Function.identity()));
 
         OffsetDateTime now = OffsetDateTime.now();

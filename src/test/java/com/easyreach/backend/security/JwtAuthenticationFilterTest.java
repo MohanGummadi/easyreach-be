@@ -65,6 +65,25 @@ class JwtAuthenticationFilterTest {
     }
 
     @Test
+    void validToken_withMobileSubject_setsAuthentication() throws ServletException, IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("Authorization", "Bearer token");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        FilterChain chain = mock(FilterChain.class);
+        UserDetails userDetails = mock(UserDetails.class);
+
+        when(jwtService.extractUsername("token")).thenReturn("9999999999");
+        when(userDetailsService.loadUserByUsername("9999999999")).thenReturn(userDetails);
+        when(jwtService.isTokenValid("token", userDetails)).thenReturn(true);
+        when(jwtService.extractCompanyId("token")).thenReturn("company1");
+
+        filter.doFilterInternal(request, response, chain);
+
+        verify(chain).doFilter(request, response);
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNotNull();
+    }
+
+    @Test
     void invalidToken_returnsUnauthorized() throws ServletException, IOException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", "Bearer bad");

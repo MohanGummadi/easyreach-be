@@ -53,7 +53,7 @@ class VehicleEntryServiceImplTest {
         existing.setCreatedAt(old);
         existing.setUpdatedAt(old);
 
-        when(repository.findAllById(any())).thenReturn(List.of(existing));
+        when(repository.findByEntryIdInAndCompanyUuid(any(), anyString())).thenReturn(List.of(existing));
 
         VehicleEntry newEntity = new VehicleEntry();
         newEntity.setEntryId("v2");

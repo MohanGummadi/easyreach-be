@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +18,6 @@ public interface ExpenseMasterRepository extends JpaRepository<ExpenseMaster, St
     Optional<ExpenseMaster> findByIdAndCompanyUuidAndDeletedIsFalse(String id, String companyUuid);
 
     Page<ExpenseMaster> findByCompanyUuidAndDeletedIsFalse(String companyUuid, Pageable pageable);
+
+    List<ExpenseMaster> findByIdInAndCompanyUuid(Collection<String> ids, String companyUuid);
 }
