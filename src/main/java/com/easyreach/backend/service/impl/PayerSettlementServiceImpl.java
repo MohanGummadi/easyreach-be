@@ -3,6 +3,7 @@ package com.easyreach.backend.service.impl;
 import com.easyreach.backend.dto.ApiResponse;
 import com.easyreach.backend.dto.payer_settlements.PayerSettlementRequestDto;
 import com.easyreach.backend.dto.payer_settlements.PayerSettlementResponseDto;
+import com.easyreach.backend.dto.payer_settlements.PayerSettlementWithNameDto;
 import com.easyreach.backend.entity.PayerSettlement;
 import com.easyreach.backend.mapper.PayerSettlementMapper;
 import com.easyreach.backend.repository.PayerSettlementRepository;
@@ -132,6 +133,42 @@ public class PayerSettlementServiceImpl extends CompanyScopedService implements 
         int size = entities.size();
         log.debug("Exiting bulkSync with size={}", size);
         return size;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ApiResponse<List<PayerSettlementResponseDto>> getSettlements(String payerId, Optional<String> companyUuid) {
+        String company = companyUuid.orElse(currentCompany());
+        List<PayerSettlement> list = repository.findByPayerIdAndCompanyUuidAndDeletedIsFalse(payerId, company);
+        return ApiResponse.success(list.stream().map(mapper::toDto).toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ApiResponse<List<PayerSettlementResponseDto>> getAllSettlements(Optional<String> companyUuid) {
+        String company = companyUuid.orElse(currentCompany());
+        List<PayerSettlement> list = repository.findByCompanyUuidAndDeletedIsFalse(company);
+        return ApiResponse.success(list.stream().map(mapper::toDto).toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ApiResponse<List<PayerSettlementWithNameDto>> getByCompanyWithPayerName(String companyUuid) {
+        List<com.easyreach.backend.repository.PayerSettlementWithName> rows = repository.findByCompanyUuidWithPayerName(companyUuid);
+        List<PayerSettlementWithNameDto> dtos = rows.stream()
+                .map(r -> new PayerSettlementWithNameDto(r.getSettlementId(), r.getPayerId(), r.getPayerName(), r.getAmount(), r.getDate()))
+                .toList();
+        return ApiResponse.success(dtos);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ApiResponse<List<PayerSettlementWithNameDto>> getByPayerWithName(String payerId) {
+        List<com.easyreach.backend.repository.PayerSettlementWithName> rows = repository.findByPayerIdWithName(payerId, currentCompany());
+        List<PayerSettlementWithNameDto> dtos = rows.stream()
+                .map(r -> new PayerSettlementWithNameDto(r.getSettlementId(), r.getPayerId(), r.getPayerName(), r.getAmount(), r.getDate()))
+                .toList();
+        return ApiResponse.success(dtos);
     }
 
     @Override

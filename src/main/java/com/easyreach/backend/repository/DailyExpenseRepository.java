@@ -4,7 +4,6 @@ import com.easyreach.backend.entity.DailyExpense;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +17,8 @@ public interface DailyExpenseRepository extends JpaRepository<DailyExpense, Stri
     Optional<DailyExpense> findByExpenseIdAndCompanyUuidAndDeletedIsFalse(String expenseId, String companyUuid);
 
     Page<DailyExpense> findByCompanyUuidAndDeletedIsFalse(String companyUuid, Pageable pageable);
+
+    Page<DailyExpense> findByCompanyUuidAndExpenseDateBetweenAndDeletedIsFalse(String companyUuid, OffsetDateTime from, OffsetDateTime to, Pageable pageable);
 
     List<DailyExpense> findByExpenseIdInAndCompanyUuid(Collection<String> expenseIds, String companyUuid);
 }

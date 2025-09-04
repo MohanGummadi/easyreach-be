@@ -85,9 +85,15 @@ public class DailyExpenseServiceImpl extends CompanyScopedService implements Dai
 
     @Override
     @Transactional(readOnly = true)
-    public ApiResponse<Page<DailyExpenseResponseDto>> list(Pageable pageable) {
-        log.debug("Entering list with pageable={}", pageable);
-        ApiResponse<Page<DailyExpenseResponseDto>> response = ApiResponse.success(repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable).map(mapper::toDto));
+    public ApiResponse<Page<DailyExpenseResponseDto>> list(Pageable pageable, OffsetDateTime dateFrom, OffsetDateTime dateTo) {
+        log.debug("Entering list with pageable={} dateFrom={} dateTo={}", pageable, dateFrom, dateTo);
+        Page<DailyExpense> page;
+        if (dateFrom != null && dateTo != null) {
+            page = repository.findByCompanyUuidAndExpenseDateBetweenAndDeletedIsFalse(currentCompany(), dateFrom, dateTo, pageable);
+        } else {
+            page = repository.findByCompanyUuidAndDeletedIsFalse(currentCompany(), pageable);
+        }
+        ApiResponse<Page<DailyExpenseResponseDto>> response = ApiResponse.success(page.map(mapper::toDto));
         log.debug("Exiting list with response={}", response);
         return response;
     }

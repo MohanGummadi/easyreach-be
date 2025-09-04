@@ -4,8 +4,11 @@ import com.easyreach.backend.dto.ApiResponse;
 import com.easyreach.backend.dto.vehicle_entries.VehicleEntryRequestDto;
 import com.easyreach.backend.dto.vehicle_entries.VehicleEntryResponseDto;
 import com.easyreach.backend.entity.VehicleEntry;
+import com.easyreach.backend.entity.PayerSettlement;
 import com.easyreach.backend.mapper.VehicleEntryMapper;
 import com.easyreach.backend.repository.VehicleEntryRepository;
+import com.easyreach.backend.repository.PayerSettlementRepository;
+import com.easyreach.backend.util.CodeGenerator;
 import com.easyreach.backend.service.VehicleEntryService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +31,48 @@ import java.util.stream.Collectors;
 public class VehicleEntryServiceImpl extends CompanyScopedService implements VehicleEntryService {
     private final VehicleEntryRepository repository;
     private final VehicleEntryMapper mapper;
+    private final PayerSettlementRepository payerSettlementRepository;
+    private final CodeGenerator codeGenerator;
 
     @Override
     public ApiResponse<VehicleEntryResponseDto> create(VehicleEntryRequestDto dto) {
         log.debug("Entering create with dto={}", dto);
+
         VehicleEntry entity = mapper.toEntity(dto);
         entity.setCompanyUuid(currentCompany());
-        ApiResponse<VehicleEntryResponseDto> response = ApiResponse.success(mapper.toDto(repository.save(entity)));
+        // generate entry code
+        entity.setEntryId(codeGenerator.generate("VE"));
+
+        // initialise payment related fields depending on pay type
+        if (dto.getPaytype() != null &&
+                ("CASH".equalsIgnoreCase(dto.getPaytype()) || "UPI".equalsIgnoreCase(dto.getPaytype()))) {
+            entity.setPaidAmount(dto.getAmount());
+            entity.setPendingAmt(java.math.BigDecimal.ZERO);
+            entity.setIsSettled(true);
+            entity.setSettlementType(dto.getPaytype());
+            entity.setSettlementDate(OffsetDateTime.now());
+
+            // create payer settlement record for immediate payments
+            PayerSettlement ps = new PayerSettlement();
+            OffsetDateTime now = OffsetDateTime.now();
+            ps.setSettlementId(codeGenerator.generate("PS"));
+            ps.setPayerId(dto.getPayerId());
+            ps.setAmount(dto.getAmount());
+            ps.setDate(now);
+            ps.setCompanyUuid(currentCompany());
+            ps.setIsSynced(true);
+            ps.setCreatedAt(now);
+            ps.setUpdatedAt(now);
+            ps.setDeleted(false);
+            payerSettlementRepository.save(ps);
+        } else {
+            entity.setPaidAmount(java.math.BigDecimal.ZERO);
+            entity.setPendingAmt(dto.getAmount());
+            entity.setIsSettled(false);
+        }
+
+        ApiResponse<VehicleEntryResponseDto> response =
+                ApiResponse.success(mapper.toDto(repository.save(entity)));
         log.debug("Exiting create with response={}", response);
         return response;
     }
