@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.OffsetDateTime;
+
 @RestController
 @RequestMapping("/api/daily-expenses")
 @RequiredArgsConstructor
@@ -74,10 +76,12 @@ public class DailyExpenseController {
 
     @GetMapping
     @Operation(summary = "List DailyExpense")
-    public ResponseEntity<ApiResponse<Page<DailyExpenseResponseDto>>> list(Pageable pageable){
-        log.info("List DailyExpense with pageable {}", pageable);
+    public ResponseEntity<ApiResponse<Page<DailyExpenseResponseDto>>> list(Pageable pageable,
+                                                                         @RequestParam(required = false) OffsetDateTime dateFrom,
+                                                                         @RequestParam(required = false) OffsetDateTime dateTo){
+        log.info("List DailyExpense with pageable {} dateFrom {} dateTo {}", pageable, dateFrom, dateTo);
         try {
-            return ResponseEntity.ok(service.list(pageable));
+            return ResponseEntity.ok(service.list(pageable, dateFrom, dateTo));
         } catch (Exception e) {
             log.error("Error listing DailyExpense", e);
             throw e;

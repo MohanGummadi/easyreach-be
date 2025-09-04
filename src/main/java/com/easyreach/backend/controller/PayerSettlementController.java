@@ -3,6 +3,7 @@ package com.easyreach.backend.controller;
 import com.easyreach.backend.dto.ApiResponse;
 import com.easyreach.backend.dto.payer_settlements.PayerSettlementRequestDto;
 import com.easyreach.backend.dto.payer_settlements.PayerSettlementResponseDto;
+import com.easyreach.backend.dto.payer_settlements.PayerSettlementWithNameDto;
 import com.easyreach.backend.service.PayerSettlementService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -80,6 +81,30 @@ public class PayerSettlementController {
             return ResponseEntity.ok(service.list(pageable));
         } catch (Exception e) {
             log.error("Error listing PayerSettlement", e);
+            throw e;
+        }
+    }
+
+    @GetMapping("/company/{companyId}")
+    @Operation(summary = "List settlements by company")
+    public ResponseEntity<ApiResponse<java.util.List<PayerSettlementWithNameDto>>> byCompany(@PathVariable String companyId) {
+        log.info("List settlements for company {}", companyId);
+        try {
+            return ResponseEntity.ok(service.getByCompanyWithPayerName(companyId));
+        } catch (Exception e) {
+            log.error("Error listing settlements for company {}", companyId, e);
+            throw e;
+        }
+    }
+
+    @GetMapping("/payer/{payerId}")
+    @Operation(summary = "List settlements by payer")
+    public ResponseEntity<ApiResponse<java.util.List<PayerSettlementWithNameDto>>> byPayer(@PathVariable String payerId) {
+        log.info("List settlements for payer {}", payerId);
+        try {
+            return ResponseEntity.ok(service.getByPayerWithName(payerId));
+        } catch (Exception e) {
+            log.error("Error listing settlements for payer {}", payerId, e);
             throw e;
         }
     }
