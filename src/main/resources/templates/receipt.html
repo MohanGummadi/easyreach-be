@@ -109,7 +109,7 @@
     <div class="address-block">Address: <span th:text="${address}"></span></div>
 </div>
 <div class="qr" th:if="${qrBase64} != null">
-    <img th:src="'data:image/png;base64,' + ${qrBase64}" alt="qr" style="width:90px;height:90px;" />
+    <img th:src="'data:image/png;base64,' + ${qrBase64}" alt="qr" style="width:120px;height:120px;" />
 </div>
 <div class="footer" th:text="${footerLine}"></div>
 </body>
