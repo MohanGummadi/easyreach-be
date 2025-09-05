@@ -6,7 +6,9 @@ import com.easyreach.backend.dto.vehicle_entries.VehicleEntryRequestDto;
 import com.easyreach.backend.entity.VehicleEntry;
 import com.easyreach.backend.mapper.VehicleEntryMapper;
 import com.easyreach.backend.repository.VehicleEntryRepository;
+import com.easyreach.backend.repository.PayerSettlementRepository;
 import com.easyreach.backend.service.impl.VehicleEntryServiceImpl;
+import com.easyreach.backend.util.CodeGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,12 +32,17 @@ class VehicleEntryServiceImplTest {
     private VehicleEntryRepository repository;
     @Mock
     private VehicleEntryMapper mapper;
+    @Mock
+    private PayerSettlementRepository payerSettlementRepository;
+    @Mock
+    private CodeGenerator codeGenerator;
 
     private VehicleEntryServiceImpl service;
 
     @BeforeEach
     void setUp() {
-        service = new VehicleEntryServiceImpl(repository, mapper);
+        service = new VehicleEntryServiceImpl(
+                repository, mapper, payerSettlementRepository, codeGenerator);
         CompanyContext.setCompanyId("test");
     }
 
