@@ -3,12 +3,24 @@ package com.easyreach.backend.util;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * Simple code generator utility used to create identifiers for various entities.
  */
 @Component
 public class CodeGenerator {
+
+    private final Supplier<UUID> uuidSupplier;
+
+    public CodeGenerator() {
+        this(UUID::randomUUID);
+    }
+
+    // Visible for testing
+    CodeGenerator(Supplier<UUID> uuidSupplier) {
+        this.uuidSupplier = uuidSupplier;
+    }
 
     /**
      * Generates a random code prefixed with the supplied value. The resulting
@@ -19,7 +31,7 @@ public class CodeGenerator {
      * @return generated unique code
      */
     public String generate(String prefix) {
-        String random = UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase();
+        String random = uuidSupplier.get().toString().replace("-", "").substring(0, 8).toUpperCase();
         return prefix + random;
     }
 }
