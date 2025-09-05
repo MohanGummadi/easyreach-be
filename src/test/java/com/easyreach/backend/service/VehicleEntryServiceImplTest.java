@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -83,6 +84,21 @@ class VehicleEntryServiceImplTest {
         assertNotNull(savedNew);
         assertEquals(savedNew.getCreatedAt(), savedNew.getUpdatedAt());
         assertTrue(savedNew.getIsSynced());
+    }
+
+    @Test
+    void bulkSync_nullOrEmpty_returnsZero() {
+        assertEquals(0, service.bulkSync(null));
+        assertEquals(0, service.bulkSync(Collections.emptyList()));
+        verifyNoInteractions(repository, mapper);
+    }
+
+    @Test
+    void bulkSync_noValidIds_returnsZero() {
+        VehicleEntryRequestDto dto = new VehicleEntryRequestDto();
+        int count = service.bulkSync(List.of(dto));
+        assertEquals(0, count);
+        verifyNoInteractions(repository, mapper);
     }
 }
 

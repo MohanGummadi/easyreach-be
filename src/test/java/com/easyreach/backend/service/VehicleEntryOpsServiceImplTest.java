@@ -79,5 +79,11 @@ class VehicleEntryOpsServiceImplTest {
         when(repository.findByEntryIdAndCompanyUuidAndDeletedIsFalse("1", "test")).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> service.addPayment("1", BigDecimal.ONE, "u", null));
     }
+
+    @Test
+    void markExit_notFound() {
+        when(repository.findByEntryIdAndCompanyUuidAndDeletedIsFalse("1", "test")).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> service.markExit("1", OffsetDateTime.now()));
+    }
 }
 
