@@ -250,7 +250,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
-                    <argLine>@{surefireArgLine} -Duser.timezone=UTC</argLine>
+                    <argLine>@{argLine} -Duser.timezone=UTC</argLine>
                     <failIfNoTests>false</failIfNoTests>
                     <reuseForks>true</reuseForks>
                 </configuration>
