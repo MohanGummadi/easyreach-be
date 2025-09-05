@@ -59,6 +59,17 @@ class PayerQueryServiceImplTest {
     }
 
     @Test
+    void searchActive_withQuery_usesNameFilter() {
+        Page<Payer> page = new PageImpl<>(List.of(entity));
+        when(repository.findByCompanyUuidAndPayerNameContainingIgnoreCaseAndDeletedAtIsNull(eq("c"), eq("abc"), any(Pageable.class))).thenReturn(page);
+        when(mapper.toDto(entity)).thenReturn(response);
+
+        ApiResponse<Page<PayerResponseDto>> res = service.searchActive("c", "abc", Pageable.unpaged());
+        assertTrue(res.isSuccess());
+        verify(repository).findByCompanyUuidAndPayerNameContainingIgnoreCaseAndDeletedAtIsNull(eq("c"), eq("abc"), any(Pageable.class));
+    }
+
+    @Test
     void softDelete_marksDeleted() {
         when(repository.findByPayerIdAndCompanyUuidAndDeletedIsFalse("1", "test")).thenReturn(Optional.of(entity));
 
