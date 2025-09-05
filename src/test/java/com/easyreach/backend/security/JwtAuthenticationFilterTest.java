@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -39,15 +40,12 @@ class JwtAuthenticationFilterTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain chain = mock(FilterChain.class);
-        SecurityContext context = mock(SecurityContext.class);
         when(request.getHeader("Authorization")).thenReturn(null);
-        when(context.getAuthentication()).thenReturn(null);
-        SecurityContextHolder.setContext(context);
 
         filter.doFilterInternal(request, response, chain);
 
         verify(chain).doFilter(request, response);
-        verify(context, never()).setAuthentication(any());
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
     }
 
     @Test
@@ -100,7 +98,6 @@ class JwtAuthenticationFilterTest {
         SecurityContext context = mock(SecurityContext.class);
         when(request.getHeader("Authorization")).thenReturn("Bearer bad");
         when(jwtService.extractUsername("bad")).thenThrow(new RuntimeException("invalid"));
-        when(context.getAuthentication()).thenReturn(null);
         SecurityContextHolder.setContext(context);
 
         filter.doFilterInternal(request, response, chain);
