@@ -64,6 +64,15 @@ class RefreshTokenServiceImplTest {
     }
 
     @Test
+    void get_found() {
+        when(repository.findById("1")).thenReturn(Optional.of(entity));
+        when(mapper.toDto(entity)).thenReturn(response);
+        ApiResponse<RefreshTokenResponseDto> res = service.get("1");
+        assertTrue(res.isSuccess());
+        verify(repository).findById("1");
+    }
+
+    @Test
     void list_returnsPage() {
         when(repository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(List.of(entity)));
         when(mapper.toDto(entity)).thenReturn(response);
@@ -71,6 +80,39 @@ class RefreshTokenServiceImplTest {
         ApiResponse<?> res = service.list(Pageable.unpaged());
         assertTrue(res.isSuccess());
         verify(repository).findAll(any(Pageable.class));
+    }
+
+    @Test
+    void update_updatesEntity() {
+        when(repository.findById("1")).thenReturn(Optional.of(entity));
+        when(repository.save(entity)).thenReturn(entity);
+        when(mapper.toDto(entity)).thenReturn(response);
+
+        ApiResponse<RefreshTokenResponseDto> res = service.update("1", request);
+
+        assertTrue(res.isSuccess());
+        verify(mapper).update(entity, request);
+        verify(repository).save(entity);
+    }
+
+    @Test
+    void update_notFound() {
+        when(repository.findById("1")).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> service.update("1", request));
+    }
+
+    @Test
+    void delete_deletesEntity() {
+        when(repository.existsById("1")).thenReturn(true);
+        ApiResponse<Void> res = service.delete("1");
+        assertTrue(res.isSuccess());
+        verify(repository).deleteById("1");
+    }
+
+    @Test
+    void delete_notFound() {
+        when(repository.existsById("1")).thenReturn(false);
+        assertThrows(EntityNotFoundException.class, () -> service.delete("1"));
     }
 }
 
