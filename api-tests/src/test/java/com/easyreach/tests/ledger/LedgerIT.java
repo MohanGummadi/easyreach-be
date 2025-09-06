@@ -3,6 +3,8 @@ package com.easyreach.tests.ledger;
 import com.easyreach.tests.core.BaseIT;
 import com.easyreach.tests.core.IdStore;
 import com.easyreach.tests.core.SampleData;
+import static com.easyreach.tests.core.EntityHelper.ensureCompany;
+import static com.easyreach.tests.core.EntityHelper.ensurePayer;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -20,20 +22,8 @@ import static org.hamcrest.Matchers.*;
 public class LedgerIT extends BaseIT {
     private void ensureLedgerData() {
         if (IdStore.get("entryId") == null) {
-            String companyId = IdStore.get("companyUuid");
-            if (companyId == null) {
-                Map<String, Object> company = SampleData.companyRequest();
-                Response cr = given().spec(spec).body(company).post("/api/companies");
-                companyId = cr.jsonPath().getString("data.uuid");
-                IdStore.put("companyUuid", companyId);
-            }
-            String payerId = IdStore.get("payerId");
-            if (payerId == null) {
-                Map<String, Object> payer = SampleData.payerRequest(companyId);
-                Response pr = given().spec(spec).body(payer).post("/api/payers");
-                payerId = pr.jsonPath().getString("data.payerId");
-                IdStore.put("payerId", payerId);
-            }
+            String companyId = ensureCompany();
+            String payerId = ensurePayer();
             Map<String, Object> entry = SampleData.vehicleEntryRequest(companyId, payerId, "TRUCK");
             Response er = given().spec(spec).body(entry).post("/api/vehicle-entries");
             String entryId = er.jsonPath().getString("data.entryId");

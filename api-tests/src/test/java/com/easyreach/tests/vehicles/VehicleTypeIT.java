@@ -3,6 +3,7 @@ package com.easyreach.tests.vehicles;
 import com.easyreach.tests.core.BaseIT;
 import com.easyreach.tests.core.IdStore;
 import com.easyreach.tests.core.SampleData;
+import static com.easyreach.tests.core.EntityHelper.ensureCompany;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -21,10 +22,7 @@ public class VehicleTypeIT extends BaseIT {
     @Test
     @Order(1)
     void shouldCreateVehicleType() {
-        String companyId = IdStore.get("companyUuid");
-        if (companyId == null) {
-            companyId = createCompany();
-        }
+        String companyId = ensureCompany();
         Map<String, Object> body = SampleData.vehicleTypeRequest(companyId);
         Response r = given().spec(spec).body(body).post("/api/vehicle-types");
         r.then().statusCode(200);
@@ -35,7 +33,7 @@ public class VehicleTypeIT extends BaseIT {
     @Test
     @Order(2)
     void shouldGetVehicleType() {
-        String id = IdStore.get("vehicleTypeId");
+        String id = ensureVehicleType();
         given().spec(spec).get("/api/vehicle-types/" + id)
                 .then().statusCode(200).body("data.id", equalTo(id));
     }
@@ -51,8 +49,8 @@ public class VehicleTypeIT extends BaseIT {
     @Test
     @Order(4)
     void shouldUpdateVehicleType() {
-        String id = IdStore.get("vehicleTypeId");
-        String companyId = IdStore.get("companyUuid");
+        String id = ensureVehicleType();
+        String companyId = ensureCompany();
         Map<String, Object> body = SampleData.vehicleTypeRequest(companyId);
         body.put("id", id);
         body.put("vehicleType", "UpdatedType");
@@ -64,16 +62,20 @@ public class VehicleTypeIT extends BaseIT {
     @Test
     @Order(5)
     void shouldDeleteVehicleType() {
-        String id = IdStore.get("vehicleTypeId");
+        String id = ensureVehicleType();
         given().spec(spec).delete("/api/vehicle-types/" + id)
                 .then().statusCode(200);
     }
 
-    private String createCompany() {
-        Map<String, Object> body = SampleData.companyRequest();
-        Response r = given().spec(spec).body(body).post("/api/companies");
-        String id = r.jsonPath().getString("data.uuid");
-        IdStore.put("companyUuid", id);
+    private String ensureVehicleType() {
+        String id = IdStore.get("vehicleTypeId");
+        if (id == null) {
+            String companyId = ensureCompany();
+            Map<String, Object> body = SampleData.vehicleTypeRequest(companyId);
+            Response r = given().spec(spec).body(body).post("/api/vehicle-types");
+            id = r.jsonPath().getString("data.id");
+            IdStore.put("vehicleTypeId", id);
+        }
         return id;
     }
 }

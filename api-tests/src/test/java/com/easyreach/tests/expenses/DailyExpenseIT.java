@@ -3,6 +3,7 @@ package com.easyreach.tests.expenses;
 import com.easyreach.tests.core.BaseIT;
 import com.easyreach.tests.core.IdStore;
 import com.easyreach.tests.core.SampleData;
+import static com.easyreach.tests.core.EntityHelper.ensureCompany;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -33,7 +34,7 @@ public class DailyExpenseIT extends BaseIT {
     @Test
     @Order(2)
     void shouldGetDailyExpense() {
-        String id = IdStore.get("dailyExpenseId");
+        String id = ensureDailyExpense();
         given().spec(spec).get("/api/daily-expenses/" + id)
                 .then().statusCode(200).body("data.expenseId", equalTo(id));
     }
@@ -51,8 +52,8 @@ public class DailyExpenseIT extends BaseIT {
     @Test
     @Order(4)
     void shouldUpdateDailyExpense() {
-        String id = IdStore.get("dailyExpenseId");
-        String companyId = IdStore.get("companyUuid");
+        String id = ensureDailyExpense();
+        String companyId = ensureCompany();
         Map<String, Object> body = SampleData.dailyExpenseRequest(companyId);
         body.put("expenseId", id);
         body.put("expenseAmount", 200);
@@ -64,18 +65,19 @@ public class DailyExpenseIT extends BaseIT {
     @Test
     @Order(5)
     void shouldDeleteDailyExpense() {
-        String id = IdStore.get("dailyExpenseId");
+        String id = ensureDailyExpense();
         given().spec(spec).delete("/api/daily-expenses/" + id)
                 .then().statusCode(200);
     }
 
-    private String ensureCompany() {
-        String id = IdStore.get("companyUuid");
+    private String ensureDailyExpense() {
+        String id = IdStore.get("dailyExpenseId");
         if (id == null) {
-            Map<String, Object> body = SampleData.companyRequest();
-            Response r = given().spec(spec).body(body).post("/api/companies");
-            id = r.jsonPath().getString("data.uuid");
-            IdStore.put("companyUuid", id);
+            String companyId = ensureCompany();
+            Map<String, Object> body = SampleData.dailyExpenseRequest(companyId);
+            Response r = given().spec(spec).body(body).post("/api/daily-expenses");
+            id = r.jsonPath().getString("data.expenseId");
+            IdStore.put("dailyExpenseId", id);
         }
         return id;
     }

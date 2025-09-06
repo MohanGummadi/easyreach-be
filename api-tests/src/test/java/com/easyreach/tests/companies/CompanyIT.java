@@ -3,6 +3,7 @@ package com.easyreach.tests.companies;
 import com.easyreach.tests.core.BaseIT;
 import com.easyreach.tests.core.IdStore;
 import com.easyreach.tests.core.SampleData;
+import static com.easyreach.tests.core.EntityHelper.ensureCompany;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
@@ -35,7 +36,7 @@ public class CompanyIT extends BaseIT {
     @Test
     @Order(2)
     void shouldGetCompany() {
-        String id = IdStore.get("companyUuid");
+        String id = ensureCompany();
         Response r = given().spec(spec).get("/api/companies/" + id);
         r.then().statusCode(200).body("data.uuid", equalTo(id));
     }
@@ -51,7 +52,7 @@ public class CompanyIT extends BaseIT {
     @Test
     @Order(4)
     void shouldUpdateCompany() {
-        String id = IdStore.get("companyUuid");
+        String id = ensureCompany();
         Map<String, Object> body = SampleData.companyRequest();
         body.put("uuid", id);
         body.put("companyName", "Updated Co");
@@ -63,7 +64,7 @@ public class CompanyIT extends BaseIT {
     @Test
     @Order(5)
     void shouldDeleteCompany() {
-        String id = IdStore.get("companyUuid");
+        String id = ensureCompany();
         given().spec(spec).delete("/api/companies/" + id)
                 .then().statusCode(200);
     }
