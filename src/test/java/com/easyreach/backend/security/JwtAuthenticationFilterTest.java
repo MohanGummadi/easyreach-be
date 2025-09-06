@@ -138,7 +138,6 @@ class JwtAuthenticationFilterTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain chain = mock(FilterChain.class);
         when(request.getServletPath()).thenReturn("/api/auth/register");
-        when(request.getHeader("Authorization")).thenReturn("Bearer token");
 
         filter.doFilter(request, response, chain);
 
