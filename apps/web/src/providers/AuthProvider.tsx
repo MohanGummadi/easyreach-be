@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { AuthResponse, LoginRequest, UserDto } from '@easyreach/types'
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
+import type { AuthResponse, LoginRequest, UserDto } from '@easyreach/types'
 import api from '../api/axios'
 import { endpoints } from '../api/endpoints'
 

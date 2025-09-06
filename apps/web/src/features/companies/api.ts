@@ -1,4 +1,4 @@
-import { CompanyRequestDto, CompanyResponseDto, PagingParams } from '@easyreach/types'
+import type { CompanyRequestDto, CompanyResponseDto, PagingParams } from '@easyreach/types'
 import { endpoints } from '../../api/endpoints'
 import { useList, useCreate } from '../../api/hooks'
 

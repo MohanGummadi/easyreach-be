@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import api from './axios'
-import { Page, PagingParams } from '@easyreach/types'
+import type { Page, PagingParams } from '@easyreach/types'
 
 export const useList = <T>(key: string, url: string, params?: PagingParams) =>
   useQuery({
