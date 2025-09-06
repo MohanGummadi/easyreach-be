@@ -17,11 +17,13 @@ class SecurityConfigTest {
     private JwtAuthenticationFilter filter;
     @Mock
     private UserDetailsService userDetailsService;
+    @Mock
+    private SecurityWhitelist securityWhitelist;
 
 
     @Test
     void authenticationProvider_usesInjectedService() throws Exception {
-        SecurityConfig config = new SecurityConfig(filter, userDetailsService);
+        SecurityConfig config = new SecurityConfig(filter, userDetailsService, securityWhitelist);
         DaoAuthenticationProvider provider = (DaoAuthenticationProvider) config.authenticationProvider();
 
         Field field = DaoAuthenticationProvider.class.getDeclaredField("userDetailsService");
