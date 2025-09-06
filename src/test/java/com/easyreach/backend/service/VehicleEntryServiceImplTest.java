@@ -6,7 +6,9 @@ import com.easyreach.backend.dto.vehicle_entries.VehicleEntryRequestDto;
 import com.easyreach.backend.entity.VehicleEntry;
 import com.easyreach.backend.mapper.VehicleEntryMapper;
 import com.easyreach.backend.repository.VehicleEntryRepository;
+import com.easyreach.backend.repository.PayerSettlementRepository;
 import com.easyreach.backend.service.impl.VehicleEntryServiceImpl;
+import com.easyreach.backend.util.CodeGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -29,12 +32,17 @@ class VehicleEntryServiceImplTest {
     private VehicleEntryRepository repository;
     @Mock
     private VehicleEntryMapper mapper;
+    @Mock
+    private PayerSettlementRepository payerSettlementRepository;
+    @Mock
+    private CodeGenerator codeGenerator;
 
     private VehicleEntryServiceImpl service;
 
     @BeforeEach
     void setUp() {
-        service = new VehicleEntryServiceImpl(repository, mapper);
+        service = new VehicleEntryServiceImpl(
+                repository, mapper, payerSettlementRepository, codeGenerator);
         CompanyContext.setCompanyId("test");
     }
 
@@ -83,6 +91,21 @@ class VehicleEntryServiceImplTest {
         assertNotNull(savedNew);
         assertEquals(savedNew.getCreatedAt(), savedNew.getUpdatedAt());
         assertTrue(savedNew.getIsSynced());
+    }
+
+    @Test
+    void bulkSync_nullOrEmpty_returnsZero() {
+        assertEquals(0, service.bulkSync(null));
+        assertEquals(0, service.bulkSync(Collections.emptyList()));
+        verifyNoInteractions(repository, mapper);
+    }
+
+    @Test
+    void bulkSync_noValidIds_returnsZero() {
+        VehicleEntryRequestDto dto = new VehicleEntryRequestDto();
+        int count = service.bulkSync(List.of(dto));
+        assertEquals(0, count);
+        verifyNoInteractions(repository, mapper);
     }
 }
 
