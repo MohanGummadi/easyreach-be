@@ -3,6 +3,8 @@ package com.easyreach.tests.ops;
 import com.easyreach.tests.core.BaseIT;
 import com.easyreach.tests.core.IdStore;
 import com.easyreach.tests.core.SampleData;
+import static com.easyreach.tests.core.EntityHelper.ensureCompany;
+import static com.easyreach.tests.core.EntityHelper.ensurePayer;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -23,20 +25,8 @@ public class VehicleEntryOpsIT extends BaseIT {
         String id = IdStore.get("entryId");
         if (id == null) {
             // create dependencies
-            String companyId = IdStore.get("companyUuid");
-            if (companyId == null) {
-                Map<String, Object> company = SampleData.companyRequest();
-                Response cr = given().spec(spec).body(company).post("/api/companies");
-                companyId = cr.jsonPath().getString("data.uuid");
-                IdStore.put("companyUuid", companyId);
-            }
-            String payerId = IdStore.get("payerId");
-            if (payerId == null) {
-                Map<String, Object> payer = SampleData.payerRequest(companyId);
-                Response pr = given().spec(spec).body(payer).post("/api/payers");
-                payerId = pr.jsonPath().getString("data.payerId");
-                IdStore.put("payerId", payerId);
-            }
+            String companyId = ensureCompany();
+            String payerId = ensurePayer();
             Map<String, Object> entry = SampleData.vehicleEntryRequest(companyId, payerId, "TRUCK");
             Response er = given().spec(spec).body(entry).post("/api/vehicle-entries");
             id = er.jsonPath().getString("data.entryId");

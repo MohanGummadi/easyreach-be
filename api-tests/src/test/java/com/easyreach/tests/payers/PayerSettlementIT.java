@@ -3,6 +3,8 @@ package com.easyreach.tests.payers;
 import com.easyreach.tests.core.BaseIT;
 import com.easyreach.tests.core.IdStore;
 import com.easyreach.tests.core.SampleData;
+import static com.easyreach.tests.core.EntityHelper.ensureCompany;
+import static com.easyreach.tests.core.EntityHelper.ensurePayer;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -33,7 +35,7 @@ public class PayerSettlementIT extends BaseIT {
     @Test
     @Order(2)
     void shouldGetPayerSettlement() {
-        String id = IdStore.get("settlementId");
+        String id = ensurePayerSettlement();
         given().spec(spec).get("/api/payer-settlements/" + id)
                 .then().statusCode(200).body("data.settlementId", equalTo(id));
     }
@@ -49,9 +51,9 @@ public class PayerSettlementIT extends BaseIT {
     @Test
     @Order(4)
     void shouldUpdatePayerSettlement() {
-        String id = IdStore.get("settlementId");
-        String companyId = IdStore.get("companyUuid");
-        String payerId = IdStore.get("payerId");
+        String id = ensurePayerSettlement();
+        String companyId = ensureCompany();
+        String payerId = ensurePayer();
         Map<String, Object> body = SampleData.payerSettlementRequest(companyId, payerId);
         body.put("settlementId", id);
         body.put("amount", 200);
@@ -63,8 +65,9 @@ public class PayerSettlementIT extends BaseIT {
     @Test
     @Order(5)
     void shouldGetByPayerAndCompany() {
-        String payerId = IdStore.get("payerId");
-        String companyId = IdStore.get("companyUuid");
+        ensurePayerSettlement();
+        String payerId = ensurePayer();
+        String companyId = ensureCompany();
         given().spec(spec).get("/api/payer-settlements/payer/" + payerId)
                 .then().statusCode(200).body("data", notNullValue());
         given().spec(spec).get("/api/payer-settlements/company/" + companyId)
@@ -74,30 +77,20 @@ public class PayerSettlementIT extends BaseIT {
     @Test
     @Order(6)
     void shouldDeletePayerSettlement() {
-        String id = IdStore.get("settlementId");
+        String id = ensurePayerSettlement();
         given().spec(spec).delete("/api/payer-settlements/" + id)
                 .then().statusCode(200);
     }
 
-    private String ensureCompany() {
-        String id = IdStore.get("companyUuid");
-        if (id == null) {
-            Map<String, Object> body = SampleData.companyRequest();
-            Response r = given().spec(spec).body(body).post("/api/companies");
-            id = r.jsonPath().getString("data.uuid");
-            IdStore.put("companyUuid", id);
-        }
-        return id;
-    }
-
-    private String ensurePayer() {
-        String id = IdStore.get("payerId");
+    private String ensurePayerSettlement() {
+        String id = IdStore.get("settlementId");
         if (id == null) {
             String companyId = ensureCompany();
-            Map<String, Object> body = SampleData.payerRequest(companyId);
-            Response r = given().spec(spec).body(body).post("/api/payers");
-            id = r.jsonPath().getString("data.payerId");
-            IdStore.put("payerId", id);
+            String payerId = ensurePayer();
+            Map<String, Object> body = SampleData.payerSettlementRequest(companyId, payerId);
+            Response r = given().spec(spec).body(body).post("/api/payer-settlements");
+            id = r.jsonPath().getString("data.settlementId");
+            IdStore.put("settlementId", id);
         }
         return id;
     }

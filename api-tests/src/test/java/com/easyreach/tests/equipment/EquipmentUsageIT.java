@@ -3,6 +3,7 @@ package com.easyreach.tests.equipment;
 import com.easyreach.tests.core.BaseIT;
 import com.easyreach.tests.core.IdStore;
 import com.easyreach.tests.core.SampleData;
+import static com.easyreach.tests.core.EntityHelper.ensureCompany;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -32,7 +33,7 @@ public class EquipmentUsageIT extends BaseIT {
     @Test
     @Order(2)
     void shouldGetEquipmentUsage() {
-        String id = IdStore.get("equipmentUsageId");
+        String id = ensureEquipmentUsage();
         given().spec(spec).get("/api/equipment-usage/" + id)
                 .then().statusCode(200).body("data.equipmentUsageId", equalTo(id));
     }
@@ -48,8 +49,8 @@ public class EquipmentUsageIT extends BaseIT {
     @Test
     @Order(4)
     void shouldUpdateEquipmentUsage() {
-        String id = IdStore.get("equipmentUsageId");
-        String companyId = IdStore.get("companyUuid");
+        String id = ensureEquipmentUsage();
+        String companyId = ensureCompany();
         Map<String, Object> body = SampleData.equipmentUsageRequest(companyId);
         body.put("equipmentUsageId", id);
         body.put("endKm", 20);
@@ -61,18 +62,19 @@ public class EquipmentUsageIT extends BaseIT {
     @Test
     @Order(5)
     void shouldDeleteEquipmentUsage() {
-        String id = IdStore.get("equipmentUsageId");
+        String id = ensureEquipmentUsage();
         given().spec(spec).delete("/api/equipment-usage/" + id)
                 .then().statusCode(200);
     }
 
-    private String ensureCompany() {
-        String id = IdStore.get("companyUuid");
+    private String ensureEquipmentUsage() {
+        String id = IdStore.get("equipmentUsageId");
         if (id == null) {
-            Map<String, Object> body = SampleData.companyRequest();
-            Response r = given().spec(spec).body(body).post("/api/companies");
-            id = r.jsonPath().getString("data.uuid");
-            IdStore.put("companyUuid", id);
+            String companyId = ensureCompany();
+            Map<String, Object> body = SampleData.equipmentUsageRequest(companyId);
+            Response r = given().spec(spec).body(body).post("/api/equipment-usage");
+            id = r.jsonPath().getString("data.equipmentUsageId");
+            IdStore.put("equipmentUsageId", id);
         }
         return id;
     }

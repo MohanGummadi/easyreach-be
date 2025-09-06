@@ -3,6 +3,7 @@ package com.easyreach.tests.fuel;
 import com.easyreach.tests.core.BaseIT;
 import com.easyreach.tests.core.IdStore;
 import com.easyreach.tests.core.SampleData;
+import static com.easyreach.tests.core.EntityHelper.ensureCompany;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -32,7 +33,7 @@ public class DieselUsageIT extends BaseIT {
     @Test
     @Order(2)
     void shouldGetDieselUsage() {
-        String id = IdStore.get("dieselUsageId");
+        String id = ensureDieselUsage();
         given().spec(spec).get("/api/diesel-usage/" + id)
                 .then().statusCode(200).body("data.dieselUsageId", equalTo(id));
     }
@@ -48,8 +49,8 @@ public class DieselUsageIT extends BaseIT {
     @Test
     @Order(4)
     void shouldUpdateDieselUsage() {
-        String id = IdStore.get("dieselUsageId");
-        String companyId = IdStore.get("companyUuid");
+        String id = ensureDieselUsage();
+        String companyId = ensureCompany();
         Map<String, Object> body = SampleData.dieselUsageRequest(companyId, "VehicleA");
         body.put("dieselUsageId", id);
         body.put("liters", 60);
@@ -61,18 +62,19 @@ public class DieselUsageIT extends BaseIT {
     @Test
     @Order(5)
     void shouldDeleteDieselUsage() {
-        String id = IdStore.get("dieselUsageId");
+        String id = ensureDieselUsage();
         given().spec(spec).delete("/api/diesel-usage/" + id)
                 .then().statusCode(200);
     }
 
-    private String ensureCompany() {
-        String id = IdStore.get("companyUuid");
+    private String ensureDieselUsage() {
+        String id = IdStore.get("dieselUsageId");
         if (id == null) {
-            Map<String, Object> body = SampleData.companyRequest();
-            Response r = given().spec(spec).body(body).post("/api/companies");
-            id = r.jsonPath().getString("data.uuid");
-            IdStore.put("companyUuid", id);
+            String companyId = ensureCompany();
+            Map<String, Object> body = SampleData.dieselUsageRequest(companyId, "VehicleA");
+            Response r = given().spec(spec).body(body).post("/api/diesel-usage");
+            id = r.jsonPath().getString("data.dieselUsageId");
+            IdStore.put("dieselUsageId", id);
         }
         return id;
     }

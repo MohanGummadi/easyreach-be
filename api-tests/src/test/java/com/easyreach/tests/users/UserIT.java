@@ -3,6 +3,8 @@ package com.easyreach.tests.users;
 import com.easyreach.tests.core.BaseIT;
 import com.easyreach.tests.core.IdStore;
 import com.easyreach.tests.core.SampleData;
+import static com.easyreach.tests.core.EntityHelper.ensureCompany;
+import static com.easyreach.tests.core.EntityHelper.ensureUser;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -32,7 +34,7 @@ public class UserIT extends BaseIT {
     @Test
     @Order(2)
     void shouldGetUser() {
-        String id = IdStore.get("userId");
+        String id = ensureUser();
         given().spec(spec).get("/api/users/" + id)
                 .then().statusCode(200).body("data.id", equalTo(id));
     }
@@ -48,8 +50,8 @@ public class UserIT extends BaseIT {
     @Test
     @Order(4)
     void shouldUpdateUser() {
-        String id = IdStore.get("userId");
-        String companyId = IdStore.get("companyUuid");
+        String id = ensureUser();
+        String companyId = ensureCompany();
         Map<String, Object> body = SampleData.userRequest(companyId);
         body.put("id", id);
         body.put("name", "Updated User");
@@ -61,19 +63,8 @@ public class UserIT extends BaseIT {
     @Test
     @Order(5)
     void shouldDeleteUser() {
-        String id = IdStore.get("userId");
+        String id = ensureUser();
         given().spec(spec).delete("/api/users/" + id)
                 .then().statusCode(200);
-    }
-
-    private String ensureCompany() {
-        String id = IdStore.get("companyUuid");
-        if (id == null) {
-            Map<String, Object> body = SampleData.companyRequest();
-            Response r = given().spec(spec).body(body).post("/api/companies");
-            id = r.jsonPath().getString("data.uuid");
-            IdStore.put("companyUuid", id);
-        }
-        return id;
     }
 }

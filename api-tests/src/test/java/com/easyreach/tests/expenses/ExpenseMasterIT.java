@@ -3,6 +3,7 @@ package com.easyreach.tests.expenses;
 import com.easyreach.tests.core.BaseIT;
 import com.easyreach.tests.core.IdStore;
 import com.easyreach.tests.core.SampleData;
+import static com.easyreach.tests.core.EntityHelper.ensureCompany;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -32,7 +33,7 @@ public class ExpenseMasterIT extends BaseIT {
     @Test
     @Order(2)
     void shouldGetExpenseMaster() {
-        String id = IdStore.get("expenseMasterId");
+        String id = ensureExpenseMaster();
         given().spec(spec).get("/api/expense-master/" + id)
                 .then().statusCode(200).body("data.id", equalTo(id));
     }
@@ -48,8 +49,8 @@ public class ExpenseMasterIT extends BaseIT {
     @Test
     @Order(4)
     void shouldUpdateExpenseMaster() {
-        String id = IdStore.get("expenseMasterId");
-        String companyId = IdStore.get("companyUuid");
+        String id = ensureExpenseMaster();
+        String companyId = ensureCompany();
         Map<String, Object> body = SampleData.expenseMasterRequest(companyId);
         body.put("id", id);
         body.put("expenseName", "UpdatedExpense");
@@ -61,18 +62,19 @@ public class ExpenseMasterIT extends BaseIT {
     @Test
     @Order(5)
     void shouldDeleteExpenseMaster() {
-        String id = IdStore.get("expenseMasterId");
+        String id = ensureExpenseMaster();
         given().spec(spec).delete("/api/expense-master/" + id)
                 .then().statusCode(200);
     }
 
-    private String ensureCompany() {
-        String id = IdStore.get("companyUuid");
+    private String ensureExpenseMaster() {
+        String id = IdStore.get("expenseMasterId");
         if (id == null) {
-            Map<String, Object> body = SampleData.companyRequest();
-            Response r = given().spec(spec).body(body).post("/api/companies");
-            id = r.jsonPath().getString("data.uuid");
-            IdStore.put("companyUuid", id);
+            String companyId = ensureCompany();
+            Map<String, Object> body = SampleData.expenseMasterRequest(companyId);
+            Response r = given().spec(spec).body(body).post("/api/expense-master");
+            id = r.jsonPath().getString("data.id");
+            IdStore.put("expenseMasterId", id);
         }
         return id;
     }
