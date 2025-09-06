@@ -32,6 +32,7 @@ spring:
 
   jackson:
     time-zone: Asia/Kolkata
+    default-property-inclusion: non_null
 
 springdoc:
   api-docs:
