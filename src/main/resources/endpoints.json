@@ -1,0 +1,1916 @@
+[
+  {
+    "controller": "AuthController",
+    "method": "POST",
+    "path": "/auth/register",
+    "auth": {
+      "jwt": false,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "UserDto"
+    },
+    "responseSchema": {
+      "dto": "AuthResponse"
+    },
+    "errors": [
+      {
+        "code": "400",
+        "httpStatus": 400
+      }
+    ]
+  },
+  {
+    "controller": "AuthController",
+    "method": "POST",
+    "path": "/auth/login",
+    "auth": {
+      "jwt": false,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "LoginRequest"
+    },
+    "responseSchema": {
+      "dto": "AuthResponse"
+    },
+    "errors": [
+      {
+        "code": "401",
+        "httpStatus": 401
+      }
+    ]
+  },
+  {
+    "controller": "AuthController",
+    "method": "POST",
+    "path": "/auth/refresh",
+    "auth": {
+      "jwt": false,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "RefreshRequest"
+    },
+    "responseSchema": {
+      "dto": "AuthResponse"
+    },
+    "errors": [
+      {
+        "code": "401",
+        "httpStatus": 401
+      }
+    ]
+  },
+  {
+    "controller": "AuthController",
+    "method": "POST",
+    "path": "/auth/logout",
+    "auth": {
+      "jwt": false,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "RefreshRequest"
+    },
+    "responseSchema": null,
+    "errors": [
+      {
+        "code": "400",
+        "httpStatus": 400
+      }
+    ]
+  },
+  {
+    "controller": "LoginController",
+    "method": "GET",
+    "path": "/login",
+    "auth": {
+      "jwt": false,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "content": "text/html"
+    },
+    "errors": []
+  },
+  {
+    "controller": "CompanyController",
+    "method": "POST",
+    "path": "/api/companies",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "CompanyRequestDto"
+    },
+    "responseSchema": {
+      "dto": "CompanyResponseDto"
+    },
+    "errors": [
+      {
+        "code": "400",
+        "httpStatus": 400
+      }
+    ]
+  },
+  {
+    "controller": "CompanyController",
+    "method": "PUT",
+    "path": "/api/companies/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "CompanyRequestDto"
+    },
+    "responseSchema": {
+      "dto": "CompanyResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "CompanyController",
+    "method": "DELETE",
+    "path": "/api/companies/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": null,
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "CompanyController",
+    "method": "GET",
+    "path": "/api/companies/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "CompanyResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "CompanyController",
+    "method": "GET",
+    "path": "/api/companies",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "size"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<CompanyResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "InternalVehicleController",
+    "method": "POST",
+    "path": "/api/internal-vehicles",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "InternalVehicleRequestDto"
+    },
+    "responseSchema": {
+      "dto": "InternalVehicleResponseDto"
+    },
+    "errors": [
+      {
+        "code": "400",
+        "httpStatus": 400
+      }
+    ]
+  },
+  {
+    "controller": "InternalVehicleController",
+    "method": "PUT",
+    "path": "/api/internal-vehicles/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "InternalVehicleRequestDto"
+    },
+    "responseSchema": {
+      "dto": "InternalVehicleResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "InternalVehicleController",
+    "method": "DELETE",
+    "path": "/api/internal-vehicles/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": null,
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "InternalVehicleController",
+    "method": "GET",
+    "path": "/api/internal-vehicles/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "InternalVehicleResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "InternalVehicleController",
+    "method": "GET",
+    "path": "/api/internal-vehicles",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "size"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<InternalVehicleResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "VehicleTypeController",
+    "method": "POST",
+    "path": "/api/vehicle-types",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "VehicleTypeRequestDto"
+    },
+    "responseSchema": {
+      "dto": "VehicleTypeResponseDto"
+    },
+    "errors": [
+      {
+        "code": "400",
+        "httpStatus": 400
+      }
+    ]
+  },
+  {
+    "controller": "VehicleTypeController",
+    "method": "PUT",
+    "path": "/api/vehicle-types/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "VehicleTypeRequestDto"
+    },
+    "responseSchema": {
+      "dto": "VehicleTypeResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "VehicleTypeController",
+    "method": "DELETE",
+    "path": "/api/vehicle-types/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": null,
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "VehicleTypeController",
+    "method": "GET",
+    "path": "/api/vehicle-types/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "VehicleTypeResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "VehicleTypeController",
+    "method": "GET",
+    "path": "/api/vehicle-types",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "size"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<VehicleTypeResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "VehicleEntryController",
+    "method": "POST",
+    "path": "/api/vehicle-entries",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "VehicleEntryRequestDto"
+    },
+    "responseSchema": {
+      "dto": "VehicleEntryResponseDto"
+    },
+    "errors": [
+      {
+        "code": "400",
+        "httpStatus": 400
+      }
+    ]
+  },
+  {
+    "controller": "VehicleEntryController",
+    "method": "PUT",
+    "path": "/api/vehicle-entries/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "VehicleEntryRequestDto"
+    },
+    "responseSchema": {
+      "dto": "VehicleEntryResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "VehicleEntryController",
+    "method": "DELETE",
+    "path": "/api/vehicle-entries/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": null,
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "VehicleEntryController",
+    "method": "GET",
+    "path": "/api/vehicle-entries/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "VehicleEntryResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "VehicleEntryController",
+    "method": "GET",
+    "path": "/api/vehicle-entries",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "size"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<VehicleEntryResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "DailyExpenseController",
+    "method": "POST",
+    "path": "/api/daily-expenses",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "DailyExpenseRequestDto"
+    },
+    "responseSchema": {
+      "dto": "DailyExpenseResponseDto"
+    },
+    "errors": [
+      {
+        "code": "400",
+        "httpStatus": 400
+      }
+    ]
+  },
+  {
+    "controller": "DailyExpenseController",
+    "method": "PUT",
+    "path": "/api/daily-expenses/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "DailyExpenseRequestDto"
+    },
+    "responseSchema": {
+      "dto": "DailyExpenseResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "DailyExpenseController",
+    "method": "DELETE",
+    "path": "/api/daily-expenses/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": null,
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "DailyExpenseController",
+    "method": "GET",
+    "path": "/api/daily-expenses/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "DailyExpenseResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "DailyExpenseController",
+    "method": "GET",
+    "path": "/api/daily-expenses",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "size",
+        "dateFrom?",
+        "dateTo?"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<DailyExpenseResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "DieselUsageController",
+    "method": "POST",
+    "path": "/api/diesel-usage",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "DieselUsageRequestDto"
+    },
+    "responseSchema": {
+      "dto": "DieselUsageResponseDto"
+    },
+    "errors": [
+      {
+        "code": "400",
+        "httpStatus": 400
+      }
+    ]
+  },
+  {
+    "controller": "DieselUsageController",
+    "method": "PUT",
+    "path": "/api/diesel-usage/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "DieselUsageRequestDto"
+    },
+    "responseSchema": {
+      "dto": "DieselUsageResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "DieselUsageController",
+    "method": "DELETE",
+    "path": "/api/diesel-usage/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": null,
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "DieselUsageController",
+    "method": "GET",
+    "path": "/api/diesel-usage/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "DieselUsageResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "DieselUsageController",
+    "method": "GET",
+    "path": "/api/diesel-usage",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "size"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<DieselUsageResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "EquipmentUsageController",
+    "method": "POST",
+    "path": "/api/equipment-usage",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "EquipmentUsageRequestDto"
+    },
+    "responseSchema": {
+      "dto": "EquipmentUsageResponseDto"
+    },
+    "errors": [
+      {
+        "code": "400",
+        "httpStatus": 400
+      }
+    ]
+  },
+  {
+    "controller": "EquipmentUsageController",
+    "method": "PUT",
+    "path": "/api/equipment-usage/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "EquipmentUsageRequestDto"
+    },
+    "responseSchema": {
+      "dto": "EquipmentUsageResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "EquipmentUsageController",
+    "method": "DELETE",
+    "path": "/api/equipment-usage/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": null,
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "EquipmentUsageController",
+    "method": "GET",
+    "path": "/api/equipment-usage/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "EquipmentUsageResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "EquipmentUsageController",
+    "method": "GET",
+    "path": "/api/equipment-usage",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "size"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<EquipmentUsageResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "ExpenseMasterController",
+    "method": "POST",
+    "path": "/api/expense-master",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "ExpenseMasterRequestDto"
+    },
+    "responseSchema": {
+      "dto": "ExpenseMasterResponseDto"
+    },
+    "errors": [
+      {
+        "code": "400",
+        "httpStatus": 400
+      }
+    ]
+  },
+  {
+    "controller": "ExpenseMasterController",
+    "method": "PUT",
+    "path": "/api/expense-master/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "ExpenseMasterRequestDto"
+    },
+    "responseSchema": {
+      "dto": "ExpenseMasterResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "ExpenseMasterController",
+    "method": "DELETE",
+    "path": "/api/expense-master/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": null,
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "ExpenseMasterController",
+    "method": "GET",
+    "path": "/api/expense-master/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "ExpenseMasterResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "ExpenseMasterController",
+    "method": "GET",
+    "path": "/api/expense-master",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "size"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<ExpenseMasterResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "PayerController",
+    "method": "POST",
+    "path": "/api/payers",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "PayerRequestDto"
+    },
+    "responseSchema": {
+      "dto": "PayerResponseDto"
+    },
+    "errors": [
+      {
+        "code": "400",
+        "httpStatus": 400
+      }
+    ]
+  },
+  {
+    "controller": "PayerController",
+    "method": "PUT",
+    "path": "/api/payers/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "PayerRequestDto"
+    },
+    "responseSchema": {
+      "dto": "PayerResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "PayerController",
+    "method": "DELETE",
+    "path": "/api/payers/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": null,
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "PayerController",
+    "method": "GET",
+    "path": "/api/payers/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "PayerResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "PayerController",
+    "method": "GET",
+    "path": "/api/payers",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "size"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<PayerResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "PayerSettlementController",
+    "method": "POST",
+    "path": "/api/payer-settlements",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "PayerSettlementRequestDto"
+    },
+    "responseSchema": {
+      "dto": "PayerSettlementResponseDto"
+    },
+    "errors": [
+      {
+        "code": "400",
+        "httpStatus": 400
+      }
+    ]
+  },
+  {
+    "controller": "PayerSettlementController",
+    "method": "PUT",
+    "path": "/api/payer-settlements/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "PayerSettlementRequestDto"
+    },
+    "responseSchema": {
+      "dto": "PayerSettlementResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "PayerSettlementController",
+    "method": "DELETE",
+    "path": "/api/payer-settlements/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": null,
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "PayerSettlementController",
+    "method": "GET",
+    "path": "/api/payer-settlements/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "PayerSettlementResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "PayerSettlementController",
+    "method": "GET",
+    "path": "/api/payer-settlements",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "size"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<PayerSettlementResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "RefreshTokenController",
+    "method": "POST",
+    "path": "/api/refresh-token",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "RefreshTokenRequestDto"
+    },
+    "responseSchema": {
+      "dto": "RefreshTokenResponseDto"
+    },
+    "errors": [
+      {
+        "code": "400",
+        "httpStatus": 400
+      }
+    ]
+  },
+  {
+    "controller": "RefreshTokenController",
+    "method": "PUT",
+    "path": "/api/refresh-token/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "RefreshTokenRequestDto"
+    },
+    "responseSchema": {
+      "dto": "RefreshTokenResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "RefreshTokenController",
+    "method": "DELETE",
+    "path": "/api/refresh-token/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": null,
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "RefreshTokenController",
+    "method": "GET",
+    "path": "/api/refresh-token/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "RefreshTokenResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "RefreshTokenController",
+    "method": "GET",
+    "path": "/api/refresh-token",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "size"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<RefreshTokenResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "UserController",
+    "method": "POST",
+    "path": "/api/users",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "UserRequestDto"
+    },
+    "responseSchema": {
+      "dto": "UserResponseDto"
+    },
+    "errors": [
+      {
+        "code": "400",
+        "httpStatus": 400
+      }
+    ]
+  },
+  {
+    "controller": "UserController",
+    "method": "PUT",
+    "path": "/api/users/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "UserRequestDto"
+    },
+    "responseSchema": {
+      "dto": "UserResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "UserController",
+    "method": "DELETE",
+    "path": "/api/users/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": null,
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "UserController",
+    "method": "GET",
+    "path": "/api/users/{id}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "UserResponseDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "UserController",
+    "method": "GET",
+    "path": "/api/users",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "size"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<UserResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "VehicleEntryOpsController",
+    "method": "POST",
+    "path": "/api/vehicle-entries-ops/{entryId}/payment",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "entryId"
+      ],
+      "query": []
+    },
+    "requestSchema": {
+      "fields": {
+        "amount": "decimal",
+        "receivedBy?": "string",
+        "when?": "datetime"
+      }
+    },
+    "responseSchema": {
+      "dto": "VehicleEntryResponseDto"
+    },
+    "errors": []
+  },
+  {
+    "controller": "VehicleEntryOpsController",
+    "method": "POST",
+    "path": "/api/vehicle-entries-ops/{entryId}/exit",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "entryId"
+      ],
+      "query": [
+        "when"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "VehicleEntryResponseDto"
+    },
+    "errors": []
+  },
+  {
+    "controller": "PayerOpsController",
+    "method": "GET",
+    "path": "/api/payers-ops/search",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "companyUuid",
+        "q?",
+        "page",
+        "size"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<PayerResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "PayerOpsController",
+    "method": "DELETE",
+    "path": "/api/payers-ops/{payerId}/soft",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "payerId"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": null,
+    "errors": []
+  },
+  {
+    "controller": "PayerSettlementController",
+    "method": "GET",
+    "path": "/api/payer-settlements/company/{companyId}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "companyId"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "List<PayerSettlementWithNameDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "PayerSettlementController",
+    "method": "GET",
+    "path": "/api/payer-settlements/payer/{payerId}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "payerId"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "List<PayerSettlementWithNameDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "LedgerController",
+    "method": "GET",
+    "path": "/api/ledger/{payerId}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "payerId"
+      ],
+      "query": [
+        "page",
+        "size"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<VehicleEntryResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "LedgerController",
+    "method": "GET",
+    "path": "/api/ledger",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "size"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Page<VehicleEntryResponseDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "LedgerController",
+    "method": "GET",
+    "path": "/api/ledger/summary",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "List<PayerLedgerSummaryDto>"
+    },
+    "errors": []
+  },
+  {
+    "controller": "LedgerController",
+    "method": "POST",
+    "path": "/api/ledger/{payerId}/apply-payment",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "payerId"
+      ],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "ApplyPaymentRequest"
+    },
+    "responseSchema": null,
+    "errors": []
+  },
+  {
+    "controller": "ReceiptController",
+    "method": "GET",
+    "path": "/api/receipts/order/{orderId}",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [
+        "orderId"
+      ],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "ReceiptDto"
+    },
+    "errors": [
+      {
+        "code": "404",
+        "httpStatus": 404
+      }
+    ]
+  },
+  {
+    "controller": "ReceiptController",
+    "method": "POST",
+    "path": "/api/receipts/pdf",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "multipart": {
+        "data": "SandReceiptData",
+        "qrPng?": "file",
+        "qrUrl?": "string"
+      }
+    },
+    "responseSchema": {
+      "content": "application/pdf"
+    },
+    "errors": []
+  },
+  {
+    "controller": "ReceiptFormController",
+    "method": "GET",
+    "path": "/receipts/new",
+    "auth": {
+      "jwt": false,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "content": "text/html"
+    },
+    "errors": []
+  },
+  {
+    "controller": "ReceiptFormController",
+    "method": "POST",
+    "path": "/receipts",
+    "auth": {
+      "jwt": false,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "multipart": {
+        "receipt": "ReceiptDto",
+        "qrPng?": "file",
+        "qrUrl?": "string"
+      }
+    },
+    "responseSchema": {
+      "content": "application/pdf"
+    },
+    "errors": []
+  },
+  {
+    "controller": "SyncController",
+    "method": "POST",
+    "path": "/api/sync",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": []
+    },
+    "requestSchema": {
+      "dto": "SyncRequestDto"
+    },
+    "responseSchema": {
+      "dto": "SyncResponseDto"
+    },
+    "errors": []
+  },
+  {
+    "controller": "SyncController",
+    "method": "GET",
+    "path": "/api/sync/download",
+    "auth": {
+      "jwt": true,
+      "authorities": []
+    },
+    "params": {
+      "path": [],
+      "query": [
+        "sinceCursor?",
+        "entities?",
+        "limit?"
+      ]
+    },
+    "requestSchema": null,
+    "responseSchema": {
+      "dto": "Map<String,Object>"
+    },
+    "errors": []
+  }
+]
