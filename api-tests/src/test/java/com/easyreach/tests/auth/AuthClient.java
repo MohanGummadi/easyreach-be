@@ -3,36 +3,34 @@ package com.easyreach.tests.auth;
 import com.easyreach.tests.config.TestConfig;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public final class AuthClient {
-    private static String token;
+public class AuthClient {
+    private static String accessToken;
 
-    private AuthClient() {
-    }
-
-    public static synchronized String getToken() {
-        if (token == null) {
-            Map<String, Object> body = new HashMap<>();
-            if (TestConfig.getAuthEmail() != null) {
-                body.put("email", TestConfig.getAuthEmail());
-            }
-            if (TestConfig.getAuthMobile() != null) {
-                body.put("mobile", TestConfig.getAuthMobile());
-            }
-            body.put("password", TestConfig.getAuthPassword());
-
-            token = RestAssured.given()
-                    .contentType(ContentType.JSON)
-                    .body(body)
-                    .post(TestConfig.getBaseUrl() + "/auth/login")
-                    .then()
-                    .statusCode(200)
-                    .extract()
-                    .path("accessToken");
+    public static synchronized String getAccessToken() {
+        if (accessToken != null) {
+            return accessToken;
         }
-        return token;
+        Map<String, Object> body = new HashMap<>();
+        String email = TestConfig.getAuthEmail();
+        String mobile = TestConfig.getAuthMobile();
+        String password = TestConfig.getAuthPassword();
+        if (email != null && !email.isEmpty()) {
+            body.put("email", email);
+        } else if (mobile != null && !mobile.isEmpty()) {
+            body.put("mobileNo", mobile);
+        }
+        body.put("password", password);
+        Response response = RestAssured.given()
+                .baseUri(TestConfig.getBaseUrl())
+                .contentType(ContentType.JSON)
+                .body(body)
+                .post("/auth/login");
+        accessToken = response.jsonPath().getString("accessToken");
+        return accessToken;
     }
 }

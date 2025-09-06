@@ -1,8 +1,1 @@
-{
-  "openapi": "3.0.3",
-  "info": {
-    "title": "EasyReach API",
-    "version": "1.0.0"
-  },
-  "paths": {}
-}
+{ "openapi": "3.0.1", "info": { "title": "Easyreach API", "version": "v1" } }
