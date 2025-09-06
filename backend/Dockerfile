@@ -2,22 +2,23 @@
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copy backend module only (Dockerfile is in backend/)
+# Copy BOTH the root aggregator POM and the backend module POM
 COPY pom.xml .
-RUN mvn -q -B -DskipTests dependency:go-offline
+COPY backend/pom.xml backend/pom.xml
 
-# Copy source and build
-COPY src ./src
-RUN mvn -q -B -DskipTests package
+# Pre-fetch dependencies for the backend module (and any parents/modules it needs)
+RUN mvn -q -B -f backend/pom.xml -pl backend -am -DskipTests dependency:go-offline
+
+# Copy sources and build the backend jar
+COPY backend/src backend/src
+RUN mvn -q -B -f backend/pom.xml -pl backend -am -DskipTests package
 
 # ---- Runtime stage ----
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/backend/target/*.jar app.jar
 
-# Render sets $PORT; default to 8080 locally
+# Render will pass PORT; default to 8080 if not provided
 ENV PORT=8080
 EXPOSE 8080
-
-# Make Spring Boot bind to $PORT (required on Render)
-CMD ["sh", "-c", "java -Dserver.port=${PORT} -jar app.jar"]
+CMD ["java", "-Dserver.port=${PORT}", "-jar", "app.jar"]
