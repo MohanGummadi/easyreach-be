@@ -2,16 +2,16 @@
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copy POMs first to leverage layer caching
+# Backend module needs its parent at ../pom.xml, so copy root POM too
 COPY pom.xml .
 COPY backend/pom.xml backend/pom.xml
 
-# Prefetch deps for the backend module using the root reactor
-RUN mvn -q -B -f pom.xml -pl backend -am -DskipTests dependency:go-offline
+# Prefetch deps for the backend module only
+RUN mvn -q -B -f backend/pom.xml -DskipTests dependency:go-offline
 
 # Copy sources and build
 COPY backend/src backend/src
-RUN mvn -q -B -f pom.xml -pl backend -am -DskipTests package
+RUN mvn -q -B -f backend/pom.xml -DskipTests package
 
 # ---- Runtime stage ----
 FROM eclipse-temurin:17-jre
