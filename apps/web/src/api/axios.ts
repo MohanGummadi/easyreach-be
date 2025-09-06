@@ -4,6 +4,8 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
 })
 
+console.log('API baseURL:', api.defaults.baseURL)
+
 let isRefreshing = false
 let subscribers: ((token: string) => void)[] = []
 
