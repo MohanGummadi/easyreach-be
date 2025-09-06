@@ -4,16 +4,17 @@ WORKDIR /app
 
 # Cache dependencies
 COPY pom.xml .
-RUN mvn -q dependency:go-offline
+COPY backend/pom.xml backend/pom.xml
+RUN mvn -q -pl backend -am dependency:go-offline
 
 # Copy source and build
-COPY src ./src
-RUN mvn -q package -DskipTests
+COPY backend/src backend/src
+RUN mvn -q -pl backend -am package -DskipTests
 
 # ---- Runtime stage ----
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/backend/target/*.jar app.jar
 
 # Render injects PORT; default to 8080 if not set
 ENV PORT=8080
