@@ -1,10 +1,15 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import Routes from './routes'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import AppRoutes from './routes'
+import { QueryProvider } from './providers/QueryProvider'
+import { AuthProvider } from './providers/AuthProvider'
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Routes />
-  </StrictMode>
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <QueryProvider>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </QueryProvider>
+  </React.StrictMode>
 )
