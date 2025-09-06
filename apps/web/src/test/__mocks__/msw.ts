@@ -1,6 +1,6 @@
 import { setupServer } from 'msw/node'
 import { http, HttpResponse } from 'msw'
-import {
+import type {
   AuthResponse,
   CompanyResponseDto,
   Page,

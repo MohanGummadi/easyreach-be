@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import api from '../../api/axios'
 import { endpoints } from '../../api/endpoints'
-import { VehicleEntryResponseDto } from '@easyreach/types'
+import type { VehicleEntryResponseDto } from '@easyreach/types'
 
 export interface PaymentRequest {
   amount: number

@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { LoginRequest } from '@easyreach/types'
+import type { LoginRequest } from '@easyreach/types'
 import { useAuth } from '../../../providers/AuthProvider'
 import { Input, Button } from '@easyreach/ui'
 import { useNavigate } from 'react-router-dom'
