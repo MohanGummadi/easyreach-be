@@ -1,35 +1,21 @@
 package com.easyreach.tests.config;
 
-public final class TestConfig {
-    private TestConfig() {
-    }
-
-    private static String get(String key) {
-        String value = System.getProperty(key);
-        if (value == null) {
-            value = System.getenv(key);
-        }
-        return value;
-    }
-
-    private static String get(String key, String def) {
-        String value = get(key);
-        return value == null ? def : value;
-    }
+public class TestConfig {
+    private static final String BASE_URL_DEFAULT = "http://localhost:8080";
 
     public static String getBaseUrl() {
-        return get("BASE_URL", "http://localhost:8080");
+        return System.getProperty("BASE_URL", System.getenv().getOrDefault("BASE_URL", BASE_URL_DEFAULT));
     }
 
     public static String getAuthEmail() {
-        return get("AUTH_EMAIL");
+        return System.getProperty("AUTH_EMAIL", System.getenv().get("AUTH_EMAIL"));
     }
 
     public static String getAuthMobile() {
-        return get("AUTH_MOBILE");
+        return System.getProperty("AUTH_MOBILE", System.getenv().get("AUTH_MOBILE"));
     }
 
     public static String getAuthPassword() {
-        return get("AUTH_PASSWORD", "admin");
+        return System.getProperty("AUTH_PASSWORD", System.getenv().getOrDefault("AUTH_PASSWORD", ""));
     }
 }
