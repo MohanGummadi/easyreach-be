@@ -29,9 +29,12 @@ class JwtAuthenticationFilterTest {
     private UserDetailsService userDetailsService;
     private JwtAuthenticationFilter filter;
 
+    private SecurityWhitelist whitelist;
+
     @BeforeEach
     void setUp() {
-        filter = new JwtAuthenticationFilter(jwtService, userDetailsService);
+        whitelist = new SecurityWhitelist();
+        filter = new JwtAuthenticationFilter(jwtService, userDetailsService, whitelist);
         SecurityContextHolder.clearContext();
     }
 
@@ -127,5 +130,19 @@ class JwtAuthenticationFilterTest {
         verify(response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing company ID");
         verify(chain, never()).doFilter(request, response);
         verify(context, never()).setAuthentication(any());
+    }
+
+    @Test
+    void whitelistedPath_skipsTokenProcessing() throws ServletException, IOException {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        FilterChain chain = mock(FilterChain.class);
+        when(request.getServletPath()).thenReturn("/api/auth/register");
+        when(request.getHeader("Authorization")).thenReturn("Bearer token");
+
+        filter.doFilter(request, response, chain);
+
+        verify(chain).doFilter(request, response);
+        verify(jwtService, never()).extractUsername(any());
     }
 }
