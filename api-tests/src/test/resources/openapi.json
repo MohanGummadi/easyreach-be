@@ -1,1 +1,5897 @@
-{ "openapi": "3.0.1", "info": { "title": "Easyreach API", "version": "v1" } }
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Easyreach API",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/vehicle-types/{id}": {
+      "get": {
+        "tags": [
+          "VehicleType"
+        ],
+        "summary": "Get VehicleType",
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVehicleTypeResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "VehicleType"
+        ],
+        "summary": "Update VehicleType",
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleTypeRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVehicleTypeResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "VehicleType"
+        ],
+        "summary": "Delete VehicleType",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/vehicle-entries/{id}": {
+      "get": {
+        "tags": [
+          "VehicleEntry"
+        ],
+        "summary": "Get VehicleEntry",
+        "operationId": "get_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVehicleEntryResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "VehicleEntry"
+        ],
+        "summary": "Update VehicleEntry",
+        "operationId": "update_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleEntryRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVehicleEntryResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "VehicleEntry"
+        ],
+        "summary": "Delete VehicleEntry",
+        "operationId": "delete_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get User",
+        "operationId": "get_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseUserResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Update User",
+        "operationId": "update_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseUserResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Delete User",
+        "operationId": "delete_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/refresh-token/{id}": {
+      "get": {
+        "tags": [
+          "RefreshToken"
+        ],
+        "summary": "Get RefreshToken",
+        "operationId": "get_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseRefreshTokenResponseDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "RefreshToken"
+        ],
+        "summary": "Update RefreshToken",
+        "operationId": "update_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseRefreshTokenResponseDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "RefreshToken"
+        ],
+        "summary": "Delete RefreshToken",
+        "operationId": "delete_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/payers/{id}": {
+      "get": {
+        "tags": [
+          "Payer"
+        ],
+        "summary": "Get Payer",
+        "operationId": "get_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePayerResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Payer"
+        ],
+        "summary": "Update Payer",
+        "operationId": "update_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayerRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePayerResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Payer"
+        ],
+        "summary": "Delete Payer",
+        "operationId": "delete_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/payer-settlements/{id}": {
+      "get": {
+        "tags": [
+          "PayerSettlement"
+        ],
+        "summary": "Get PayerSettlement",
+        "operationId": "get_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePayerSettlementResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "PayerSettlement"
+        ],
+        "summary": "Update PayerSettlement",
+        "operationId": "update_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayerSettlementRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePayerSettlementResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "PayerSettlement"
+        ],
+        "summary": "Delete PayerSettlement",
+        "operationId": "delete_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/internal-vehicles/{id}": {
+      "get": {
+        "tags": [
+          "InternalVehicle"
+        ],
+        "summary": "Get InternalVehicle",
+        "operationId": "get_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseInternalVehicleResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "InternalVehicle"
+        ],
+        "summary": "Update InternalVehicle",
+        "operationId": "update_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InternalVehicleRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseInternalVehicleResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "InternalVehicle"
+        ],
+        "summary": "Delete InternalVehicle",
+        "operationId": "delete_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/expense-master/{id}": {
+      "get": {
+        "tags": [
+          "ExpenseMaster"
+        ],
+        "summary": "Get ExpenseMaster",
+        "operationId": "get_7",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseExpenseMasterResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "ExpenseMaster"
+        ],
+        "summary": "Update ExpenseMaster",
+        "operationId": "update_7",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpenseMasterRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseExpenseMasterResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "ExpenseMaster"
+        ],
+        "summary": "Delete ExpenseMaster",
+        "operationId": "delete_7",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/equipment-usage/{id}": {
+      "get": {
+        "tags": [
+          "EquipmentUsage"
+        ],
+        "summary": "Get EquipmentUsage",
+        "operationId": "get_8",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseEquipmentUsageResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "EquipmentUsage"
+        ],
+        "summary": "Update EquipmentUsage",
+        "operationId": "update_8",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EquipmentUsageRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseEquipmentUsageResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "EquipmentUsage"
+        ],
+        "summary": "Delete EquipmentUsage",
+        "operationId": "delete_8",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/diesel-usage/{id}": {
+      "get": {
+        "tags": [
+          "DieselUsage"
+        ],
+        "summary": "Get DieselUsage",
+        "operationId": "get_9",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDieselUsageResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "DieselUsage"
+        ],
+        "summary": "Update DieselUsage",
+        "operationId": "update_9",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DieselUsageRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDieselUsageResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "DieselUsage"
+        ],
+        "summary": "Delete DieselUsage",
+        "operationId": "delete_9",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/daily-expenses/{id}": {
+      "get": {
+        "tags": [
+          "DailyExpense"
+        ],
+        "summary": "Get DailyExpense",
+        "operationId": "get_10",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDailyExpenseResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "DailyExpense"
+        ],
+        "summary": "Update DailyExpense",
+        "operationId": "update_10",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DailyExpenseRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDailyExpenseResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "DailyExpense"
+        ],
+        "summary": "Delete DailyExpense",
+        "operationId": "delete_10",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/companies/{id}": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "summary": "Get Company",
+        "operationId": "get_11",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCompanyResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Company"
+        ],
+        "summary": "Update Company",
+        "operationId": "update_11",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCompanyResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Company"
+        ],
+        "summary": "Delete Company",
+        "operationId": "delete_11",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "refresh",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "logout",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/vehicle-types": {
+      "get": {
+        "tags": [
+          "VehicleType"
+        ],
+        "summary": "List VehicleType",
+        "operationId": "list",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePageVehicleTypeResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "VehicleType"
+        ],
+        "summary": "Create VehicleType",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleTypeRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVehicleTypeResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/vehicle-entries": {
+      "get": {
+        "tags": [
+          "VehicleEntry"
+        ],
+        "summary": "List VehicleEntry",
+        "operationId": "list_1",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePageVehicleEntryResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "VehicleEntry"
+        ],
+        "summary": "Create VehicleEntry",
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleEntryRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVehicleEntryResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/vehicle-entries-ops/{entryId}/payment": {
+      "post": {
+        "tags": [
+          "VehicleEntryOps"
+        ],
+        "summary": "Add a payment towards a vehicle entry",
+        "operationId": "addPayment",
+        "parameters": [
+          {
+            "name": "entryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddPaymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVehicleEntryResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/vehicle-entries-ops/{entryId}/exit": {
+      "post": {
+        "tags": [
+          "VehicleEntryOps"
+        ],
+        "summary": "Mark vehicle exit time",
+        "operationId": "exit",
+        "parameters": [
+          {
+            "name": "entryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "when",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVehicleEntryResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "List User",
+        "operationId": "list_2",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePageUserResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Create User",
+        "operationId": "create_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseUserResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/sync": {
+      "post": {
+        "tags": [
+          "Sync"
+        ],
+        "summary": "Bulk synchronize entities",
+        "description": "Accepts lists of entity DTOs and persists them with isSynced=true",
+        "operationId": "sync",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SyncRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseSyncResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/refresh-token": {
+      "get": {
+        "tags": [
+          "RefreshToken"
+        ],
+        "summary": "List RefreshToken",
+        "operationId": "list_3",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePageRefreshTokenResponseDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "RefreshToken"
+        ],
+        "summary": "Create RefreshToken",
+        "operationId": "create_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseRefreshTokenResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/receipts/pdf": {
+      "post": {
+        "tags": [
+          "receipt-controller"
+        ],
+        "operationId": "buildPdf",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "data"
+                ],
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "string"
+                  },
+                  "qrPng": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "qrUrl": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/payers": {
+      "get": {
+        "tags": [
+          "Payer"
+        ],
+        "summary": "List Payer",
+        "operationId": "list_4",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePagePayerResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Payer"
+        ],
+        "summary": "Create Payer",
+        "operationId": "create_4",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayerRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePayerResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/payer-settlements": {
+      "get": {
+        "tags": [
+          "PayerSettlement"
+        ],
+        "summary": "List PayerSettlement",
+        "operationId": "list_5",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePagePayerSettlementResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "PayerSettlement"
+        ],
+        "summary": "Create PayerSettlement",
+        "operationId": "create_5",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayerSettlementRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePayerSettlementResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/ledger/{payerId}/apply-payment": {
+      "post": {
+        "tags": [
+          "Ledger"
+        ],
+        "summary": "Apply payment to payer ledger",
+        "operationId": "applyPayment",
+        "parameters": [
+          {
+            "name": "payerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplyPaymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/internal-vehicles": {
+      "get": {
+        "tags": [
+          "InternalVehicle"
+        ],
+        "summary": "List InternalVehicle",
+        "operationId": "list_6",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePageInternalVehicleResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "InternalVehicle"
+        ],
+        "summary": "Create InternalVehicle",
+        "operationId": "create_6",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InternalVehicleRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseInternalVehicleResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/expense-master": {
+      "get": {
+        "tags": [
+          "ExpenseMaster"
+        ],
+        "summary": "List ExpenseMaster",
+        "operationId": "list_7",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePageExpenseMasterResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "ExpenseMaster"
+        ],
+        "summary": "Create ExpenseMaster",
+        "operationId": "create_7",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpenseMasterRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseExpenseMasterResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/equipment-usage": {
+      "get": {
+        "tags": [
+          "EquipmentUsage"
+        ],
+        "summary": "List EquipmentUsage",
+        "operationId": "list_8",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePageEquipmentUsageResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "EquipmentUsage"
+        ],
+        "summary": "Create EquipmentUsage",
+        "operationId": "create_8",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EquipmentUsageRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseEquipmentUsageResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/diesel-usage": {
+      "get": {
+        "tags": [
+          "DieselUsage"
+        ],
+        "summary": "List DieselUsage",
+        "operationId": "list_9",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePageDieselUsageResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "DieselUsage"
+        ],
+        "summary": "Create DieselUsage",
+        "operationId": "create_9",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DieselUsageRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDieselUsageResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/daily-expenses": {
+      "get": {
+        "tags": [
+          "DailyExpense"
+        ],
+        "summary": "List DailyExpense",
+        "operationId": "list_10",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePageDailyExpenseResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "DailyExpense"
+        ],
+        "summary": "Create DailyExpense",
+        "operationId": "create_10",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DailyExpenseRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDailyExpenseResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/companies": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "summary": "List Company",
+        "operationId": "list_11",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePageCompanyResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Company"
+        ],
+        "summary": "Create Company",
+        "operationId": "create_11",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCompanyResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/sync/download": {
+      "get": {
+        "tags": [
+          "Sync"
+        ],
+        "summary": "Download changed entities",
+        "description": "Returns entity deltas since a cursor",
+        "operationId": "downloadChanges",
+        "parameters": [
+          {
+            "name": "sinceCursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "entities",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/receipts/order/{orderId}": {
+      "get": {
+        "tags": [
+          "receipt-controller"
+        ],
+        "operationId": "findByOrderId",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/payers-ops/search": {
+      "get": {
+        "tags": [
+          "PayerOps"
+        ],
+        "summary": "Search active payers by name within company",
+        "operationId": "search",
+        "parameters": [
+          {
+            "name": "companyUuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePagePayerResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/payer-settlements/payer/{payerId}": {
+      "get": {
+        "tags": [
+          "PayerSettlement"
+        ],
+        "summary": "List settlements by payer",
+        "operationId": "byPayer",
+        "parameters": [
+          {
+            "name": "payerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListPayerSettlementWithNameDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/payer-settlements/company/{companyId}": {
+      "get": {
+        "tags": [
+          "PayerSettlement"
+        ],
+        "summary": "List settlements by company",
+        "operationId": "byCompany",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListPayerSettlementWithNameDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/ledger": {
+      "get": {
+        "tags": [
+          "Ledger"
+        ],
+        "summary": "Get all ledgers",
+        "operationId": "getAllLedger",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePageVehicleEntryResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/ledger/{payerId}": {
+      "get": {
+        "tags": [
+          "Ledger"
+        ],
+        "summary": "Get ledger for payer",
+        "operationId": "getLedgerForPayer",
+        "parameters": [
+          {
+            "name": "payerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePageVehicleEntryResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/ledger/summary": {
+      "get": {
+        "tags": [
+          "Ledger"
+        ],
+        "summary": "Ledger summary by payer",
+        "operationId": "summary",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListPayerLedgerSummaryDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/payers-ops/{payerId}/soft": {
+      "delete": {
+        "tags": [
+          "PayerOps"
+        ],
+        "summary": "Soft delete payer (set deleted_at)",
+        "operationId": "softDelete",
+        "parameters": [
+          {
+            "name": "payerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "VehicleTypeRequestDto": {
+        "required": [
+          "companyUuid",
+          "createdAt",
+          "deleted",
+          "id",
+          "isSynced",
+          "type",
+          "updatedAt",
+          "vehicleType"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "vehicleType": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ApiResponseVehicleTypeResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/VehicleTypeResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "VehicleTypeResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "vehicleType": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "VehicleEntryRequestDto": {
+        "required": [
+          "amount",
+          "beta",
+          "commission",
+          "companyUuid",
+          "createdAt",
+          "deleted",
+          "driverContactNo",
+          "driverName",
+          "entryDate",
+          "entryId",
+          "entryTime",
+          "fromAddress",
+          "isSettled",
+          "isSynced",
+          "paidAmount",
+          "payerId",
+          "paytype",
+          "pendingAmt",
+          "toAddress",
+          "updatedAt",
+          "vehicleNumber",
+          "vehicleType"
+        ],
+        "type": "object",
+        "properties": {
+          "entryId": {
+            "type": "string"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "payerId": {
+            "type": "string"
+          },
+          "vehicleNumber": {
+            "type": "string"
+          },
+          "vehicleType": {
+            "type": "string"
+          },
+          "fromAddress": {
+            "type": "string"
+          },
+          "toAddress": {
+            "type": "string"
+          },
+          "driverName": {
+            "type": "string"
+          },
+          "driverContactNo": {
+            "type": "string"
+          },
+          "commission": {
+            "type": "number"
+          },
+          "beta": {
+            "type": "number"
+          },
+          "referredBy": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "paytype": {
+            "type": "string"
+          },
+          "entryDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "entryTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "exitTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "paymentReceivedBy": {
+            "type": "string"
+          },
+          "paidAmount": {
+            "type": "number"
+          },
+          "pendingAmt": {
+            "type": "number"
+          },
+          "isSettled": {
+            "type": "boolean"
+          },
+          "settlementType": {
+            "type": "string"
+          },
+          "settlementDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ApiResponseVehicleEntryResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/VehicleEntryResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "VehicleEntryResponseDto": {
+        "type": "object",
+        "properties": {
+          "entryId": {
+            "type": "string"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "payerId": {
+            "type": "string"
+          },
+          "vehicleNumber": {
+            "type": "string"
+          },
+          "vehicleType": {
+            "type": "string"
+          },
+          "fromAddress": {
+            "type": "string"
+          },
+          "toAddress": {
+            "type": "string"
+          },
+          "driverName": {
+            "type": "string"
+          },
+          "driverContactNo": {
+            "type": "string"
+          },
+          "commission": {
+            "type": "number"
+          },
+          "beta": {
+            "type": "number"
+          },
+          "referredBy": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "paytype": {
+            "type": "string"
+          },
+          "entryDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "entryTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "exitTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "paymentReceivedBy": {
+            "type": "string"
+          },
+          "paidAmount": {
+            "type": "number"
+          },
+          "pendingAmt": {
+            "type": "number"
+          },
+          "isSettled": {
+            "type": "boolean"
+          },
+          "settlementType": {
+            "type": "string"
+          },
+          "settlementDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "UserRequestDto": {
+        "required": [
+          "employeeId",
+          "id",
+          "isActive"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "employeeId": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "mobileNo": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "companyCode": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "joiningDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponseUserResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/UserResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "UserResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "employeeId": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "mobileNo": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "companyCode": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "joiningDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "RefreshTokenRequestDto": {
+        "required": [
+          "expiresAt",
+          "issuedAt",
+          "jti",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "jti": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "issuedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revokedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rotatedFromJti": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseRefreshTokenResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RefreshTokenResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "RefreshTokenResponseDto": {
+        "type": "object",
+        "properties": {
+          "jti": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "issuedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revokedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rotatedFromJti": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PayerRequestDto": {
+        "required": [
+          "companyUuid",
+          "createdAt",
+          "deleted",
+          "isSynced",
+          "mobileNo",
+          "payerId",
+          "payerName",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "payerId": {
+            "type": "string"
+          },
+          "payerName": {
+            "type": "string"
+          },
+          "mobileNo": {
+            "type": "string"
+          },
+          "payerAddress": {
+            "type": "string"
+          },
+          "registrationDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "creditLimit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ApiResponsePayerResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PayerResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PayerResponseDto": {
+        "type": "object",
+        "properties": {
+          "payerId": {
+            "type": "string"
+          },
+          "payerName": {
+            "type": "string"
+          },
+          "mobileNo": {
+            "type": "string"
+          },
+          "payerAddress": {
+            "type": "string"
+          },
+          "registrationDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "creditLimit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "PayerSettlementRequestDto": {
+        "required": [
+          "amount",
+          "companyUuid",
+          "createdAt",
+          "date",
+          "deleted",
+          "isSynced",
+          "payerId",
+          "settlementId",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "settlementId": {
+            "type": "string"
+          },
+          "payerId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ApiResponsePayerSettlementResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PayerSettlementResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PayerSettlementResponseDto": {
+        "type": "object",
+        "properties": {
+          "settlementId": {
+            "type": "string"
+          },
+          "payerId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "InternalVehicleRequestDto": {
+        "required": [
+          "createdAt",
+          "deleted",
+          "isActive",
+          "isSynced",
+          "updatedAt",
+          "vehicleId",
+          "vehicleName",
+          "vehicleType"
+        ],
+        "type": "object",
+        "properties": {
+          "vehicleId": {
+            "type": "string"
+          },
+          "vehicleName": {
+            "type": "string"
+          },
+          "vehicleType": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ApiResponseInternalVehicleResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/InternalVehicleResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "InternalVehicleResponseDto": {
+        "type": "object",
+        "properties": {
+          "vehicleId": {
+            "type": "string"
+          },
+          "vehicleName": {
+            "type": "string"
+          },
+          "vehicleType": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ExpenseMasterRequestDto": {
+        "required": [
+          "companyUuid",
+          "createdAt",
+          "deleted",
+          "expenseName",
+          "id",
+          "isSynced",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "expenseName": {
+            "type": "string"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ApiResponseExpenseMasterResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ExpenseMasterResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "ExpenseMasterResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "expenseName": {
+            "type": "string"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "EquipmentUsageRequestDto": {
+        "required": [
+          "companyUuid",
+          "createdAt",
+          "date",
+          "deleted",
+          "endKm",
+          "endTime",
+          "equipmentName",
+          "equipmentType",
+          "equipmentUsageId",
+          "isSynced",
+          "startKm",
+          "startTime",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "equipmentUsageId": {
+            "type": "string"
+          },
+          "equipmentName": {
+            "type": "string"
+          },
+          "equipmentType": {
+            "type": "string"
+          },
+          "startKm": {
+            "type": "number"
+          },
+          "endKm": {
+            "type": "number"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ApiResponseEquipmentUsageResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/EquipmentUsageResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "EquipmentUsageResponseDto": {
+        "type": "object",
+        "properties": {
+          "equipmentUsageId": {
+            "type": "string"
+          },
+          "equipmentName": {
+            "type": "string"
+          },
+          "equipmentType": {
+            "type": "string"
+          },
+          "startKm": {
+            "type": "number"
+          },
+          "endKm": {
+            "type": "number"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "DieselUsageRequestDto": {
+        "required": [
+          "companyUuid",
+          "createdAt",
+          "date",
+          "deleted",
+          "dieselUsageId",
+          "isSynced",
+          "liters",
+          "updatedAt",
+          "vehicleName"
+        ],
+        "type": "object",
+        "properties": {
+          "dieselUsageId": {
+            "type": "string"
+          },
+          "vehicleName": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "liters": {
+            "type": "number"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ApiResponseDieselUsageResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/DieselUsageResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "DieselUsageResponseDto": {
+        "type": "object",
+        "properties": {
+          "dieselUsageId": {
+            "type": "string"
+          },
+          "vehicleName": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "liters": {
+            "type": "number"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "DailyExpenseRequestDto": {
+        "required": [
+          "companyUuid",
+          "createdAt",
+          "deleted",
+          "expenseAmount",
+          "expenseDate",
+          "expenseId",
+          "expenseType",
+          "isPaid",
+          "isSynced",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "expenseId": {
+            "type": "string"
+          },
+          "expenseType": {
+            "type": "string"
+          },
+          "expenseAmount": {
+            "type": "number"
+          },
+          "expenseDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expenseNote": {
+            "type": "string"
+          },
+          "isPaid": {
+            "type": "boolean"
+          },
+          "paidBy": {
+            "type": "string"
+          },
+          "paidTo": {
+            "type": "string"
+          },
+          "paidDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ApiResponseDailyExpenseResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/DailyExpenseResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "DailyExpenseResponseDto": {
+        "type": "object",
+        "properties": {
+          "expenseId": {
+            "type": "string"
+          },
+          "expenseType": {
+            "type": "string"
+          },
+          "expenseAmount": {
+            "type": "number"
+          },
+          "expenseDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expenseNote": {
+            "type": "string"
+          },
+          "isPaid": {
+            "type": "boolean"
+          },
+          "paidBy": {
+            "type": "string"
+          },
+          "paidTo": {
+            "type": "string"
+          },
+          "paidDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "companyUuid": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "CompanyRequestDto": {
+        "required": [
+          "companyCode",
+          "companyContactNo",
+          "companyLocation",
+          "companyName",
+          "companyRegistrationDate",
+          "createdAt",
+          "deleted",
+          "isActive",
+          "isSynced",
+          "ownerDob",
+          "ownerEmailAddress",
+          "ownerMobileNo",
+          "ownerName",
+          "updatedAt",
+          "uuid"
+        ],
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "companyCode": {
+            "type": "string"
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "companyContactNo": {
+            "type": "string"
+          },
+          "companyCoordinates": {
+            "type": "string"
+          },
+          "companyLocation": {
+            "type": "string"
+          },
+          "companyRegistrationDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "ownerName": {
+            "type": "string"
+          },
+          "ownerMobileNo": {
+            "type": "string"
+          },
+          "ownerEmailAddress": {
+            "type": "string"
+          },
+          "ownerDob": {
+            "type": "string",
+            "format": "date"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ApiResponseCompanyResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CompanyResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "CompanyResponseDto": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "companyCode": {
+            "type": "string"
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "companyContactNo": {
+            "type": "string"
+          },
+          "companyCoordinates": {
+            "type": "string"
+          },
+          "companyLocation": {
+            "type": "string"
+          },
+          "companyRegistrationDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "ownerName": {
+            "type": "string"
+          },
+          "ownerMobileNo": {
+            "type": "string"
+          },
+          "ownerEmailAddress": {
+            "type": "string"
+          },
+          "ownerDob": {
+            "type": "string",
+            "format": "date"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "isSynced": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "uuid": {
+            "type": "string"
+          },
+          "employeeId": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "mobileNo": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "companyId": {
+            "type": "string"
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string"
+          },
+          "joiningDate": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "RefreshRequest": {
+        "required": [
+          "refreshToken"
+        ],
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginRequest": {
+        "required": [
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "mobileNo": {
+            "pattern": "^\\+?[0-9]{10,15}$",
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "AddPaymentRequest": {
+        "required": [
+          "amount"
+        ],
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "receivedBy": {
+            "type": "string"
+          },
+          "when": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SyncRequestDto": {
+        "type": "object",
+        "properties": {
+          "companies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompanyRequestDto"
+            }
+          },
+          "dailyExpenses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DailyExpenseRequestDto"
+            }
+          },
+          "dieselUsages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DieselUsageRequestDto"
+            }
+          },
+          "equipmentUsages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EquipmentUsageRequestDto"
+            }
+          },
+          "expenseMasters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseMasterRequestDto"
+            }
+          },
+          "internalVehicles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InternalVehicleRequestDto"
+            }
+          },
+          "payers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PayerRequestDto"
+            }
+          },
+          "payerSettlements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PayerSettlementRequestDto"
+            }
+          },
+          "vehicleEntries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VehicleEntryRequestDto"
+            }
+          },
+          "vehicleTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VehicleTypeRequestDto"
+            }
+          }
+        }
+      },
+      "ApiResponseSyncResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/SyncResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "SyncResponseDto": {
+        "type": "object",
+        "properties": {
+          "companies": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dailyExpenses": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dieselUsages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "equipmentUsages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "expenseMasters": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "internalVehicles": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payers": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payerSettlements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "vehicleEntries": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "vehicleTypes": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ApplyPaymentRequest": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "settlementType": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseVoid": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ApiResponsePageVehicleTypeResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PageVehicleTypeResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PageVehicleTypeResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VehicleTypeResponseDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paged": {
+            "type": "boolean"
+          },
+          "unpaged": {
+            "type": "boolean"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "sorted": {
+            "type": "boolean"
+          },
+          "unsorted": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponsePageVehicleEntryResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PageVehicleEntryResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PageVehicleEntryResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VehicleEntryResponseDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponsePageUserResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PageUserResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PageUserResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserResponseDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponseMapStringObject": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "ApiResponsePageRefreshTokenResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PageRefreshTokenResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PageRefreshTokenResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RefreshTokenResponseDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponsePagePayerResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PagePayerResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PagePayerResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PayerResponseDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponsePagePayerSettlementResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PagePayerSettlementResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PagePayerSettlementResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PayerSettlementResponseDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponseListPayerSettlementWithNameDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PayerSettlementWithNameDto"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PayerSettlementWithNameDto": {
+        "type": "object",
+        "properties": {
+          "settlementId": {
+            "type": "string"
+          },
+          "payerId": {
+            "type": "string"
+          },
+          "payerName": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListPayerLedgerSummaryDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PayerLedgerSummaryDto"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PayerLedgerSummaryDto": {
+        "type": "object",
+        "properties": {
+          "payerId": {
+            "type": "string"
+          },
+          "payerName": {
+            "type": "string"
+          },
+          "pendingAmt": {
+            "type": "number"
+          }
+        }
+      },
+      "ApiResponsePageInternalVehicleResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PageInternalVehicleResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PageInternalVehicleResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InternalVehicleResponseDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponsePageExpenseMasterResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PageExpenseMasterResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PageExpenseMasterResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseMasterResponseDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponsePageEquipmentUsageResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PageEquipmentUsageResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PageEquipmentUsageResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EquipmentUsageResponseDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponsePageDieselUsageResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PageDieselUsageResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PageDieselUsageResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DieselUsageResponseDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponsePageDailyExpenseResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PageDailyExpenseResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PageDailyExpenseResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DailyExpenseResponseDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponsePageCompanyResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PageCompanyResponseDto"
+          },
+          "errors": {
+            "type": "array",
+            "example": [],
+            "items": {
+              "type": "string",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "PageCompanyResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompanyResponseDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
