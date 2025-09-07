@@ -10,34 +10,29 @@
 <h2 class="mb-3">Create Receipt</h2>
 <form th:action="@{/receipts}" method="post" enctype="multipart/form-data">
     <div class="mb-3">
-        <label class="form-label">Order ID</label>
-        <div class="input-group">
-            <input class="form-control" type="text" name="orderId" required>
-            <button class="btn btn-secondary" type="button" id="searchBtn">Search</button>
-        </div>
-        <div id="searchMessage" class="form-text text-danger"></div>
+        <label class="form-label">Order</label>
+        <select class="form-select" name="orderId" id="orderSelect" required>
+            <option value="">Select Order</option>
+            <th:block th:each="o : ${orders}">
+                <option th:value="${o.orderId}" th:text="${o.orderId + ' - ' + o.address}"></option>
+            </th:block>
+        </select>
     </div>
     <div class="mb-3">
         <label class="form-label">Trip No</label>
-        <input class="form-control" type="text" name="tripNo">
+        <input class="form-control" type="text" name="tripNo" readonly>
     </div>
     <div class="mb-3">
         <label class="form-label">Customer Name</label>
-        <input class="form-control" type="text" name="customerName">
+        <input class="form-control" type="text" name="customerName" readonly>
     </div>
     <div class="mb-3">
         <label class="form-label">Customer Mobile</label>
-        <input class="form-control" type="text" name="customerMobile">
+        <input class="form-control" type="text" name="customerMobile" readonly>
     </div>
     <div class="mb-3">
         <label class="form-label">Sand Quantity</label>
-        <select class="form-select" name="sandQuantity">
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="25">25</option>
-            <option value="30">30</option>
-            <option value="35">35</option>
-        </select>
+        <input class="form-control" type="text" name="sandQuantity" readonly>
     </div>
     <div class="mb-3">
         <label class="form-label">Dispatch Date/Time</label>
@@ -57,7 +52,7 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Address</label>
-        <textarea class="form-control" name="address"></textarea>
+        <textarea class="form-control" name="address" readonly></textarea>
     </div>
     <div class="mb-3">
         <label class="form-label">QR Image</label>
@@ -77,57 +72,18 @@
           window.location.href = `/login?redirect=${redirect}`;
           return;
       }
-      const orderInput = document.querySelector('input[name="orderId"]');
-      const searchBtn = document.getElementById('searchBtn');
-      const messageEl = document.getElementById('searchMessage');
-      if (!orderInput || !searchBtn) return;
-
-    const makeUpper = () => {
-        orderInput.value = orderInput.value.toUpperCase();
-    };
-    orderInput.addEventListener('input', makeUpper);
-    orderInput.addEventListener('blur', makeUpper);
-
-      searchBtn.addEventListener('click', async () => {
-          const orderId = orderInput.value;
-          if (!orderId) {
-              return;
-          }
-          messageEl.textContent = '';
-          try {
-              const res = await fetch(`/api/receipts/order/${orderId}`, {
-                  headers: { 'Authorization': 'Bearer ' + token }
-              });
-              if (res.status === 404) {
-                  messageEl.textContent = 'No order id found';
-                  return;
-              }
-              if (!res.ok) {
-                messageEl.textContent = 'Failed to search';
-                return;
-            }
-            const data = await res.json();
-            const mapping = {
-                tripNo: 'input[name="tripNo"]',
-                customerName: 'input[name="customerName"]',
-                customerMobile: 'input[name="customerMobile"]',
-                sandQuantity: 'select[name="sandQuantity"]',
-                dispatchDateTime: 'input[name="dispatchDateTime"]',
-                address: 'textarea[name="address"]',
-                qrUrl: 'input[name="qrUrl"]'
-            };
-            for (const [key, selector] of Object.entries(mapping)) {
-                if (data[key] != null) {
-                    const el = document.querySelector(selector);
-                    if (el) {
-                        el.value = data[key];
-                    }
-                }
-            }
-        } catch (e) {
-            console.error('Failed to fetch receipt by order ID', e);
-            messageEl.textContent = 'Failed to search';
-          }
+      const orderSelect = document.getElementById('orderSelect');
+      orderSelect.addEventListener('change', async () => {
+          const orderId = orderSelect.value;
+          if (!orderId) return;
+          const res = await fetch(`/api/orders/${orderId}`, { headers: { 'Authorization': 'Bearer ' + token }});
+          if (!res.ok) return;
+          const data = await res.json();
+          document.querySelector('input[name="tripNo"]').value = (data.tripNo || 0) + 1;
+          document.querySelector('input[name="customerName"]').value = data.customerName || '';
+          document.querySelector('input[name="customerMobile"]').value = data.customerMobile || '';
+          document.querySelector('input[name="sandQuantity"]').value = data.sandQuantity || '';
+          document.querySelector('textarea[name="address"]').value = data.fullAddress || '';
       });
 
       const form = document.querySelector('form');
@@ -140,7 +96,6 @@
               body: formData
           });
           if (!res.ok) {
-              messageEl.textContent = 'Failed to create receipt';
               return;
           }
           const blob = await res.blob();
@@ -152,7 +107,7 @@
           window.URL.revokeObjectURL(url);
       });
   });
-  </script>
-  </body>
-  </html>
+</script>
+</body>
+</html>
 
