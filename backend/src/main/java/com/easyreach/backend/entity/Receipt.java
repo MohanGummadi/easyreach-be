@@ -36,9 +36,6 @@ public class Receipt {
     @Column(name = "sand_quantity")
     private String sandQuantity;
 
-    @Column(name = "supply_point")
-    private String supplyPoint;
-
     @Column(name = "dispatch_date_time")
     private LocalDateTime dispatchDateTime;
 

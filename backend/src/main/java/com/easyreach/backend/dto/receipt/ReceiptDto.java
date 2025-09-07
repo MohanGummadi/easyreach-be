@@ -17,7 +17,6 @@ public class ReceiptDto {
     private String customerName;
     private String customerMobile;
     private String sandQuantity;
-    private String supplyPoint;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime dispatchDateTime;
     private String driverName;
