@@ -22,7 +22,7 @@
 </form>
 <script>
 const params = new URLSearchParams(window.location.search);
-const redirectUrl = params.get('redirect') || '/receipts/new';
+const redirectUrl = params.get('redirect') || '/';
 const form = document.getElementById('loginForm');
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -49,7 +49,7 @@ form.addEventListener('submit', async (e) => {
             document.write(html);
             document.close();
         } else {
-            document.getElementById('loginError').textContent = 'Unable to load receipt form';
+            document.getElementById('loginError').textContent = 'Unable to load page';
         }
     } catch (err) {
         document.getElementById('loginError').textContent = 'Login failed';

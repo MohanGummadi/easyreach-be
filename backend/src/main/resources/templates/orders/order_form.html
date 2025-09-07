@@ -7,6 +7,7 @@
     <title>Create Order</title>
 </head>
 <body class="container py-4">
+<button id="homeBtn" class="btn btn-secondary mb-3">Home</button>
 <h2 class="mb-3">Create Order</h2>
 <form id="orderForm">
     <div class="mb-3">
@@ -46,6 +47,17 @@
     }
     const form = document.getElementById('orderForm');
     const messageEl = document.getElementById('message');
+    const homeBtn = document.getElementById('homeBtn');
+
+    homeBtn.addEventListener('click', async () => {
+        const res = await fetch('/', { headers: { 'Authorization': 'Bearer ' + token }});
+        if (res.ok) {
+            const html = await res.text();
+            document.open();
+            document.write(html);
+            document.close();
+        }
+    });
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         messageEl.textContent = '';
