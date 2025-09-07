@@ -52,8 +52,7 @@ public class ReceiptPdfService {
     }
 
     public byte[] buildReceiptPdf(SandReceiptData d,
-                                  byte[] qrPngOrNull,
-                                  String qrUrlOrNull) throws Exception {
+                                  String qrUrl) throws Exception {
         byte[] logoBytes = null;
         ClassPathResource logo = new ClassPathResource("static/images/ap_logo.png");
         if (logo.exists()) {
@@ -62,17 +61,17 @@ public class ReceiptPdfService {
             }
         }
 
-        byte[] qrBytes = (qrPngOrNull != null && qrPngOrNull.length > 0)
-                ? qrPngOrNull
-                : ((qrUrlOrNull != null && !qrUrlOrNull.isBlank()) ? generateQrPng(qrUrlOrNull, 200, 200) : null);
+        byte[] qrBytes = (qrUrl != null && !qrUrl.isBlank())
+                ? generateQrPng(qrUrl, 200, 200)
+                : null;
 
         Context ctx = new Context();
 
         List<Map<String, String>> rows = new ArrayList<>();
         rows.add(Map.of("label", "Order Id", "value", d.orderId));
         rows.add(Map.of("label", "Trip No", "value", d.tripNo));
-        rows.add(Map.of("label", "Customer Name", "value", d.customerName));
-        rows.add(Map.of("label", "Customer Mobile", "value", d.customerMobile));
+        rows.add(Map.of("label", "Consumer Name", "value", d.customerName));
+        rows.add(Map.of("label", "Consumer Mobile", "value", d.customerMobile));
         double qty = Double.parseDouble(d.sandQuantity);
         rows.add(Map.of("label", "Sand Quantity", "value", String.format(Locale.ENGLISH, "%.1fTons", qty)));
         rows.add(Map.of("label", "Sand Supply Point Name", "value", SUPPLY_POINT));

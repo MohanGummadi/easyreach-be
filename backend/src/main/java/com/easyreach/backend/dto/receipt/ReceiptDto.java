@@ -17,7 +17,6 @@ public class ReceiptDto {
     private String customerName;
     private String customerMobile;
     private String sandQuantity;
-    private String supplyPoint;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime dispatchDateTime;
     private String driverName;
@@ -25,7 +24,6 @@ public class ReceiptDto {
     private String vehicleNo;
     private String address;
     private String footerLine;
-      private String qrUrl;
       private String createdBy;
       private OffsetDateTime createdAt;
       private OffsetDateTime updatedAt;

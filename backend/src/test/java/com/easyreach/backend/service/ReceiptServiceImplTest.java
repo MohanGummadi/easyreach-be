@@ -1,7 +1,9 @@
 package com.easyreach.backend.service;
 
 import com.easyreach.backend.dto.receipt.ReceiptDto;
+import com.easyreach.backend.entity.Order;
 import com.easyreach.backend.entity.Receipt;
+import com.easyreach.backend.repository.OrderRepository;
 import com.easyreach.backend.repository.ReceiptRepository;
 import com.easyreach.backend.service.impl.ReceiptServiceImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -29,6 +31,9 @@ class ReceiptServiceImplTest {
     @Mock
     private ReceiptRepository repository;
 
+    @Mock
+    private OrderRepository orderRepository;
+
     @InjectMocks
     private ReceiptServiceImpl service;
 
@@ -48,26 +53,32 @@ class ReceiptServiceImplTest {
     void createSavesReceiptWithDefaults() {
         ReceiptDto dto = ReceiptDto.builder()
                 .orderId("ord1")
-                .tripNo("T1")
-                .customerName("Cust")
-                .customerMobile("111")
-                .sandQuantity("5")
+                .sandQuantity("10")
                 .dispatchDateTime(LocalDateTime.now())
                 .driverName("Drv")
                 .driverMobile("222")
                 .vehicleNo("VH1")
-                .address("Addr")
-                .qrUrl("qr")
                 .build();
 
+        Order order = Order.builder()
+                .orderId("ORD1")
+                .customerName("Cust")
+                .customerMobile("111")
+                .fullAddress("Addr")
+                .qrUrl("qr")
+                .tripNo(0)
+                .build();
+
+        when(orderRepository.findByOrderIdIgnoreCase("ord1")).thenReturn(java.util.Optional.of(order));
         when(repository.save(any(Receipt.class))).thenAnswer(inv -> inv.getArgument(0));
 
         Receipt saved = service.create(dto);
 
         assertEquals("ORD1", saved.getOrderId());
-        assertEquals("Khandyam", saved.getSupplyPoint());
+        assertEquals("10", saved.getSandQuantity());
         assertEquals("18.4060366,83.9543993 Thank you", saved.getFooterLine());
         assertEquals("test-user", saved.getCreatedBy());
+        verify(orderRepository).save(any(Order.class));
         verify(repository).save(any(Receipt.class));
     }
 
@@ -79,15 +90,13 @@ class ReceiptServiceImplTest {
                 .tripNo("T1")
                 .customerName("Name")
                 .customerMobile("111")
-                .sandQuantity("5")
-                .supplyPoint("SP")
+                .sandQuantity("10")
                 .dispatchDateTime(LocalDateTime.now())
                 .driverName("D")
                 .driverMobile("M")
                 .vehicleNo("V")
                 .address("Addr")
                 .footerLine("F")
-                .qrUrl("qr")
                 .createdBy("user")
                 .createdAt(OffsetDateTime.now())
                 .updatedAt(OffsetDateTime.now())

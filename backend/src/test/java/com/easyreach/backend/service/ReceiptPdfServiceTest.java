@@ -37,7 +37,7 @@ public class ReceiptPdfServiceTest {
         d.footerLine = "18.4060366,83.9543993 Thank you";
 
         ReceiptPdfService svc = new ReceiptPdfService();
-        byte[] pdf = svc.buildReceiptPdf(d, null, null);
+        byte[] pdf = svc.buildReceiptPdf(d, "https://example.com/qr");
         assertNotNull(pdf);
         assertTrue(pdf.length > 0);
 
@@ -47,6 +47,8 @@ public class ReceiptPdfServiceTest {
             assertTrue(text.contains("Consumer Copy"));
             assertTrue(text.contains("Driver Copy"));
             assertTrue(text.contains(d.orderId));
+            assertTrue(text.contains("Consumer Name"));
+            assertTrue(text.contains("Consumer Mobile"));
             assertTrue(text.contains("Khandyam"));
             assertTrue(text.contains("10.0Tons"));
             assertTrue(text.contains("18.4060366,83.9543993 Thank you"));

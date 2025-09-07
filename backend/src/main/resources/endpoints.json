@@ -1819,9 +1819,7 @@
     },
     "requestSchema": {
       "multipart": {
-        "data": "SandReceiptData",
-        "qrPng?": "file",
-        "qrUrl?": "string"
+        "data": "SandReceiptData"
       }
     },
     "responseSchema": {
@@ -1861,9 +1859,7 @@
     },
     "requestSchema": {
       "multipart": {
-        "receipt": "ReceiptDto",
-        "qrPng?": "file",
-        "qrUrl?": "string"
+        "receipt": "ReceiptDto"
       }
     },
     "responseSchema": {

@@ -3,7 +3,6 @@ package com.easyreach.backend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Getter
@@ -13,19 +12,22 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "receipts")
-public class Receipt {
+@Table(name = "orders")
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "order_id")
+    @Column(name = "order_id", nullable = false, unique = true)
     private String orderId;
 
-    @Column(name = "trip_no")
-    private String tripNo;
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "full_address")
+    private String fullAddress;
 
     @Column(name = "customer_name")
     private String customerName;
@@ -33,29 +35,11 @@ public class Receipt {
     @Column(name = "customer_mobile")
     private String customerMobile;
 
-    @Column(name = "sand_quantity")
-    private String sandQuantity;
+    @Column(name = "qr_url")
+    private String qrUrl;
 
-    @Column(name = "dispatch_date_time")
-    private LocalDateTime dispatchDateTime;
-
-    @Column(name = "driver_name")
-    private String driverName;
-
-    @Column(name = "driver_mobile")
-    private String driverMobile;
-
-    @Column(name = "vehicle_no")
-    private String vehicleNo;
-
-    @Column(name = "address")
-    private String address;
-
-    @Column(name = "footer_line")
-    private String footerLine;
-
-      @Column(name = "created_by")
-      private String createdBy;
+    @Column(name = "trip_no")
+    private Integer tripNo;
 
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
@@ -64,11 +48,23 @@ public class Receipt {
     private OffsetDateTime updatedAt;
 
     @PrePersist
+    public void prePersist() {
+        createdAt = updatedAt = OffsetDateTime.now();
+        uppercaseOrderId();
+        if (tripNo == null) {
+            tripNo = 0;
+        }
+    }
+
     @PreUpdate
+    public void preUpdate() {
+        updatedAt = OffsetDateTime.now();
+        uppercaseOrderId();
+    }
+
     private void uppercaseOrderId() {
         if (orderId != null) {
             orderId = orderId.toUpperCase();
         }
     }
 }
-
