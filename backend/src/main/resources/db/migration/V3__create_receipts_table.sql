@@ -5,6 +5,7 @@ CREATE TABLE public.receipts (
     customer_name VARCHAR(255),
     customer_mobile VARCHAR(50),
     sand_quantity VARCHAR(50),
+    supply_point VARCHAR(255),
     dispatch_date_time TIMESTAMP,
     driver_name VARCHAR(255),
     driver_mobile VARCHAR(50),
