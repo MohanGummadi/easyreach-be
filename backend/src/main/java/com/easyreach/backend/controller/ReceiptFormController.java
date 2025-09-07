@@ -61,7 +61,7 @@ public class ReceiptFormController {
         data.tripNo = receipt.getTripNo();
         data.customerName = order.getCustomerName();
         data.customerMobile = order.getCustomerMobile();
-        data.sandQuantity = order.getSandQuantity();
+        data.sandQuantity = receipt.getSandQuantity();
         data.supplyPoint = order.getSupplyPoint();
         data.dispatchDateTime = dto.getDispatchDateTime();
         data.driverName = dto.getDriverName();

@@ -38,7 +38,7 @@ public class ReceiptServiceImpl implements ReceiptService {
                 .tripNo(String.valueOf(nextTrip))
                 .customerName(order.getCustomerName())
                 .customerMobile(order.getCustomerMobile())
-                .sandQuantity(order.getSandQuantity())
+                .sandQuantity(dto.getSandQuantity())
                 .supplyPoint(order.getSupplyPoint())
                 .dispatchDateTime(dto.getDispatchDateTime())
                 .driverName(dto.getDriverName())
