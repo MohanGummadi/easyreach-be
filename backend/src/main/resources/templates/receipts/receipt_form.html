@@ -7,6 +7,7 @@
     <title>Create Receipt</title>
 </head>
 <body class="container py-4">
+<button id="homeBtn" class="btn btn-secondary mb-3">Home</button>
 <h2 class="mb-3">Create Receipt</h2>
 <form th:action="@{/receipts}" method="post">
     <div class="mb-3">
@@ -71,6 +72,17 @@
           return;
       }
       const orderSelect = document.getElementById('orderSelect');
+      const homeBtn = document.getElementById('homeBtn');
+
+      homeBtn.addEventListener('click', async () => {
+          const res = await fetch('/', { headers: { 'Authorization': 'Bearer ' + token }});
+          if (res.ok) {
+              const html = await res.text();
+              document.open();
+              document.write(html);
+              document.close();
+          }
+      });
       orderSelect.addEventListener('change', async () => {
           const orderId = orderSelect.value;
           if (!orderId) return;
