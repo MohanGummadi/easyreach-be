@@ -2011,13 +2011,6 @@
                 "properties": {
                   "data": {
                     "type": "string"
-                  },
-                  "qrPng": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "qrUrl": {
-                    "type": "string"
                   }
                 }
               }

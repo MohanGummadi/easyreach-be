@@ -58,7 +58,6 @@ class ReceiptServiceImplTest {
                 .driverName("Drv")
                 .driverMobile("222")
                 .vehicleNo("VH1")
-                .qrUrl("qr")
                 .build();
 
         Order order = Order.builder()
@@ -67,6 +66,7 @@ class ReceiptServiceImplTest {
                 .customerMobile("111")
                 .supplyPoint("SP")
                 .fullAddress("Addr")
+                .qrUrl("qr")
                 .tripNo(0)
                 .build();
 
@@ -100,7 +100,6 @@ class ReceiptServiceImplTest {
                 .vehicleNo("V")
                 .address("Addr")
                 .footerLine("F")
-                .qrUrl("qr")
                 .createdBy("user")
                 .createdAt(OffsetDateTime.now())
                 .updatedAt(OffsetDateTime.now())

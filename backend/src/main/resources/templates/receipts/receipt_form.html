@@ -8,7 +8,7 @@
 </head>
 <body class="container py-4">
 <h2 class="mb-3">Create Receipt</h2>
-<form th:action="@{/receipts}" method="post" enctype="multipart/form-data">
+<form th:action="@{/receipts}" method="post">
     <div class="mb-3">
         <label class="form-label">Order</label>
         <select class="form-select" name="orderId" id="orderSelect" required>
@@ -59,14 +59,6 @@
     <div class="mb-3">
         <label class="form-label">Address</label>
         <textarea class="form-control" name="address" readonly></textarea>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">QR Image</label>
-        <input class="form-control" type="file" name="qrPng" accept="image/png">
-    </div>
-    <div class="mb-3">
-        <label class="form-label">QR URL</label>
-        <input class="form-control" type="text" name="qrUrl">
     </div>
     <button class="btn btn-primary" type="submit">Generate PDF</button>
 </form>

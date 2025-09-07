@@ -1,5 +1,7 @@
 # EasyReach Backend
 
+QR codes are now generated from a URL stored on each order; receipt uploads no longer accept QR images.
+
 ## Running tests
 
 ```bash

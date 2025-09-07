@@ -52,8 +52,7 @@ public class ReceiptPdfService {
     }
 
     public byte[] buildReceiptPdf(SandReceiptData d,
-                                  byte[] qrPngOrNull,
-                                  String qrUrlOrNull) throws Exception {
+                                  String qrUrl) throws Exception {
         byte[] logoBytes = null;
         ClassPathResource logo = new ClassPathResource("static/images/ap_logo.png");
         if (logo.exists()) {
@@ -62,9 +61,9 @@ public class ReceiptPdfService {
             }
         }
 
-        byte[] qrBytes = (qrPngOrNull != null && qrPngOrNull.length > 0)
-                ? qrPngOrNull
-                : ((qrUrlOrNull != null && !qrUrlOrNull.isBlank()) ? generateQrPng(qrUrlOrNull, 200, 200) : null);
+        byte[] qrBytes = (qrUrl != null && !qrUrl.isBlank())
+                ? generateQrPng(qrUrl, 200, 200)
+                : null;
 
         Context ctx = new Context();
 

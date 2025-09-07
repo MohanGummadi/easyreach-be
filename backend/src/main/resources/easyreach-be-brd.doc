@@ -121,7 +121,8 @@ EasyReach‑BE is a Spring Boot backend providing RESTful services for managing 
 | **ExpenseMaster** | `id` PK, `expenseName`. |
 | **DieselUsage** | `dieselUsageId` PK, `vehicleName`, `date`, `liters`. |
 | **EquipmentUsage** | `equipmentUsageId` PK, `equipmentName`, km readings & times. |
-| **Receipt** | `id` serial PK, order metadata, `qrUrl`, `createdBy`. |
+| **Order** | `id` serial PK, order details, `qrUrl`. |
+| **Receipt** | `id` serial PK, order metadata, `createdBy`. |
 | **RefreshToken** | `jti` PK, `userId`, timestamps, rotation chain. |
 
 ### Relationships & ER Diagram
@@ -241,8 +242,8 @@ CRUD `/api/daily-expenses`; list supports `dateFrom` & `dateTo` query filters.
 
 ### Receipts
 * `GET /api/receipts/order/{orderId}` – retrieve by order ID.
-* `POST /api/receipts/pdf` – multipart: `data` (JSON `SandReceiptData`), optional `qrPng`, `qrUrl`; returns PDF.
-* HTML form controller `/receipts/new` and `/receipts` (multipart).
+* `POST /api/receipts/pdf` – multipart: `data` (JSON `SandReceiptData`); QR generated from order `qrUrl`; returns PDF.
+* HTML form controller `/receipts/new` and `/receipts` (no uploads).
 
 ### Sync
 * `POST /api/sync` – bulk upload; body `SyncRequestDto` with lists per entity.
@@ -309,7 +310,7 @@ sequenceDiagram
 ---
 
 ## Reports / Exports
-* **Receipt PDF** – 80 mm thermal format, includes AP Sand logo, QR code for `qrUrl`, produced on `/api/receipts/pdf` or via web form.
+* **Receipt PDF** – 80 mm thermal format, includes AP Sand logo, QR code derived from order `qrUrl`, produced on `/api/receipts/pdf` or via web form.
 * PDFs saved under `./receipts` folder on server.
 
 ---

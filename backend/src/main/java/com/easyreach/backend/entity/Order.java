@@ -38,6 +38,9 @@ public class Order {
     @Column(name = "supply_point")
     private String supplyPoint;
 
+    @Column(name = "qr_url")
+    private String qrUrl;
+
     @Column(name = "trip_no")
     private Integer tripNo;
 

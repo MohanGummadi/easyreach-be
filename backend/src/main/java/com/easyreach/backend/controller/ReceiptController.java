@@ -5,6 +5,7 @@ import com.easyreach.backend.dto.receipt.ReceiptDto;
 import com.easyreach.backend.service.ReceiptService;
 import com.easyreach.backend.service.impl.ReceiptPdfService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.easyreach.backend.repository.OrderRepository;
 
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -12,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,11 +30,14 @@ public class ReceiptController {
     private final ReceiptPdfService pdfService;
     private final ObjectMapper objectMapper;
     private final ReceiptService receiptService;
+    private final OrderRepository orderRepository;
 
-    public ReceiptController(ReceiptPdfService pdfService, ObjectMapper objectMapper, ReceiptService receiptService) {
+    public ReceiptController(ReceiptPdfService pdfService, ObjectMapper objectMapper, ReceiptService receiptService,
+                             OrderRepository orderRepository) {
         this.pdfService = pdfService;
         this.objectMapper = objectMapper;
         this.receiptService = receiptService;
+        this.orderRepository = orderRepository;
     }
 
     @GetMapping("/order/{orderId}")
@@ -49,18 +52,18 @@ public class ReceiptController {
 
     @PostMapping(value = "/pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> buildPdf(
-            @RequestPart("data") String dataJson,
-            @RequestPart(value = "qrPng", required = false) MultipartFile qrPng,
-            @RequestPart(value = "qrUrl", required = false) String qrUrl
+            @RequestPart("data") String dataJson
     ) throws Exception {
 
         SandReceiptData data = objectMapper.readValue(dataJson, SandReceiptData.class);
 
+        var order = orderRepository.findByOrderIdIgnoreCase(data.orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+
         // ✅ Generate PDF
         byte[] pdfBytes = pdfService.buildReceiptPdf(
                 data,
-                (qrPng != null && !qrPng.isEmpty()) ? qrPng.getBytes() : null,
-                qrUrl
+                order.getQrUrl()
         );
 
         // ✅ Save PDF to folder (e.g., ./receipts)
