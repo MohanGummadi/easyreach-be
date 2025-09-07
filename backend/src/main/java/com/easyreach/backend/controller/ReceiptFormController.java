@@ -4,6 +4,9 @@ import com.easyreach.backend.dto.SandReceiptData;
 import com.easyreach.backend.dto.receipt.ReceiptDto;
 import com.easyreach.backend.service.ReceiptService;
 import com.easyreach.backend.service.impl.ReceiptPdfService;
+import com.easyreach.backend.repository.OrderRepository;
+import com.easyreach.backend.entity.Order;
+import com.easyreach.backend.entity.Receipt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -27,8 +30,8 @@ public class ReceiptFormController {
 
     private final ReceiptService receiptService;
     private final ReceiptPdfService receiptPdfService;
+    private final OrderRepository orderRepository;
 
-    private static final String SUPPLY_POINT = "Khandyam";
     private static final String FOOTER_LINE = "18.4060366,83.9543993 Thank you";
 
     @GetMapping("/receipts/new")
@@ -37,6 +40,7 @@ public class ReceiptFormController {
         ReceiptDto dto = new ReceiptDto();
         dto.setCreatedBy(username);
         model.addAttribute("receipt", dto);
+        model.addAttribute("orders", orderRepository.findAll());
         return "receipts/receipt_form";
     }
 
@@ -46,23 +50,24 @@ public class ReceiptFormController {
                                                 @RequestParam(value = "qrUrl", required = false) String qrUrl) throws Exception {
 
         dto.setQrUrl(qrUrl);
-        dto.setSupplyPoint(SUPPLY_POINT);
-        dto.setFooterLine(FOOTER_LINE);
         dto.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
-        receiptService.create(dto);
+        Receipt receipt = receiptService.create(dto);
+
+        Order order = orderRepository.findByOrderIdIgnoreCase(receipt.getOrderId())
+                .orElseThrow();
 
         SandReceiptData data = new SandReceiptData();
-        data.orderId = dto.getOrderId();
-        data.tripNo = dto.getTripNo();
-        data.customerName = dto.getCustomerName();
-        data.customerMobile = dto.getCustomerMobile();
-        data.sandQuantity = dto.getSandQuantity();
-        data.supplyPoint = SUPPLY_POINT;
+        data.orderId = receipt.getOrderId();
+        data.tripNo = receipt.getTripNo();
+        data.customerName = order.getCustomerName();
+        data.customerMobile = order.getCustomerMobile();
+        data.sandQuantity = order.getSandQuantity();
+        data.supplyPoint = order.getSupplyPoint();
         data.dispatchDateTime = dto.getDispatchDateTime();
         data.driverName = dto.getDriverName();
         data.driverMobile = dto.getDriverMobile();
         data.vehicleNo = dto.getVehicleNo();
-        data.address = dto.getAddress();
+        data.address = order.getFullAddress();
         data.footerLine = FOOTER_LINE;
 
         byte[] pdf = receiptPdfService.buildReceiptPdf(

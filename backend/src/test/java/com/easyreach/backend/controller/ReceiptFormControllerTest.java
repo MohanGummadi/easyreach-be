@@ -17,6 +17,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.easyreach.backend.repository.OrderRepository;
+import com.easyreach.backend.entity.Order;
+import java.util.Collections;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,16 +41,21 @@ class ReceiptFormControllerTest {
     @MockBean
     private ReceiptPdfService receiptPdfService;
 
+    @MockBean
+    private OrderRepository orderRepository;
+
     @Test
     @DisplayName("new receipt form – success")
     void newFormSuccess() throws Exception {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken("user", "pass"));
+        when(orderRepository.findAll()).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/receipts/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("receipts/receipt_form"))
-                .andExpect(model().attributeExists("receipt"));
+                .andExpect(model().attributeExists("receipt"))
+                .andExpect(model().attributeExists("orders"));
     }
 
     @Test
@@ -55,6 +64,7 @@ class ReceiptFormControllerTest {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken("user", "pass"));
         when(receiptService.create(any())).thenThrow(new IllegalArgumentException("bad"));
+        when(orderRepository.findByOrderIdIgnoreCase(any())).thenReturn(java.util.Optional.of(Order.builder().build()));
 
         MockMultipartFile emptyFile = new MockMultipartFile("qrPng", new byte[0]);
 
@@ -72,6 +82,7 @@ class ReceiptFormControllerTest {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken("user", "pass"));
         when(receiptService.create(any())).thenThrow(new RuntimeException("boom"));
+        when(orderRepository.findByOrderIdIgnoreCase(any())).thenReturn(java.util.Optional.of(Order.builder().build()));
 
         MockMultipartFile emptyFile = new MockMultipartFile("qrPng", new byte[0]);
 

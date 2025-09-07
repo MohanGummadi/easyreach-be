@@ -1,7 +1,9 @@
 package com.easyreach.backend.service.impl;
 
 import com.easyreach.backend.dto.receipt.ReceiptDto;
+import com.easyreach.backend.entity.Order;
 import com.easyreach.backend.entity.Receipt;
+import com.easyreach.backend.repository.OrderRepository;
 import com.easyreach.backend.repository.ReceiptRepository;
 import com.easyreach.backend.service.ReceiptService;
 import lombok.RequiredArgsConstructor;
@@ -20,32 +22,37 @@ import java.time.OffsetDateTime;
 public class ReceiptServiceImpl implements ReceiptService {
 
     private final ReceiptRepository repository;
+    private final OrderRepository orderRepository;
 
-    private static final String SUPPLY_POINT = "Khandyam";
     private static final String FOOTER_LINE = "18.4060366,83.9543993 Thank you";
 
     @Override
     public Receipt create(ReceiptDto dto) {
         log.debug("Creating receipt for order {}", dto.getOrderId());
+        Order order = orderRepository.findByOrderIdIgnoreCase(dto.getOrderId())
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        int nextTrip = (order.getTripNo() == null ? 0 : order.getTripNo()) + 1;
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Receipt receipt = Receipt.builder()
-                .orderId(dto.getOrderId() != null ? dto.getOrderId().toUpperCase() : null)
-                .tripNo(dto.getTripNo())
-                .customerName(dto.getCustomerName())
-                .customerMobile(dto.getCustomerMobile())
-                .sandQuantity(dto.getSandQuantity())
-                .supplyPoint(SUPPLY_POINT)
+                .orderId(order.getOrderId())
+                .tripNo(String.valueOf(nextTrip))
+                .customerName(order.getCustomerName())
+                .customerMobile(order.getCustomerMobile())
+                .sandQuantity(order.getSandQuantity())
+                .supplyPoint(order.getSupplyPoint())
                 .dispatchDateTime(dto.getDispatchDateTime())
                 .driverName(dto.getDriverName())
                 .driverMobile(dto.getDriverMobile())
                 .vehicleNo(dto.getVehicleNo())
-                .address(dto.getAddress())
+                .address(order.getFullAddress())
                 .footerLine(FOOTER_LINE)
                 .qrUrl(dto.getQrUrl())
                 .createdBy(username)
                 .createdAt(OffsetDateTime.now())
                 .updatedAt(OffsetDateTime.now())
                 .build();
+        order.setTripNo(nextTrip);
+        orderRepository.save(order);
         return repository.save(receipt);
     }
 
