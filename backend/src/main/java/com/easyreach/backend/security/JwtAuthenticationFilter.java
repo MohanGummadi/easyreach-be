@@ -67,6 +67,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     log.debug("Authentication successful for user {} company {}", identifier, companyId);
                 } else {
                     log.warn("Token validation failed for user {}", identifier);
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
+                    return;
                 }
             }
             chain.doFilter(request, response);
