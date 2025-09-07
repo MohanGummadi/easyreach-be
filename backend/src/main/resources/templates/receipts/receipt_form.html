@@ -23,16 +23,22 @@
         <input class="form-control" type="text" name="tripNo" readonly>
     </div>
     <div class="mb-3">
-        <label class="form-label">Customer Name</label>
+        <label class="form-label">Consumer Name</label>
         <input class="form-control" type="text" name="customerName" readonly>
     </div>
     <div class="mb-3">
-        <label class="form-label">Customer Mobile</label>
+        <label class="form-label">Consumer Mobile</label>
         <input class="form-control" type="text" name="customerMobile" readonly>
     </div>
     <div class="mb-3">
         <label class="form-label">Sand Quantity</label>
-        <input class="form-control" type="text" name="sandQuantity" readonly>
+        <select class="form-select" name="sandQuantity" required>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+            <option value="35">35</option>
+        </select>
     </div>
     <div class="mb-3">
         <label class="form-label">Dispatch Date/Time</label>
@@ -76,14 +82,22 @@
       orderSelect.addEventListener('change', async () => {
           const orderId = orderSelect.value;
           if (!orderId) return;
-          const res = await fetch(`/api/orders/${orderId}`, { headers: { 'Authorization': 'Bearer ' + token }});
-          if (!res.ok) return;
-          const data = await res.json();
-          document.querySelector('input[name="tripNo"]').value = (data.tripNo || 0) + 1;
-          document.querySelector('input[name="customerName"]').value = data.customerName || '';
-          document.querySelector('input[name="customerMobile"]').value = data.customerMobile || '';
-          document.querySelector('input[name="sandQuantity"]').value = data.sandQuantity || '';
-          document.querySelector('textarea[name="address"]').value = data.fullAddress || '';
+          const [orderRes, tripRes] = await Promise.all([
+              fetch(`/api/orders/${orderId}`, { headers: { 'Authorization': 'Bearer ' + token }}),
+              fetch(`/api/orders/${orderId}/next-trip`, { headers: { 'Authorization': 'Bearer ' + token }})
+          ]);
+          if (orderRes.ok) {
+              const data = await orderRes.json();
+              document.querySelector('input[name="customerName"]').value = data.customerName || '';
+              document.querySelector('input[name="customerMobile"]').value = data.customerMobile || '';
+              document.querySelector('textarea[name="address"]').value = data.fullAddress || '';
+          }
+          if (tripRes.ok) {
+              const tripData = await tripRes.json();
+              document.querySelector('input[name="tripNo"]').value = tripData.nextTripNo || '';
+          } else {
+              document.querySelector('input[name="tripNo"]').value = '';
+          }
       });
 
       const form = document.querySelector('form');

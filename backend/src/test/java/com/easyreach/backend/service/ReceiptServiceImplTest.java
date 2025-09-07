@@ -53,6 +53,7 @@ class ReceiptServiceImplTest {
     void createSavesReceiptWithDefaults() {
         ReceiptDto dto = ReceiptDto.builder()
                 .orderId("ord1")
+                .sandQuantity("10")
                 .dispatchDateTime(LocalDateTime.now())
                 .driverName("Drv")
                 .driverMobile("222")
@@ -64,7 +65,6 @@ class ReceiptServiceImplTest {
                 .orderId("ORD1")
                 .customerName("Cust")
                 .customerMobile("111")
-                .sandQuantity("5")
                 .supplyPoint("SP")
                 .fullAddress("Addr")
                 .tripNo(0)
@@ -76,6 +76,7 @@ class ReceiptServiceImplTest {
         Receipt saved = service.create(dto);
 
         assertEquals("ORD1", saved.getOrderId());
+        assertEquals("10", saved.getSandQuantity());
         assertEquals("SP", saved.getSupplyPoint());
         assertEquals("18.4060366,83.9543993 Thank you", saved.getFooterLine());
         assertEquals("test-user", saved.getCreatedBy());
@@ -91,7 +92,7 @@ class ReceiptServiceImplTest {
                 .tripNo("T1")
                 .customerName("Name")
                 .customerMobile("111")
-                .sandQuantity("5")
+                .sandQuantity("10")
                 .supplyPoint("SP")
                 .dispatchDateTime(LocalDateTime.now())
                 .driverName("D")

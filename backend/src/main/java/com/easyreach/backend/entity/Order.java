@@ -35,9 +35,6 @@ public class Order {
     @Column(name = "customer_mobile")
     private String customerMobile;
 
-    @Column(name = "sand_quantity")
-    private String sandQuantity;
-
     @Column(name = "supply_point")
     private String supplyPoint;
 

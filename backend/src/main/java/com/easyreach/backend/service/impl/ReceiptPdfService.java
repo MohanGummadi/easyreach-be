@@ -71,8 +71,8 @@ public class ReceiptPdfService {
         List<Map<String, String>> rows = new ArrayList<>();
         rows.add(Map.of("label", "Order Id", "value", d.orderId));
         rows.add(Map.of("label", "Trip No", "value", d.tripNo));
-        rows.add(Map.of("label", "Customer Name", "value", d.customerName));
-        rows.add(Map.of("label", "Customer Mobile", "value", d.customerMobile));
+        rows.add(Map.of("label", "Consumer Name", "value", d.customerName));
+        rows.add(Map.of("label", "Consumer Mobile", "value", d.customerMobile));
         double qty = Double.parseDouble(d.sandQuantity);
         rows.add(Map.of("label", "Sand Quantity", "value", String.format(Locale.ENGLISH, "%.1fTons", qty)));
         rows.add(Map.of("label", "Sand Supply Point Name", "value", SUPPLY_POINT));
