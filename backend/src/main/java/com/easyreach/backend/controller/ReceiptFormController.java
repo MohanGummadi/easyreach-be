@@ -10,7 +10,6 @@ import com.easyreach.backend.entity.Receipt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,8 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -44,12 +41,9 @@ public class ReceiptFormController {
         return "receipts/receipt_form";
     }
 
-    @PostMapping(value = "/receipts", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<byte[]> createReceipt(@ModelAttribute ReceiptDto dto,
-                                                @RequestParam(value = "qrPng", required = false) MultipartFile qrPng,
-                                                @RequestParam(value = "qrUrl", required = false) String qrUrl) throws Exception {
+    @PostMapping(value = "/receipts")
+    public ResponseEntity<byte[]> createReceipt(@ModelAttribute ReceiptDto dto) throws Exception {
 
-        dto.setQrUrl(qrUrl);
         dto.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         Receipt receipt = receiptService.create(dto);
 
@@ -72,8 +66,7 @@ public class ReceiptFormController {
 
         byte[] pdf = receiptPdfService.buildReceiptPdf(
                 data,
-                (qrPng != null && !qrPng.isEmpty()) ? qrPng.getBytes() : null,
-                dto.getQrUrl()
+                order.getQrUrl()
         );
 
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));

@@ -57,9 +57,6 @@ public class Receipt {
     @Column(name = "footer_line")
     private String footerLine;
 
-      @Column(name = "qr_url")
-      private String qrUrl;
-
       @Column(name = "created_by")
       private String createdBy;
 

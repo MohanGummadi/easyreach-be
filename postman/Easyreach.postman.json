@@ -9480,23 +9480,6 @@
                                                     "key": "data",
                                                     "value": "<string>",
                                                     "type": "text"
-                                                },
-                                                {
-                                                    "description": {
-                                                        "content": "",
-                                                        "type": "text/plain"
-                                                    },
-                                                    "key": "qrPng",
-                                                    "type": "file"
-                                                },
-                                                {
-                                                    "description": {
-                                                        "content": "",
-                                                        "type": "text/plain"
-                                                    },
-                                                    "key": "qrUrl",
-                                                    "value": "<string>",
-                                                    "type": "text"
                                                 }
                                             ]
                                         },
@@ -9547,23 +9530,6 @@
                                                                 "type": "text/plain"
                                                             },
                                                             "key": "data",
-                                                            "value": "<string>",
-                                                            "type": "text"
-                                                        },
-                                                        {
-                                                            "description": {
-                                                                "content": "",
-                                                                "type": "text/plain"
-                                                            },
-                                                            "key": "qrPng",
-                                                            "type": "file"
-                                                        },
-                                                        {
-                                                            "description": {
-                                                                "content": "",
-                                                                "type": "text/plain"
-                                                            },
-                                                            "key": "qrUrl",
                                                             "value": "<string>",
                                                             "type": "text"
                                                         }

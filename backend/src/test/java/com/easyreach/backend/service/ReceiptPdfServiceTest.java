@@ -37,7 +37,7 @@ public class ReceiptPdfServiceTest {
         d.footerLine = "18.4060366,83.9543993 Thank you";
 
         ReceiptPdfService svc = new ReceiptPdfService();
-        byte[] pdf = svc.buildReceiptPdf(d, null, null);
+        byte[] pdf = svc.buildReceiptPdf(d, "https://example.com/qr");
         assertNotNull(pdf);
         assertTrue(pdf.length > 0);
 

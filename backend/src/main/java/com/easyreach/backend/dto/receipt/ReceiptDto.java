@@ -25,7 +25,6 @@ public class ReceiptDto {
     private String vehicleNo;
     private String address;
     private String footerLine;
-      private String qrUrl;
       private String createdBy;
       private OffsetDateTime createdAt;
       private OffsetDateTime updatedAt;
