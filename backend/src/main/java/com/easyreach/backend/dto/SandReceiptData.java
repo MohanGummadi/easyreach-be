@@ -8,7 +8,6 @@ public class SandReceiptData {
     public String customerName;
     public String customerMobile;
     public String sandQuantity;
-    public String supplyPoint;
     public LocalDateTime dispatchDateTime;
     public String driverName;
     public String driverMobile;

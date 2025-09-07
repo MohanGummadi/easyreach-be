@@ -64,7 +64,6 @@ class ReceiptServiceImplTest {
                 .orderId("ORD1")
                 .customerName("Cust")
                 .customerMobile("111")
-                .supplyPoint("SP")
                 .fullAddress("Addr")
                 .qrUrl("qr")
                 .tripNo(0)
@@ -77,7 +76,6 @@ class ReceiptServiceImplTest {
 
         assertEquals("ORD1", saved.getOrderId());
         assertEquals("10", saved.getSandQuantity());
-        assertEquals("SP", saved.getSupplyPoint());
         assertEquals("18.4060366,83.9543993 Thank you", saved.getFooterLine());
         assertEquals("test-user", saved.getCreatedBy());
         verify(orderRepository).save(any(Order.class));
@@ -93,7 +91,6 @@ class ReceiptServiceImplTest {
                 .customerName("Name")
                 .customerMobile("111")
                 .sandQuantity("10")
-                .supplyPoint("SP")
                 .dispatchDateTime(LocalDateTime.now())
                 .driverName("D")
                 .driverMobile("M")
